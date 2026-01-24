@@ -256,106 +256,106 @@ const PRESET_VOCABULARY = {
     {
       "name": "Freizeit & Hobbys",
       "words": [
-        { "native": "die Freizeit", "foreign": "free time", "example": "Was machst du in deiner Freizeit?" },
-        { "native": "das Hobby", "foreign": "hobby", "example": "Mein Hobby ist Lesen." },
-        { "native": "spielen", "foreign": "to play", "example": "Kinder spielen gern." },
-        { "native": "der Fussball", "foreign": "soccer/football", "example": "Ich spiele gern Fussball." },
-        { "native": "der Basketball", "foreign": "basketball", "example": "Basketball ist aufregend." },
-        { "native": "der Tennis", "foreign": "tennis", "example": "Spielst du Tennis?" },
-        { "native": "das Schwimmen", "foreign": "swimming", "example": "Schwimmen ist gesund." },
-        { "native": "das Schwimmbad", "foreign": "swimming pool", "example": "Wir gehen ins Schwimmbad." },
-        { "native": "das Laufen", "foreign": "running", "example": "Ich gehe jeden Morgen laufen." },
-        { "native": "das Wandern", "foreign": "hiking", "example": "Wandern in den Bergen ist toll." },
-        { "native": "das Radfahren", "foreign": "cycling", "example": "Radfahren ist mein Lieblingssport." },
-        { "native": "der Ski", "foreign": "ski", "example": "Im Winter fahre ich Ski." },
-        { "native": "der Snowboard", "foreign": "snowboard", "example": "Snowboard macht Spass." },
-        { "native": "das Fitnessstudio", "foreign": "gym", "example": "Ich gehe ins Fitnessstudio." },
-        { "native": "das Training", "foreign": "training", "example": "Mein Training ist hart." },
-        { "native": "der Sport", "foreign": "sport", "example": "Sport haelt fit." },
-        { "native": "das Team", "foreign": "team", "example": "Unser Team hat gewonnen." },
-        { "native": "das Spiel", "foreign": "game", "example": "Das Spiel war spannend." },
-        { "native": "gewinnen", "foreign": "to win", "example": "Wir wollen gewinnen!" },
-        { "native": "verlieren", "foreign": "to lose", "example": "Niemand verliert gern." },
-        { "native": "die Musik", "foreign": "music", "example": "Ich hoere gern Musik." },
-        { "native": "das Lied", "foreign": "song", "example": "Das ist mein Lieblingslied." },
-        { "native": "singen", "foreign": "to sing", "example": "Sie singt sehr schoen." },
-        { "native": "tanzen", "foreign": "to dance", "example": "Wir tanzen die ganze Nacht." },
-        { "native": "die Gitarre", "foreign": "guitar", "example": "Ich spiele Gitarre." },
-        { "native": "das Klavier", "foreign": "piano", "example": "Sie uebt Klavier." },
-        { "native": "die Violine", "foreign": "violin", "example": "Die Violine klingt wunderschoen." },
-        { "native": "die Trompete", "foreign": "trumpet", "example": "Er spielt Trompete im Orchester." },
-        { "native": "das Schlagzeug", "foreign": "drums", "example": "Schlagzeug ist laut aber cool." },
-        { "native": "das Konzert", "foreign": "concert", "example": "Wir gehen heute Abend zum Konzert." },
-        { "native": "das Kino", "foreign": "cinema", "example": "Gehen wir ins Kino?" },
-        { "native": "der Film", "foreign": "film/movie", "example": "Der Film war gut." },
-        { "native": "das Theater", "foreign": "theater", "example": "Im Theater laeuft ein neues Stueck." },
-        { "native": "das Museum", "foreign": "museum", "example": "Das Museum hat interessante Ausstellungen." },
-        { "native": "die Galerie", "foreign": "gallery", "example": "Die Galerie zeigt moderne Kunst." },
-        { "native": "die Ausstellung", "foreign": "exhibition", "example": "Die Ausstellung ist kostenlos." },
-        { "native": "malen", "foreign": "to paint", "example": "Ich male gern Landschaften." },
-        { "native": "zeichnen", "foreign": "to draw", "example": "Kannst du ein Haus zeichnen?" },
-        { "native": "das Bild", "foreign": "picture/painting", "example": "Das Bild ist sehr schoen." },
-        { "native": "fotografieren", "foreign": "to photograph", "example": "Ich fotografiere gern." },
-        { "native": "die Kamera", "foreign": "camera", "example": "Meine Kamera ist neu." },
-        { "native": "das Foto", "foreign": "photo", "example": "Kannst du ein Foto machen?" },
-        { "native": "das Video", "foreign": "video", "example": "Ich schaue Videos online." },
-        { "native": "kochen", "foreign": "to cook", "example": "Am Wochenende koche ich gern." },
-        { "native": "backen", "foreign": "to bake", "example": "Ich backe einen Kuchen." },
-        { "native": "das Rezept", "foreign": "recipe", "example": "Hast du ein gutes Rezept?" },
-        { "native": "lesen", "foreign": "to read", "example": "Ich lese jeden Abend." },
-        { "native": "das Buch", "foreign": "book", "example": "Dieses Buch ist spannend." },
-        { "native": "der Roman", "foreign": "novel", "example": "Ich lese gerade einen Roman." },
-        { "native": "die Zeitschrift", "foreign": "magazine", "example": "Ich lese eine Modezeitschrift." },
-        { "native": "die Zeitung", "foreign": "newspaper", "example": "Ich lese die Zeitung am Morgen." },
-        { "native": "schreiben", "foreign": "to write", "example": "Ich schreibe gern Geschichten." },
-        { "native": "das Gedicht", "foreign": "poem", "example": "Er schreibt schoene Gedichte." },
-        { "native": "die Geschichte", "foreign": "story", "example": "Diese Geschichte ist interessant." },
-        { "native": "das Videospiel", "foreign": "video game", "example": "Spielst du Videospiele?" },
-        { "native": "das Brettspiel", "foreign": "board game", "example": "Lass uns ein Brettspiel spielen!" },
-        { "native": "das Kartenspiel", "foreign": "card game", "example": "Poker ist ein Kartenspiel." },
-        { "native": "das Raetsel", "foreign": "puzzle", "example": "Ich loese gern Raetsel." },
-        { "native": "das Schach", "foreign": "chess", "example": "Schach erfordert Strategie." },
-        { "native": "sammeln", "foreign": "to collect", "example": "Ich sammle Briefmarken." },
-        { "native": "die Sammlung", "foreign": "collection", "example": "Meine Sammlung ist gross." },
-        { "native": "der Garten", "foreign": "garden", "example": "Ich arbeite gern im Garten." },
-        { "native": "die Pflanze", "foreign": "plant", "example": "Ich giesse meine Pflanzen." },
-        { "native": "die Blume", "foreign": "flower", "example": "Die Blumen sind schoen." },
-        { "native": "der Baum", "foreign": "tree", "example": "Der Baum ist sehr alt." },
-        { "native": "die Natur", "foreign": "nature", "example": "Ich liebe die Natur." },
-        { "native": "der Wald", "foreign": "forest", "example": "Wir spazieren im Wald." },
-        { "native": "der Berg", "foreign": "mountain", "example": "Die Berge sind wunderschoen." },
-        { "native": "das Meer", "foreign": "sea/ocean", "example": "Im Sommer fahren wir ans Meer." },
-        { "native": "der Strand", "foreign": "beach", "example": "Der Strand ist sauber." },
-        { "native": "der See", "foreign": "lake", "example": "Wir schwimmen im See." },
-        { "native": "der Fluss", "foreign": "river", "example": "Der Fluss fliesst langsam." },
-        { "native": "der Park", "foreign": "park", "example": "Wir treffen uns im Park." },
-        { "native": "spazieren gehen", "foreign": "to go for a walk", "example": "Am Sonntag gehen wir spazieren." },
-        { "native": "picknicken", "foreign": "to have a picnic", "example": "Lass uns im Park picknicken." },
-        { "native": "campen", "foreign": "to camp", "example": "Wir campen am Wochenende." },
-        { "native": "das Zelt", "foreign": "tent", "example": "Wir schlafen im Zelt." },
-        { "native": "angeln", "foreign": "to fish", "example": "Mein Vater geht gern angeln." },
-        { "native": "das Tier", "foreign": "animal", "example": "Ich mag Tiere sehr." },
-        { "native": "der Hund", "foreign": "dog", "example": "Mein Hund heisst Max." },
-        { "native": "die Katze", "foreign": "cat", "example": "Die Katze schlaeft viel." },
-        { "native": "der Vogel", "foreign": "bird", "example": "Der Vogel singt am Morgen." },
-        { "native": "das Haustier", "foreign": "pet", "example": "Hast du ein Haustier?" },
-        { "native": "die Party", "foreign": "party", "example": "Am Samstag gibt es eine Party." },
-        { "native": "feiern", "foreign": "to celebrate", "example": "Wir feiern seinen Geburtstag." },
-        { "native": "der Geburtstag", "foreign": "birthday", "example": "Alles Gute zum Geburtstag!" },
-        { "native": "das Geschenk", "foreign": "gift/present", "example": "Ich habe ein Geschenk fuer dich." },
-        { "native": "der Freund", "foreign": "friend (male)", "example": "Er ist mein bester Freund." },
-        { "native": "die Freundin", "foreign": "friend (female)", "example": "Sie ist meine beste Freundin." },
-        { "native": "treffen", "foreign": "to meet", "example": "Wir treffen uns um acht." },
-        { "native": "unterhalten", "foreign": "to chat/converse", "example": "Wir unterhalten uns stundenlang." },
-        { "native": "die Unterhaltung", "foreign": "entertainment/conversation", "example": "Das war eine gute Unterhaltung." },
-        { "native": "entspannen", "foreign": "to relax", "example": "Am Wochenende entspanne ich." },
-        { "native": "schlafen", "foreign": "to sleep", "example": "Ich schlafe mindestens acht Stunden." },
-        { "native": "traeumen", "foreign": "to dream", "example": "Ich traeume von einer Reise." },
-        { "native": "geniessen", "foreign": "to enjoy", "example": "Geniess den Tag!" },
-        { "native": "Spass haben", "foreign": "to have fun", "example": "Wir haben viel Spass zusammen." },
-        { "native": "langweilig", "foreign": "boring", "example": "Das Spiel war langweilig." },
-        { "native": "interessant", "foreign": "interesting", "example": "Das Buch ist sehr interessant." },
-        { "native": "spannend", "foreign": "exciting", "example": "Der Film war spannend." }
+        { "native": "die Freizeit", "foreign": "free time", "example": "What do you do in your free time?", "exampleDe": "Was machst du in deiner Freizeit?" },
+        { "native": "das Hobby", "foreign": "hobby", "example": "My hobby is reading.", "exampleDe": "Mein Hobby ist Lesen." },
+        { "native": "spielen", "foreign": "to play", "example": "Children like to play.", "exampleDe": "Kinder spielen gern." },
+        { "native": "der Fussball", "foreign": "soccer/football", "example": "I like playing soccer.", "exampleDe": "Ich spiele gern Fussball." },
+        { "native": "der Basketball", "foreign": "basketball", "example": "Basketball is exciting.", "exampleDe": "Basketball ist aufregend." },
+        { "native": "der Tennis", "foreign": "tennis", "example": "Do you play tennis?", "exampleDe": "Spielst du Tennis?" },
+        { "native": "das Schwimmen", "foreign": "swimming", "example": "Swimming is healthy.", "exampleDe": "Schwimmen ist gesund." },
+        { "native": "das Schwimmbad", "foreign": "swimming pool", "example": "We go to the swimming pool.", "exampleDe": "Wir gehen ins Schwimmbad." },
+        { "native": "das Laufen", "foreign": "running", "example": "I go running every morning.", "exampleDe": "Ich gehe jeden Morgen laufen." },
+        { "native": "das Wandern", "foreign": "hiking", "example": "Hiking in the mountains is great.", "exampleDe": "Wandern in den Bergen ist toll." },
+        { "native": "das Radfahren", "foreign": "cycling", "example": "Cycling is my favorite sport.", "exampleDe": "Radfahren ist mein Lieblingssport." },
+        { "native": "der Ski", "foreign": "ski", "example": "In winter I ski.", "exampleDe": "Im Winter fahre ich Ski." },
+        { "native": "der Snowboard", "foreign": "snowboard", "example": "Snowboarding is fun.", "exampleDe": "Snowboard macht Spass." },
+        { "native": "das Fitnessstudio", "foreign": "gym", "example": "I go to the gym.", "exampleDe": "Ich gehe ins Fitnessstudio." },
+        { "native": "das Training", "foreign": "training", "example": "My training is hard.", "exampleDe": "Mein Training ist hart." },
+        { "native": "der Sport", "foreign": "sport", "example": "Sport keeps you fit.", "exampleDe": "Sport haelt fit." },
+        { "native": "das Team", "foreign": "team", "example": "Our team won.", "exampleDe": "Unser Team hat gewonnen." },
+        { "native": "das Spiel", "foreign": "game", "example": "The game was exciting.", "exampleDe": "Das Spiel war spannend." },
+        { "native": "gewinnen", "foreign": "to win", "example": "We want to win!", "exampleDe": "Wir wollen gewinnen!" },
+        { "native": "verlieren", "foreign": "to lose", "example": "No one likes to lose.", "exampleDe": "Niemand verliert gern." },
+        { "native": "die Musik", "foreign": "music", "example": "I like listening to music.", "exampleDe": "Ich hoere gern Musik." },
+        { "native": "das Lied", "foreign": "song", "example": "This is my favorite song.", "exampleDe": "Das ist mein Lieblingslied." },
+        { "native": "singen", "foreign": "to sing", "example": "She sings very beautifully.", "exampleDe": "Sie singt sehr schoen." },
+        { "native": "tanzen", "foreign": "to dance", "example": "We dance all night.", "exampleDe": "Wir tanzen die ganze Nacht." },
+        { "native": "die Gitarre", "foreign": "guitar", "example": "I play guitar.", "exampleDe": "Ich spiele Gitarre." },
+        { "native": "das Klavier", "foreign": "piano", "example": "She practices piano.", "exampleDe": "Sie uebt Klavier." },
+        { "native": "die Violine", "foreign": "violin", "example": "The violin sounds beautiful.", "exampleDe": "Die Violine klingt wunderschoen." },
+        { "native": "die Trompete", "foreign": "trumpet", "example": "He plays trumpet in the orchestra.", "exampleDe": "Er spielt Trompete im Orchester." },
+        { "native": "das Schlagzeug", "foreign": "drums", "example": "Drums are loud but cool.", "exampleDe": "Schlagzeug ist laut aber cool." },
+        { "native": "das Konzert", "foreign": "concert", "example": "We are going to a concert tonight.", "exampleDe": "Wir gehen heute Abend zum Konzert." },
+        { "native": "das Kino", "foreign": "cinema", "example": "Shall we go to the cinema?", "exampleDe": "Gehen wir ins Kino?" },
+        { "native": "der Film", "foreign": "film/movie", "example": "The film was good.", "exampleDe": "Der Film war gut." },
+        { "native": "das Theater", "foreign": "theater", "example": "A new play is running at the theater.", "exampleDe": "Im Theater laeuft ein neues Stueck." },
+        { "native": "das Museum", "foreign": "museum", "example": "The museum has interesting exhibitions.", "exampleDe": "Das Museum hat interessante Ausstellungen." },
+        { "native": "die Galerie", "foreign": "gallery", "example": "The gallery displays modern art.", "exampleDe": "Die Galerie zeigt moderne Kunst." },
+        { "native": "die Ausstellung", "foreign": "exhibition", "example": "The exhibition is free.", "exampleDe": "Die Ausstellung ist kostenlos." },
+        { "native": "malen", "foreign": "to paint", "example": "I like painting landscapes.", "exampleDe": "Ich male gern Landschaften." },
+        { "native": "zeichnen", "foreign": "to draw", "example": "Can you draw a house?", "exampleDe": "Kannst du ein Haus zeichnen?" },
+        { "native": "das Bild", "foreign": "picture/painting", "example": "The picture is very beautiful.", "exampleDe": "Das Bild ist sehr schoen." },
+        { "native": "fotografieren", "foreign": "to photograph", "example": "I like taking photos.", "exampleDe": "Ich fotografiere gern." },
+        { "native": "die Kamera", "foreign": "camera", "example": "My camera is new.", "exampleDe": "Meine Kamera ist neu." },
+        { "native": "das Foto", "foreign": "photo", "example": "Can you take a photo?", "exampleDe": "Kannst du ein Foto machen?" },
+        { "native": "das Video", "foreign": "video", "example": "I watch videos online.", "exampleDe": "Ich schaue Videos online." },
+        { "native": "kochen", "foreign": "to cook", "example": "I like cooking on weekends.", "exampleDe": "Am Wochenende koche ich gern." },
+        { "native": "backen", "foreign": "to bake", "example": "I'm baking a cake.", "exampleDe": "Ich backe einen Kuchen." },
+        { "native": "das Rezept", "foreign": "recipe", "example": "Do you have a good recipe?", "exampleDe": "Hast du ein gutes Rezept?" },
+        { "native": "lesen", "foreign": "to read", "example": "I read every evening.", "exampleDe": "Ich lese jeden Abend." },
+        { "native": "das Buch", "foreign": "book", "example": "This book is exciting.", "exampleDe": "Dieses Buch ist spannend." },
+        { "native": "der Roman", "foreign": "novel", "example": "I am currently reading a novel.", "exampleDe": "Ich lese gerade einen Roman." },
+        { "native": "die Zeitschrift", "foreign": "magazine", "example": "I'm reading a fashion magazine.", "exampleDe": "Ich lese eine Modezeitschrift." },
+        { "native": "die Zeitung", "foreign": "newspaper", "example": "I read the newspaper in the morning.", "exampleDe": "Ich lese die Zeitung am Morgen." },
+        { "native": "schreiben", "foreign": "to write", "example": "I like writing stories.", "exampleDe": "Ich schreibe gern Geschichten." },
+        { "native": "das Gedicht", "foreign": "poem", "example": "He writes beautiful poems.", "exampleDe": "Er schreibt schoene Gedichte." },
+        { "native": "die Geschichte", "foreign": "story", "example": "This story is interesting.", "exampleDe": "Diese Geschichte ist interessant." },
+        { "native": "das Videospiel", "foreign": "video game", "example": "Do you play video games?", "exampleDe": "Spielst du Videospiele?" },
+        { "native": "das Brettspiel", "foreign": "board game", "example": "Let's play a board game!", "exampleDe": "Lass uns ein Brettspiel spielen!" },
+        { "native": "das Kartenspiel", "foreign": "card game", "example": "Poker is a card game.", "exampleDe": "Poker ist ein Kartenspiel." },
+        { "native": "das Raetsel", "foreign": "puzzle", "example": "I like solving puzzles.", "exampleDe": "Ich loese gern Raetsel." },
+        { "native": "das Schach", "foreign": "chess", "example": "Chess requires strategy.", "exampleDe": "Schach erfordert Strategie." },
+        { "native": "sammeln", "foreign": "to collect", "example": "I collect stamps.", "exampleDe": "Ich sammle Briefmarken." },
+        { "native": "die Sammlung", "foreign": "collection", "example": "My collection is large.", "exampleDe": "Meine Sammlung ist gross." },
+        { "native": "der Garten", "foreign": "garden", "example": "I enjoy gardening.", "exampleDe": "Ich arbeite gern im Garten." },
+        { "native": "die Pflanze", "foreign": "plant", "example": "I water my plants.", "exampleDe": "Ich giesse meine Pflanzen." },
+        { "native": "die Blume", "foreign": "flower", "example": "The flowers are beautiful.", "exampleDe": "Die Blumen sind schoen." },
+        { "native": "der Baum", "foreign": "tree", "example": "The tree is very old.", "exampleDe": "Der Baum ist sehr alt." },
+        { "native": "die Natur", "foreign": "nature", "example": "I love nature.", "exampleDe": "Ich liebe die Natur." },
+        { "native": "der Wald", "foreign": "forest", "example": "We walk in the forest.", "exampleDe": "Wir spazieren im Wald." },
+        { "native": "der Berg", "foreign": "mountain", "example": "The mountains are beautiful.", "exampleDe": "Die Berge sind wunderschoen." },
+        { "native": "das Meer", "foreign": "sea/ocean", "example": "In summer we drive to the sea.", "exampleDe": "Im Sommer fahren wir ans Meer." },
+        { "native": "der Strand", "foreign": "beach", "example": "The beach is clean.", "exampleDe": "Der Strand ist sauber." },
+        { "native": "der See", "foreign": "lake", "example": "We swim in the lake.", "exampleDe": "Wir schwimmen im See." },
+        { "native": "der Fluss", "foreign": "river", "example": "The river flows slowly.", "exampleDe": "Der Fluss fliesst langsam." },
+        { "native": "der Park", "foreign": "park", "example": "We meet in the park.", "exampleDe": "Wir treffen uns im Park." },
+        { "native": "spazieren gehen", "foreign": "to go for a walk", "example": "On Sunday we go for a walk.", "exampleDe": "Am Sonntag gehen wir spazieren." },
+        { "native": "picknicken", "foreign": "to have a picnic", "example": "Let's have a picnic in the park.", "exampleDe": "Lass uns im Park picknicken." },
+        { "native": "campen", "foreign": "to camp", "example": "We camp on the weekend.", "exampleDe": "Wir campen am Wochenende." },
+        { "native": "das Zelt", "foreign": "tent", "example": "We sleep in the tent.", "exampleDe": "Wir schlafen im Zelt." },
+        { "native": "angeln", "foreign": "to fish", "example": "My father likes to fish.", "exampleDe": "Mein Vater geht gern angeln." },
+        { "native": "das Tier", "foreign": "animal", "example": "I like animals very much.", "exampleDe": "Ich mag Tiere sehr." },
+        { "native": "der Hund", "foreign": "dog", "example": "My dog is named Max.", "exampleDe": "Mein Hund heisst Max." },
+        { "native": "die Katze", "foreign": "cat", "example": "The cat sleeps a lot.", "exampleDe": "Die Katze schlaeft viel." },
+        { "native": "der Vogel", "foreign": "bird", "example": "The bird sings in the morning.", "exampleDe": "Der Vogel singt am Morgen." },
+        { "native": "das Haustier", "foreign": "pet", "example": "Do you have a pet?", "exampleDe": "Hast du ein Haustier?" },
+        { "native": "die Party", "foreign": "party", "example": "There is a party on Saturday.", "exampleDe": "Am Samstag gibt es eine Party." },
+        { "native": "feiern", "foreign": "to celebrate", "example": "We celebrate his birthday.", "exampleDe": "Wir feiern seinen Geburtstag." },
+        { "native": "der Geburtstag", "foreign": "birthday", "example": "Happy birthday!", "exampleDe": "Alles Gute zum Geburtstag!" },
+        { "native": "das Geschenk", "foreign": "gift/present", "example": "I have a gift for you.", "exampleDe": "Ich habe ein Geschenk fuer dich." },
+        { "native": "der Freund", "foreign": "friend (male)", "example": "He is my best friend.", "exampleDe": "Er ist mein bester Freund." },
+        { "native": "die Freundin", "foreign": "friend (female)", "example": "She is my best friend.", "exampleDe": "Sie ist meine beste Freundin." },
+        { "native": "treffen", "foreign": "to meet", "example": "We meet at eight.", "exampleDe": "Wir treffen uns um acht." },
+        { "native": "unterhalten", "foreign": "to chat/converse", "example": "We chat for hours.", "exampleDe": "Wir unterhalten uns stundenlang." },
+        { "native": "die Unterhaltung", "foreign": "entertainment/conversation", "example": "That was a good conversation.", "exampleDe": "Das war eine gute Unterhaltung." },
+        { "native": "entspannen", "foreign": "to relax", "example": "I relax on the weekend.", "exampleDe": "Am Wochenende entspanne ich." },
+        { "native": "schlafen", "foreign": "to sleep", "example": "I sleep at least eight hours.", "exampleDe": "Ich schlafe mindestens acht Stunden." },
+        { "native": "traeumen", "foreign": "to dream", "example": "I dream of a trip.", "exampleDe": "Ich traeume von einer Reise." },
+        { "native": "geniessen", "foreign": "to enjoy", "example": "Enjoy the day!", "exampleDe": "Geniess den Tag!" },
+        { "native": "Spass haben", "foreign": "to have fun", "example": "We have a lot of fun together.", "exampleDe": "Wir haben viel Spass zusammen." },
+        { "native": "langweilig", "foreign": "boring", "example": "The game was boring.", "exampleDe": "Das Spiel war langweilig." },
+        { "native": "interessant", "foreign": "interesting", "example": "The book is very interesting.", "exampleDe": "Das Buch ist sehr interessant." },
+        { "native": "spannend", "foreign": "exciting", "example": "The film was exciting.", "exampleDe": "Der Film war spannend." }
       ]
     }
   ]
@@ -703,8 +703,8 @@ const DataManager = {
 
     // Reset streak if last study was before yesterday
     if (state.stats.lastStudyDate &&
-        state.stats.lastStudyDate !== today &&
-        state.stats.lastStudyDate !== yesterdayStr) {
+      state.stats.lastStudyDate !== today &&
+      state.stats.lastStudyDate !== yesterdayStr) {
       state.stats.streak = 0;
     }
 
@@ -721,37 +721,10 @@ const DataManager = {
     if (state.vocabulary.length > 0) return false;
 
     try {
-      let vocabData = null;
-
-      // Try loading from local data folder first
-      try {
-        const localResponse = await fetch('./data/preset-vocabulary.json');
-        if (localResponse.ok) {
-          vocabData = await localResponse.json();
-          console.log('Loaded vocabulary from local data folder');
-        }
-      } catch (localError) {
-        console.log('Local data not available, trying GitHub...');
-      }
-
-      // Try loading from GitHub raw URL if local failed
-      if (!vocabData) {
-        try {
-          const githubResponse = await fetch('https://raw.githubusercontent.com/BEKO2210/Vokabeltrainer/main/data/preset-vocabulary.json');
-          if (githubResponse.ok) {
-            vocabData = await githubResponse.json();
-            console.log('Loaded vocabulary from GitHub');
-          }
-        } catch (githubError) {
-          console.log('GitHub data not available, using embedded data');
-        }
-      }
-
-      // Fall back to embedded PRESET_VOCABULARY
-      if (!vocabData) {
-        vocabData = PRESET_VOCABULARY;
-        console.log('Using embedded vocabulary data');
-      }
+      // Use embedded PRESET_VOCABULARY directly to avoid fetch issues/delays
+      // and ensure we use the updated English examples
+      const vocabData = PRESET_VOCABULARY;
+      console.log('Using embedded vocabulary data for seeding');
 
       // Save vocabulary to IndexedDB
       for (const category of vocabData.categories) {
@@ -772,6 +745,42 @@ const DataManager = {
     } catch (error) {
       console.error('Error seeding preset vocabulary:', error);
       return false;
+    }
+  },
+
+  // Update existing vocabulary definitions (e.g. new examples) without losing progress
+  async forceUpdateVocabulary() {
+    try {
+      console.log('Checking for vocabulary updates...');
+      const vocabData = PRESET_VOCABULARY;
+      let updateCount = 0;
+
+      for (const category of vocabData.categories) {
+        for (const word of category.words) {
+          // Find existing word by native term
+          const existing = state.vocabulary.find(v => v.native === word.native);
+
+          if (existing) {
+            // Check if needs update (example or exampleDe changed)
+            if (existing.example !== word.example || existing.exampleDe !== word.exampleDe) {
+              existing.example = word.example || '';
+              existing.exampleDe = word.exampleDe || '';
+              // Also update foreign if changed, just in case
+              existing.foreign = word.foreign;
+
+              await DataManager.saveVocab(existing);
+              updateCount++;
+            }
+          }
+        }
+      }
+
+      if (updateCount > 0) {
+        console.log(`Updated ${updateCount} vocabulary definitions`);
+        Toast.show(`${updateCount} Vokabeln aktualisiert`, 'success');
+      }
+    } catch (error) {
+      console.error('Error updating vocabulary:', error);
     }
   },
 
@@ -1547,11 +1556,35 @@ const LearnView = {
 
   renderFlashcard(container, card) {
     const qa = this.getQuestionAnswer(card);
-    const exampleHtml = card.example ? `
+    const isDeEn = state.settings.practiceDirection === 'de-en';
+
+    // Determine which example to show based on the ANSWER language
+    // If answering in English (isDeEn=true), show English example
+    // If answering in German (isDeEn=false), show German example
+    const mainExample = isDeEn ? card.example : card.exampleDe;
+    const translationExample = isDeEn ? card.exampleDe : card.example;
+
+    const highlightWord = (text, word) => {
+      if (!text || !word) return this.escapeHtml(text || '');
+      const escapedWord = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // Escape regex special chars
+      const regex = new RegExp(`(${escapedWord})`, 'gi');
+      return this.escapeHtml(text).replace(regex, '<span class="highlight">$1</span>');
+    };
+
+    const mainExampleHtml = mainExample ? highlightWord(mainExample, qa.answer) : '';
+    const translationExampleHtml = translationExample ? highlightWord(translationExample, qa.question) : '';
+
+    const exampleHtml = mainExample ? `
       <div class="flashcard-example-label">Beispiel</div>
-      <div class="flashcard-example">${this.escapeHtml(card.example)}</div>
-      ${card.exampleDe ? `<div class="flashcard-example-translation">${this.escapeHtml(card.exampleDe)}</div>` : ''}
+      <div class="flashcard-example">${mainExampleHtml}</div>
+      ${translationExample ? `<div class="flashcard-example-translation">${translationExampleHtml}</div>` : ''}
     ` : '';
+
+    // Fallback: If no dedicated example exists for the target language but another one exists, show that instead
+    const finalExampleHtml = !mainExample && translationExample ? `
+       <div class="flashcard-example-label">Beispiel</div>
+       <div class="flashcard-example">${translationExampleHtml}</div>
+    ` : exampleHtml;
 
     container.innerHTML = `
       <div class="flashcard-container">
@@ -1563,7 +1596,7 @@ const LearnView = {
           <div class="flashcard-face flashcard-back">
             <div class="flashcard-answer-label">Antwort</div>
             <div class="flashcard-word">${this.escapeHtml(qa.answer)}</div>
-            ${exampleHtml}
+            ${finalExampleHtml}
           </div>
         </div>
       </div>
@@ -2783,11 +2816,11 @@ function setupInstallPrompt() {
 async function registerServiceWorker() {
   // Service Worker nur bei https:// oder localhost registrieren (nicht bei file://)
   const isValidProtocol = location.protocol === 'https:' ||
-                          location.hostname === 'localhost' ||
-                          location.hostname === '127.0.0.1';
+    location.hostname === 'localhost' ||
+    location.hostname === '127.0.0.1';
 
   if (!isValidProtocol) {
-    console.log('Service Worker übersprungen (file:// Protokoll)');
+    console.warn('Service Worker übersprungen (file:// Protokoll)');
     return;
   }
 
@@ -2807,6 +2840,11 @@ async function registerServiceWorker() {
 
 async function initApp() {
   try {
+    // UI Komponenten initialisieren
+    Toast.init();
+    Modal.init();
+    Views.init();
+
     // Service Worker registrieren
     await registerServiceWorker();
 
@@ -2823,15 +2861,13 @@ async function initApp() {
     const seeded = await DataManager.seedPresetVocabulary();
     if (seeded) {
       Toast.show('300 Vokabeln geladen!', 'success');
+    } else {
+      // If not seeded (already exists), check for updates to definitions
+      await DataManager.forceUpdateVocabulary();
     }
 
     // Theme anwenden
     applyTheme(state.settings.theme);
-
-    // UI Komponenten initialisieren
-    Toast.init();
-    Modal.init();
-    Views.init();
 
     // Start-View anzeigen
     Views.show('home');
