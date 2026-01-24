@@ -13,9 +13,9 @@
   --color-text-secondary: #475569;
   --color-text-muted: #94a3b8;
   --color-border: #e2e8f0;
-  --color-primary: #6366f1;
-  --color-primary-hover: #4f46e5;
-  --color-primary-light: #e0e7ff;
+  --color-primary: #06b6d4;
+  --color-primary-hover: #0891b2;
+  --color-primary-light: #cffafe;
   --color-success: #10b981;
   --color-success-light: #d1fae5;
   --color-error: #ef4444;
@@ -65,7 +65,7 @@
   --color-text-secondary: #cbd5e1;
   --color-text-muted: #64748b;
   --color-border: #334155;
-  --color-primary-light: #312e81;
+  --color-primary-light: #164e63;
   --color-success-light: #064e3b;
   --color-error-light: #7f1d1d;
   --color-warning-light: #78350f;
@@ -106,6 +106,51 @@ html, body {
   overflow-x: hidden;
 }
 
+/* Text Overflow Prevention */
+.vocab-item-native,
+.vocab-item-foreign,
+.flashcard-content,
+.mc-option,
+.settings-item-label,
+.settings-item-desc,
+h1, h2, h3, h4, p {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+/* Dynamic Font Sizing */
+.flashcard-content {
+  font-size: clamp(1rem, 4vw, 1.5rem);
+}
+
+.vocab-item-native,
+.vocab-item-foreign {
+  font-size: clamp(0.875rem, 3.5vw, 1rem);
+}
+
+.mc-option {
+  font-size: clamp(0.875rem, 3vw, 1rem);
+}
+
+/* Text Overflow Ellipsis */
+.vocab-item-content {
+  min-width: 0; /* Enable text-overflow in flexbox */
+}
+
+.vocab-item-native,
+.vocab-item-foreign {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Allow wrap on card views */
+.flashcard-content {
+  white-space: normal;
+}
+
 /* App Container */
 .app-container {
   display: flex;
@@ -141,6 +186,22 @@ html, body {
 .header-actions {
   display: flex;
   gap: var(--space-sm);
+}
+
+.btn-sm {
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-size-sm);
+  gap: var(--space-xs);
+}
+
+#install-button {
+  display: none;
+}
+
+#install-button.show {
+  display: flex;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
 }
 
 /* Main Content Area */
@@ -201,7 +262,7 @@ html, body {
   background: none;
   border: none;
   cursor: pointer;
-  transition: color 0.2s;
+  transition: color 0.2s ease, transform 0.2s ease;
   min-height: 44px;
   min-width: 44px;
 }
@@ -209,10 +270,12 @@ html, body {
 .nav-item:hover,
 .nav-item:focus {
   color: var(--color-primary);
+  transform: scale(1.05);
 }
 
 .nav-item.active {
   color: var(--color-primary);
+  transform: scale(1);
 }
 
 .nav-item svg {
@@ -237,9 +300,20 @@ html, body {
   border: none;
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+  transform: translateY(0);
   min-height: 44px;
   min-width: 44px;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(6, 182, 212, 0.2);
 }
 
 .btn:disabled {
@@ -254,6 +328,7 @@ html, body {
 
 .btn-primary:hover:not(:disabled) {
   background-color: var(--color-primary-hover);
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.4);
 }
 
 .btn-secondary {
@@ -328,7 +403,7 @@ html, body {
 .form-input:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-light);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
 }
 
 .form-input::placeholder {
@@ -356,6 +431,16 @@ select.form-input {
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border);
   overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
 .card-body {
@@ -454,7 +539,11 @@ select.form-input {
   height: 100%;
   cursor: pointer;
   transform-style: preserve-3d;
-  transition: transform 0.5s;
+  transition: transform 0.5s, box-shadow 0.2s ease;
+}
+
+.flashcard:hover {
+  box-shadow: 0 8px 30px rgba(6, 182, 212, 0.15);
 }
 
 .flashcard.flipped {
@@ -1171,6 +1260,13 @@ select.form-input {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .btn:hover,
+  .card:hover,
+  .nav-item:hover,
+  .flashcard:hover {
+    transform: none !important;
   }
 }
 

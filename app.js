@@ -26,7 +26,8 @@ const CONFIG = {
     speechEnabled: true,
     speechLang: 'en-US',
     nativeLang: 'de-DE',
-    cardsPerSession: 10
+    cardsPerSession: 10,
+    soundEnabled: false // Sound effects for correct/incorrect answers (default off)
   },
   // Quiz Optionen
   MC_OPTIONS_COUNT: 4
@@ -1002,11 +1003,22 @@ const LearnView = {
 
   speak(text) {
     if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = state.settings.speechLang;
-      utterance.rate = 0.8;
-      window.speechSynthesis.speak(utterance);
+      // Wait for voices to load before speaking
+      const doSpeak = () => {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = state.settings.speechLang;
+        utterance.rate = 0.8;
+        window.speechSynthesis.speak(utterance);
+      };
+
+      // Check if voices are already loaded
+      if (speechSynthesis.getVoices().length > 0) {
+        doSpeak();
+      } else {
+        // Wait for voices to load
+        speechSynthesis.addEventListener('voiceschanged', doSpeak, { once: true });
+      }
     }
   },
 
@@ -1407,11 +1419,12 @@ const StatsView = {
     // Top Fehlerwörter
     const errorWords = state.vocabulary
       .filter(v => state.progress[v.id])
-      .map(v => ({
-        ...v,
-        errorRate: state.progress[v.id].incorrectCount /
-          (state.progress[v.id].correctCount + state.progress[v.id].incorrectCount || 1)
-      }))
+      .map(v => {
+        const progress = state.progress[v.id];
+        const total = progress.correctCount + progress.incorrectCount;
+        const errorRate = total > 0 ? (progress.incorrectCount / total) : 0;
+        return { ...v, errorRate };
+      })
       .filter(v => v.errorRate > 0.3)
       .sort((a, b) => b.errorRate - a.errorRate)
       .slice(0, 5);
@@ -1610,6 +1623,18 @@ const SettingsView = {
 
         <div class="settings-item">
           <div>
+            <div class="settings-item-label">Sound-Effekte</div>
+            <div class="settings-item-desc">Bei richtig/falsch</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" ${state.settings.soundEnabled ? 'checked' : ''}
+                   onchange="SettingsView.setSetting('soundEnabled', this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="settings-item">
+          <div>
             <div class="settings-item-label">Fremdsprache</div>
             <div class="settings-item-desc">Für Aussprache</div>
           </div>
@@ -1708,6 +1733,8 @@ const SettingsView = {
 
   async setTheme(theme) {
     await DataManager.saveSettings({ theme });
+    // Also save to localStorage for FOUC prevention script in index.html
+    localStorage.setItem('vokabel-theme', theme);
     applyTheme(theme);
   },
 
@@ -1787,6 +1814,51 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () 
 });
 
 // ============================================
+// PWA INSTALL PROMPT
+// ============================================
+
+let deferredPrompt = null;
+
+function setupInstallPrompt() {
+  const installButton = document.getElementById('install-button');
+  if (!installButton) return;
+
+  // Listen for install prompt
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    installButton.classList.add('show');
+  });
+
+  // Handle install button click
+  installButton.addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+
+    if (outcome === 'accepted') {
+      Toast.show('App wird installiert!', 'success');
+    }
+
+    deferredPrompt = null;
+    installButton.classList.remove('show');
+  });
+
+  // Hide button if app is already installed
+  window.addEventListener('appinstalled', () => {
+    installButton.classList.remove('show');
+    deferredPrompt = null;
+    Toast.show('App erfolgreich installiert!', 'success');
+  });
+
+  // Check if running as installed PWA
+  if (window.matchMedia('(display-mode: standalone)').matches) {
+    installButton.classList.remove('show');
+  }
+}
+
+// ============================================
 // SERVICE WORKER REGISTRATION
 // ============================================
 
@@ -1809,6 +1881,9 @@ async function initApp() {
   try {
     // Service Worker registrieren
     await registerServiceWorker();
+
+    // PWA Install Prompt einrichten
+    setupInstallPrompt();
 
     // Datenbank öffnen
     await DB.open();
