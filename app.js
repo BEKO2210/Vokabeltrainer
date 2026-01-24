@@ -29,7 +29,7 @@ const CONFIG = {
     speechEnabled: true,
     speechLang: 'en-US',
     nativeLang: 'de-DE',
-    cardsPerSession: 10,
+    cardsPerSession: 20,
     soundEnabled: false, // Sound effects for correct/incorrect answers (default off)
     practiceDirection: 'de-en' // 'de-en' = show German, answer English; 'en-de' = opposite
   },
@@ -721,8 +721,40 @@ const DataManager = {
     if (state.vocabulary.length > 0) return false;
 
     try {
-      // Use embedded PRESET_VOCABULARY (works with file:// protocol)
-      for (const category of PRESET_VOCABULARY.categories) {
+      let vocabData = null;
+
+      // Try loading from local data folder first
+      try {
+        const localResponse = await fetch('./data/preset-vocabulary.json');
+        if (localResponse.ok) {
+          vocabData = await localResponse.json();
+          console.log('Loaded vocabulary from local data folder');
+        }
+      } catch (localError) {
+        console.log('Local data not available, trying GitHub...');
+      }
+
+      // Try loading from GitHub raw URL if local failed
+      if (!vocabData) {
+        try {
+          const githubResponse = await fetch('https://raw.githubusercontent.com/BEKO2210/Vokabeltrainer/main/data/preset-vocabulary.json');
+          if (githubResponse.ok) {
+            vocabData = await githubResponse.json();
+            console.log('Loaded vocabulary from GitHub');
+          }
+        } catch (githubError) {
+          console.log('GitHub data not available, using embedded data');
+        }
+      }
+
+      // Fall back to embedded PRESET_VOCABULARY
+      if (!vocabData) {
+        vocabData = PRESET_VOCABULARY;
+        console.log('Using embedded vocabulary data');
+      }
+
+      // Save vocabulary to IndexedDB
+      for (const category of vocabData.categories) {
         for (const word of category.words) {
           const vocab = {
             native: word.native,
@@ -1566,10 +1598,38 @@ const LearnView = {
     const isDeEn = state.settings.practiceDirection === 'de-en';
 
     // Wrong options come from the answer field of other cards
-    const otherCards = state.vocabulary.filter(v => v.id !== card.id);
-    const wrongOptions = this.shuffle(otherCards)
-      .slice(0, CONFIG.MC_OPTIONS_COUNT - 1)
-      .map(v => isDeEn ? v.foreign : v.native);
+    // Filter out cards with the same answer to ensure wrong options are truly wrong
+    const correctAnswer = qa.answer.toLowerCase().trim();
+    const otherCards = state.vocabulary.filter(v => {
+      if (v.id === card.id) return false;
+      const otherAnswer = (isDeEn ? v.foreign : v.native).toLowerCase().trim();
+      return otherAnswer !== correctAnswer;
+    });
+
+    // Get unique wrong options (no duplicates)
+    const wrongOptionsSet = new Set();
+    const shuffledOthers = this.shuffle(otherCards);
+    for (const v of shuffledOthers) {
+      const option = isDeEn ? v.foreign : v.native;
+      const optionLower = option.toLowerCase().trim();
+      if (!wrongOptionsSet.has(optionLower) && optionLower !== correctAnswer) {
+        wrongOptionsSet.add(optionLower);
+        if (wrongOptionsSet.size >= CONFIG.MC_OPTIONS_COUNT - 1) break;
+      }
+    }
+
+    // Convert Set back to array with original casing
+    const wrongOptions = [];
+    const usedLower = new Set();
+    for (const v of shuffledOthers) {
+      const option = isDeEn ? v.foreign : v.native;
+      const optionLower = option.toLowerCase().trim();
+      if (wrongOptionsSet.has(optionLower) && !usedLower.has(optionLower)) {
+        wrongOptions.push(option);
+        usedLower.add(optionLower);
+        if (wrongOptions.length >= CONFIG.MC_OPTIONS_COUNT - 1) break;
+      }
+    }
 
     const options = this.shuffle([qa.answer, ...wrongOptions]);
 
