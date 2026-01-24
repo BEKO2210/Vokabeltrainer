@@ -19,6 +19,8 @@ const CONFIG = {
   STORE_SETTINGS: 'settings',
   STORE_STATS: 'stats',
   STORE_SELECTION: 'selection',
+  // Daily Goal
+  DAILY_GOAL: 20, // Number of correct answers to reach daily goal
   // Default Einstellungen
   DEFAULT_SETTINGS: {
     theme: 'system',
@@ -374,7 +376,10 @@ const state = {
     correctAnswers: 0,
     streak: 0,
     lastStudyDate: null,
-    dailyStats: {}
+    dailyStats: {},
+    dailyCorrect: 0,      // Today's correct count toward daily goal
+    goalReached: false,   // Whether today's goal (20 correct) is complete
+    lastCategory: null    // Last practiced category for "continue" feature
   },
   currentView: 'learn',
   currentSession: null,
@@ -641,28 +646,51 @@ const DataManager = {
       state.stats.correctAnswers++;
     }
 
-    // Tagesstatistik
-    if (!state.stats.dailyStats[today]) {
-      state.stats.dailyStats[today] = { reviews: 0, correct: 0 };
-    }
-    state.stats.dailyStats[today].reviews++;
-    if (isCorrect) {
-      state.stats.dailyStats[today].correct++;
-    }
-
-    // Streak aktualisieren
+    // New day detection - handle reset and streak logic
     if (state.stats.lastStudyDate !== today) {
       const yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
       const yesterdayStr = yesterday.toISOString().split('T')[0];
 
-      if (state.stats.lastStudyDate === yesterdayStr) {
+      // Check if yesterday's goal was reached for streak calculation
+      const yesterdayStats = state.stats.dailyStats[yesterdayStr];
+      const yesterdayGoalReached = yesterdayStats ? yesterdayStats.goalReached : false;
+
+      // Streak logic: only increment if yesterday's goal was REACHED
+      if (state.stats.lastStudyDate === yesterdayStr && yesterdayGoalReached) {
         state.stats.streak++;
-      } else if (state.stats.lastStudyDate !== today) {
+      } else if (state.stats.lastStudyDate !== yesterdayStr) {
+        // Streak broken - didn't study or reach goal yesterday
         state.stats.streak = 1;
       }
+
+      // Reset daily counters for new day
+      state.stats.dailyCorrect = 0;
+      state.stats.goalReached = false;
       state.stats.lastStudyDate = today;
     }
+
+    // Initialize today's daily stats if needed
+    if (!state.stats.dailyStats[today]) {
+      state.stats.dailyStats[today] = { reviews: 0, correct: 0, goalReached: false };
+    }
+    state.stats.dailyStats[today].reviews++;
+
+    if (isCorrect) {
+      state.stats.dailyStats[today].correct++;
+      state.stats.dailyCorrect++;
+
+      // Check if daily goal is reached
+      if (state.stats.dailyCorrect >= CONFIG.DAILY_GOAL && !state.stats.goalReached) {
+        state.stats.goalReached = true;
+        state.stats.dailyStats[today].goalReached = true;
+        console.log('Daily goal reached! Correct today:', state.stats.dailyCorrect);
+        // Show celebration animation
+        showGoalCelebration();
+      }
+    }
+
+    console.log('Stats updated - dailyCorrect:', state.stats.dailyCorrect, 'goalReached:', state.stats.goalReached);
 
     await DB.put(CONFIG.STORE_STATS, { key: 'userStats', value: state.stats });
   },
@@ -673,10 +701,17 @@ const DataManager = {
     yesterday.setDate(yesterday.getDate() - 1);
     const yesterdayStr = yesterday.toISOString().split('T')[0];
 
+    // Reset streak if last study was before yesterday
     if (state.stats.lastStudyDate &&
         state.stats.lastStudyDate !== today &&
         state.stats.lastStudyDate !== yesterdayStr) {
       state.stats.streak = 0;
+    }
+
+    // If it's a new day, reset daily counters
+    if (state.stats.lastStudyDate && state.stats.lastStudyDate !== today) {
+      state.stats.dailyCorrect = 0;
+      state.stats.goalReached = false;
     }
   },
 
@@ -906,11 +941,47 @@ const Modal = {
 };
 
 // ============================================
+// GOAL CELEBRATION
+// ============================================
+
+function showGoalCelebration() {
+  const streak = state.stats.streak || 0;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'celebration-overlay';
+  overlay.innerHTML = `
+    <div class="celebration-content">
+      <div class="celebration-emoji">🎉</div>
+      <div class="celebration-title">Tagesziel erreicht!</div>
+      <div class="celebration-subtitle">Du hast heute ${CONFIG.DAILY_GOAL} Wörter gelernt</div>
+      ${streak > 0 ? `
+        <div class="celebration-streak">
+          <span class="streak-fire">🔥</span>
+          <span>${streak} Tage Streak!</span>
+        </div>
+      ` : ''}
+      <button class="celebration-btn" onclick="this.closest('.celebration-overlay').remove()">
+        Weiter
+      </button>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  // Auto-dismiss after 5 seconds
+  setTimeout(() => {
+    if (overlay.parentNode) {
+      overlay.remove();
+    }
+  }, 5000);
+}
+
+// ============================================
 // VIEWS
 // ============================================
 
 const Views = {
-  current: 'learn',
+  current: 'home',
 
   init() {
     // Navigation Events
@@ -938,6 +1009,9 @@ const Views = {
 
     // View-spezifische Initialisierung
     switch (viewName) {
+      case 'home':
+        HomeView.init();
+        break;
       case 'learn':
         LearnView.init();
         break;
@@ -951,6 +1025,160 @@ const Views = {
         SettingsView.init();
         break;
     }
+  }
+};
+
+// ============================================
+// HOME VIEW
+// ============================================
+
+const HomeView = {
+  init() {
+    this.render();
+  },
+
+  render() {
+    const container = document.getElementById('view-home');
+    const today = new Date().toISOString().split('T')[0];
+    const dailyCorrect = state.stats.dailyCorrect || 0;
+    const goalReached = state.stats.goalReached || false;
+    const streak = state.stats.streak || 0;
+    const progressPercent = Math.min((dailyCorrect / CONFIG.DAILY_GOAL) * 100, 100);
+
+    container.innerHTML = `
+      <div class="home-header">
+        <h1 class="home-title">Vokabeltrainer</h1>
+        ${streak > 0 ? `
+          <div class="home-streak">
+            <span class="streak-fire">🔥</span>
+            <span class="streak-value">${streak}</span>
+            <span class="streak-label">Tage</span>
+          </div>
+        ` : ''}
+      </div>
+
+      <div class="card home-progress-card">
+        <div class="card-body">
+          <div class="progress-label">
+            <span>Tagesziel</span>
+            <span class="progress-count">${dailyCorrect}/${CONFIG.DAILY_GOAL}</span>
+          </div>
+          <div class="daily-progress">
+            <div class="daily-progress-fill ${goalReached ? 'complete' : ''}"
+                 style="width: ${progressPercent}%"></div>
+          </div>
+          ${goalReached ? `
+            <div class="goal-complete-message">
+              <span>✓</span> Tagesziel erreicht!
+            </div>
+          ` : `
+            <div class="goal-remaining">
+              Noch ${CONFIG.DAILY_GOAL - dailyCorrect} Wörter
+            </div>
+          `}
+        </div>
+      </div>
+
+      ${state.stats.lastCategory ? `
+        <div class="home-continue card">
+          <div class="card-body">
+            <div class="continue-label">Weitermachen</div>
+            <div class="continue-category">${this.escapeHtml(state.stats.lastCategory)}</div>
+            <button class="btn btn-secondary" onclick="HomeView.continueLastCategory()">
+              Fortsetzen
+            </button>
+          </div>
+        </div>
+      ` : ''}
+
+      <div class="home-actions">
+        <button class="btn btn-primary btn-large" onclick="HomeView.quickStart()">
+          ${goalReached ? 'Weiter üben' : 'Jetzt lernen'}
+        </button>
+      </div>
+
+      <div class="home-stats card">
+        <div class="card-body">
+          <div class="mini-stats">
+            <div class="mini-stat">
+              <div class="mini-stat-value">${state.stats.totalReviews || 0}</div>
+              <div class="mini-stat-label">Gesamt</div>
+            </div>
+            <div class="mini-stat">
+              <div class="mini-stat-value">${state.stats.correctAnswers || 0}</div>
+              <div class="mini-stat-label">Richtig</div>
+            </div>
+            <div class="mini-stat">
+              <div class="mini-stat-value">${streak}</div>
+              <div class="mini-stat-label">Streak</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  quickStart() {
+    // Check if we have cards to practice
+    const dueCards = DataManager.getDueCards();
+    const newCards = DataManager.getNewCards();
+    const allCards = state.vocabulary.filter(v => state.selectedWords.has(v.id));
+
+    if (allCards.length === 0) {
+      Toast.show('Keine Wörter ausgewählt', 'info');
+      return;
+    }
+
+    // Navigate to learn view
+    Views.show('learn');
+
+    // Auto-start session after small delay for DOM update
+    setTimeout(() => {
+      // Set default session type and begin
+      state.currentSession = {
+        mode: 'flashcard',
+        cardSet: dueCards.length > 0 ? 'due' : (newCards.length > 0 ? 'new' : 'all')
+      };
+      LearnView.beginSession();
+    }, 50);
+  },
+
+  continueLastCategory() {
+    const category = state.stats.lastCategory;
+    if (!category) {
+      Toast.show('Keine Kategorie gespeichert', 'info');
+      return;
+    }
+
+    // Check if there are cards in this category
+    const categoryCards = state.vocabulary.filter(v =>
+      v.category === category && state.selectedWords.has(v.id)
+    );
+
+    if (categoryCards.length === 0) {
+      Toast.show('Keine Karten in dieser Kategorie ausgewählt', 'info');
+      return;
+    }
+
+    // Navigate to learn view
+    Views.show('learn');
+
+    // Start session with category filter
+    setTimeout(() => {
+      state.currentSession = {
+        mode: 'flashcard',
+        cardSet: 'all',
+        categoryFilter: category
+      };
+      LearnView.beginSession();
+    }, 50);
+  },
+
+  escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
   }
 };
 
@@ -1195,6 +1423,13 @@ const LearnView = {
         cards = state.vocabulary.filter(v => state.selectedWords.has(v.id));
     }
 
+    // Apply category filter if set (for "continue last category" feature)
+    if (session.categoryFilter) {
+      cards = cards.filter(c => c.category === session.categoryFilter);
+      // Clear categoryFilter after use
+      delete session.categoryFilter;
+    }
+
     // Mischen und limitieren
     cards = this.shuffle(cards).slice(0, state.settings.cardsPerSession);
 
@@ -1206,6 +1441,13 @@ const LearnView = {
     session.cards = cards;
     state.currentCardIndex = 0;
     state.sessionResults = [];
+
+    // Track last category from first card for "continue" feature
+    if (cards.length > 0 && cards[0].category) {
+      state.stats.lastCategory = cards[0].category;
+      // Persist to IndexedDB
+      DB.put(CONFIG.STORE_STATS, { key: 'userStats', value: state.stats });
+    }
 
     this.renderExercise();
   },
@@ -2328,7 +2570,7 @@ const SettingsView = {
     };
 
     Toast.show('Alle Daten gelöscht', 'info');
-    Views.show('learn');
+    Views.show('home');
   }
 };
 
@@ -2447,7 +2689,7 @@ async function initApp() {
     Views.init();
 
     // Start-View anzeigen
-    Views.show('learn');
+    Views.show('home');
 
     console.log('Vokabel Master+ initialisiert');
 
