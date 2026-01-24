@@ -20,7 +20,7 @@ const CONFIG = {
   STORE_STATS: 'stats',
   STORE_SELECTION: 'selection',
   // Daily Goal
-  DAILY_GOAL: 20, // Number of correct answers to reach daily goal
+  DAILY_GOAL: 50, // Number of correct answers to reach daily goal
   // Default Einstellungen
   DEFAULT_SETTINGS: {
     theme: 'system',
@@ -1270,6 +1270,7 @@ const DataManager = {
       console.log('Checking for vocabulary updates...');
       const vocabData = PRESET_VOCABULARY;
       let updateCount = 0;
+      let newCount = 0;
 
       for (const category of vocabData.categories) {
         for (const word of category.words) {
@@ -1287,13 +1288,27 @@ const DataManager = {
               await DataManager.saveVocab(existing);
               updateCount++;
             }
+          } else {
+            // WORT FEHLT -> NEU HINZUFÜGEN
+            const vocab = {
+              native: word.native,
+              foreign: word.foreign,
+              example: word.example || '',
+              exampleDe: word.exampleDe || '',
+              category: category.name,
+              difficulty: 1,
+              note: ''
+            };
+            await this.saveVocab(vocab);
+            newCount++;
           }
         }
       }
 
-      if (updateCount > 0) {
-        console.log(`Updated ${updateCount} vocabulary definitions`);
-        Toast.show(`${updateCount} Vokabeln aktualisiert`, 'success');
+      if (updateCount > 0 || newCount > 0) {
+        const total = updateCount + newCount;
+        console.log(`Updated ${updateCount} and added ${newCount} vocabulary definitions`);
+        Toast.show(`${total} Vokabeln aktualisiert`, 'success');
       }
     } catch (error) {
       console.error('Error updating vocabulary:', error);
@@ -1424,6 +1439,21 @@ const DataManager = {
       reader.onerror = () => reject(reader.error);
       reader.readAsText(file);
     });
+  },
+
+  // Download CSV Template
+  downloadCSVTemplate() {
+    const headers = 'native;foreign;example;category;difficulty';
+    const example = 'Haus;house;The house is big.;Haus & Wohnen;1';
+    const csvContent = `${headers}\n${example}`;
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'vokabel-template.csv';
+    a.click();
+    URL.revokeObjectURL(url);
   }
 };
 
@@ -1603,74 +1633,121 @@ const HomeView = {
     const streak = state.stats.streak || 0;
     const progressPercent = Math.min((dailyCorrect / CONFIG.DAILY_GOAL) * 100, 100);
 
+    const masteredCount = Object.values(state.progress).filter(p => p.level >= 5).length;
+    const learningCount = Object.keys(state.progress).length;
+    const totalVocab = state.vocabulary.length;
+
     container.innerHTML = `
-      <div class="home-header">
-        <h1 class="home-title">Vokabeltrainer</h1>
-        ${streak > 0 ? `
-          <div class="home-streak">
-            <span class="streak-fire">🔥</span>
-            <span class="streak-value">${streak}</span>
-            <span class="streak-label">Tage</span>
+      <div class="dashboard">
+        <div class="dashboard-header">
+          <div class="greeting">
+            <h1 class="greeting-title">Hallo! 👋</h1>
+            <p class="greeting-subtitle">Bereit für dein Training?</p>
+          </div>
+          <div class="streak-badge ${streak > 0 ? 'active' : ''}">
+            <span class="streak-icon">🔥</span>
+            <span class="streak-text">${streak} Tage</span>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- Tagesziel Card -->
+          <div class="db-card goal-card ${goalReached ? 'reached' : ''}">
+            <div class="db-card-header">
+              <span class="db-card-icon">🎯</span>
+              <h3>Tagesziel</h3>
+            </div>
+            <div class="goal-progress-container">
+              <svg class="goal-ring" viewBox="0 0 100 100">
+                <circle class="ring-bg" cx="50" cy="50" r="45"></circle>
+                <circle class="ring-fill" cx="50" cy="50" r="45" 
+                        style="stroke-dasharray: ${282 * (progressPercent / 100)}, 282"></circle>
+              </svg>
+              <div class="goal-text">
+                <span class="goal-current">${dailyCorrect}</span>
+                <span class="goal-total">/ ${CONFIG.DAILY_GOAL}</span>
+              </div>
+            </div>
+            <p class="db-card-footer">${goalReached ? 'Ziel erreicht! 🎉' : `Noch ${CONFIG.DAILY_GOAL - dailyCorrect} Wörter`}</p>
+          </div>
+
+          <!-- Fortschritt Card -->
+          <div class="db-card progress-card">
+            <div class="db-card-header">
+              <span class="db-card-icon">📊</span>
+              <h3>Fortschritt</h3>
+            </div>
+            <div class="stats-mini-grid">
+              <div class="mini-stat-item">
+                <span class="val">${totalVocab}</span>
+                <span class="lbl">Gesamt</span>
+              </div>
+              <div class="mini-stat-item">
+                <span class="val">${learningCount}</span>
+                <span class="lbl">In Arbeit</span>
+              </div>
+              <div class="mini-stat-item">
+                <span class="val">${masteredCount}</span>
+                <span class="lbl">Meister</span>
+              </div>
+            </div>
+            <div class="mastery-bar-container">
+               <div class="mastery-label">Meisterungs-Grad: ${Math.round((masteredCount / (totalVocab || 1)) * 100)}%</div>
+               <div class="mastery-bar-bg"><div class="mastery-bar-fill" style="width: ${(masteredCount / (totalVocab || 1)) * 100}%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Continue Action -->
+        ${state.stats.lastCategory ? `
+          <div class="continue-action card" onclick="HomeView.continueLastCategory()" role="button">
+            <div class="continue-icon">🚀</div>
+            <div class="continue-info">
+              <span class="label">Weitermachen</span>
+              <span class="category-name">${this.escapeHtml(state.stats.lastCategory)}</span>
+            </div>
+            <div class="continue-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                <path d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
           </div>
         ` : ''}
-      </div>
 
-      <div class="card home-progress-card">
-        <div class="card-body">
-          <div class="progress-label">
-            <span>Tagesziel</span>
-            <span class="progress-count">${dailyCorrect}/${CONFIG.DAILY_GOAL}</span>
-          </div>
-          <div class="daily-progress">
-            <div class="daily-progress-fill ${goalReached ? 'complete' : ''}"
-                 style="width: ${progressPercent}%"></div>
-          </div>
-          ${goalReached ? `
-            <div class="goal-complete-message">
-              <span>✓</span> Tagesziel erreicht!
+        <div class="main-actions">
+          <button class="action-button primary" onclick="HomeView.quickStart()">
+            <span class="icon">✨</span>
+            <div class="text">
+               <span class="title">Sitzung starten</span>
+               <span class="desc">Quick-Start Modus</span>
             </div>
-          ` : `
-            <div class="goal-remaining">
-              Noch ${CONFIG.DAILY_GOAL - dailyCorrect} Wörter
+          </button>
+          
+          <button class="action-button secondary" onclick="Views.show('learn')">
+            <span class="icon">📚</span>
+             <div class="text">
+               <span class="title">Lernmodus wählen</span>
+               <span class="desc">Flashcards, MC, Tippen</span>
             </div>
-          `}
+          </button>
         </div>
-      </div>
 
-      ${state.stats.lastCategory ? `
-        <div class="home-continue card">
-          <div class="card-body">
-            <div class="continue-label">Weitermachen</div>
-            <div class="continue-category">${this.escapeHtml(state.stats.lastCategory)}</div>
-            <button class="btn btn-secondary" onclick="HomeView.continueLastCategory()">
-              Fortsetzen
-            </button>
-          </div>
-        </div>
-      ` : ''}
-
-      <div class="home-actions">
-        <button class="btn btn-primary btn-large" onclick="HomeView.quickStart()">
-          ${goalReached ? 'Weiter üben' : 'Jetzt lernen'}
-        </button>
-      </div>
-
-      <div class="home-stats card">
-        <div class="card-body">
-          <div class="mini-stats">
-            <div class="mini-stat">
-              <div class="mini-stat-value">${state.stats.totalReviews || 0}</div>
-              <div class="mini-stat-label">Gesamt</div>
-            </div>
-            <div class="mini-stat">
-              <div class="mini-stat-value">${state.stats.correctAnswers || 0}</div>
-              <div class="mini-stat-label">Richtig</div>
-            </div>
-            <div class="mini-stat">
-              <div class="mini-stat-value">${streak}</div>
-              <div class="mini-stat-label">Streak</div>
-            </div>
-          </div>
+        <div class="recent-stats card">
+           <div class="card-header-simple">Deine Erfolge</div>
+           <div class="quick-stats">
+              <div class="qs-item">
+                 <span class="qs-val">${state.stats.totalReviews || 0}</span>
+                 <span class="qs-lbl">Antworten</span>
+              </div>
+              <div class="qs-item">
+                 <span class="qs-val">${state.stats.correctAnswers || 0}</span>
+                 <span class="qs-lbl">Richtig</span>
+              </div>
+              <div class="qs-item">
+                 <span class="qs-val">${state.stats.totalReviews > 0 ? Math.round((state.stats.correctAnswers / state.stats.totalReviews) * 100) : 0}%</span>
+                 <span class="qs-lbl">Genauigkeit</span>
+              </div>
+           </div>
         </div>
       </div>
     `;
@@ -2962,6 +3039,14 @@ const SettingsView = {
   render() {
     const container = document.getElementById('view-settings');
 
+    const btnPoints = `
+      <span class="fold"></span>
+      <div class="points_wrapper">
+        <i class="point"></i><i class="point"></i><i class="point"></i><i class="point"></i><i class="point"></i>
+        <i class="point"></i><i class="point"></i><i class="point"></i><i class="point"></i><i class="point"></i>
+      </div>
+    `;
+
     container.innerHTML = `
       <div class="settings-section">
         <h3>Darstellung</h3>
@@ -3081,13 +3166,16 @@ const SettingsView = {
             <div class="settings-item-label">Daten exportieren</div>
             <div class="settings-item-desc">Als JSON-Backup</div>
           </div>
-          <button class="btn btn-secondary" onclick="DataManager.exportData()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-              <polyline points="7 10 12 15 17 10"/>
-              <line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
-            Export
+          <button class="btn-uiverse" onclick="DataManager.exportData()">
+            ${btnPoints}
+            <span class="inner">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Export
+            </span>
           </button>
         </div>
 
@@ -3099,13 +3187,16 @@ const SettingsView = {
           <div class="file-input-wrapper">
             <input type="file" class="file-input" id="import-json" accept=".json"
                    onchange="SettingsView.importJSON(this.files[0])">
-            <button class="btn btn-secondary" onclick="document.getElementById('import-json').click()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="17 8 12 3 7 8"/>
-                <line x1="12" y1="3" x2="12" y2="15"/>
-              </svg>
-              Import
+            <button class="btn-uiverse" onclick="document.getElementById('import-json').click()">
+              ${btnPoints}
+              <span class="inner">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="17 8 12 3 7 8"/>
+                  <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                Import
+              </span>
             </button>
           </div>
         </div>
@@ -3115,17 +3206,27 @@ const SettingsView = {
             <div class="settings-item-label">CSV importieren</div>
             <div class="settings-item-desc">Format: native;foreign;example;category;difficulty</div>
           </div>
-          <div class="file-input-wrapper">
+          <div class="file-input-wrapper" style="display: flex; gap: var(--space-xs);">
+            <button class="btn btn-ghost btn-sm" onclick="DataManager.downloadCSVTemplate()" title="Vorlage herunterladen">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+            </button>
             <input type="file" class="file-input" id="import-csv" accept=".csv,.txt"
                    onchange="SettingsView.importCSV(this.files[0])">
-            <button class="btn btn-secondary" onclick="document.getElementById('import-csv').click()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                <polyline points="14 2 14 8 20 8"/>
-                <line x1="16" y1="13" x2="8" y2="13"/>
-                <line x1="16" y1="17" x2="8" y2="17"/>
-              </svg>
-              CSV
+            <button class="btn-uiverse" onclick="document.getElementById('import-csv').click()">
+              ${btnPoints}
+              <span class="inner">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+                CSV
+              </span>
             </button>
           </div>
         </div>
@@ -3158,11 +3259,14 @@ const SettingsView = {
             <div class="settings-item-label">Alle Daten löschen</div>
             <div class="settings-item-desc">Unwiderruflich!</div>
           </div>
-          <button class="btn btn-error" onclick="SettingsView.clearAllData()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-              <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-            </svg>
-            Löschen
+          <button class="btn-uiverse btn-uiverse-error" onclick="SettingsView.clearAllData()">
+            ${btnPoints}
+            <span class="inner">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+              </svg>
+              Löschen
+            </span>
           </button>
         </div>
       </div>
