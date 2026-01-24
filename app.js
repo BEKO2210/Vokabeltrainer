@@ -892,9 +892,10 @@ const state = {
     correctAnswers: 0,
     streak: 0,
     lastStudyDate: null,
+    lastGoalDate: null,   // Date when the goal was last reached
     dailyStats: {},
     dailyCorrect: 0,      // Today's correct count toward daily goal
-    goalReached: false,   // Whether today's goal (20 correct) is complete
+    goalReached: false,   // Whether today's goal is complete
     lastCategory: null    // Last practiced category for "continue" feature
   },
   currentView: 'learn',
@@ -1162,25 +1163,8 @@ const DataManager = {
       state.stats.correctAnswers++;
     }
 
-    // New day detection - handle reset and streak logic
+    // New day detection
     if (state.stats.lastStudyDate !== today) {
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      const yesterdayStr = yesterday.toISOString().split('T')[0];
-
-      // Check if yesterday's goal was reached for streak calculation
-      const yesterdayStats = state.stats.dailyStats[yesterdayStr];
-      const yesterdayGoalReached = yesterdayStats ? yesterdayStats.goalReached : false;
-
-      // Streak logic: only increment if yesterday's goal was REACHED
-      if (state.stats.lastStudyDate === yesterdayStr && yesterdayGoalReached) {
-        state.stats.streak++;
-      } else if (state.stats.lastStudyDate !== yesterdayStr) {
-        // Streak broken - didn't study or reach goal yesterday
-        state.stats.streak = 1;
-      }
-
-      // Reset daily counters for new day
       state.stats.dailyCorrect = 0;
       state.stats.goalReached = false;
       state.stats.lastStudyDate = today;
@@ -1200,8 +1184,20 @@ const DataManager = {
       if (state.stats.dailyCorrect >= CONFIG.DAILY_GOAL && !state.stats.goalReached) {
         state.stats.goalReached = true;
         state.stats.dailyStats[today].goalReached = true;
-        console.log('Daily goal reached! Correct today:', state.stats.dailyCorrect);
-        // Show celebration animation
+
+        // Streak logic
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+        if (state.stats.lastGoalDate === yesterdayStr) {
+          state.stats.streak++;
+        } else if (state.stats.lastGoalDate !== today) {
+          state.stats.streak = 1;
+        }
+
+        state.stats.lastGoalDate = today;
+        console.log('Daily goal reached! Streak:', state.stats.streak);
         showGoalCelebration();
       }
     }
@@ -1217,17 +1213,17 @@ const DataManager = {
     yesterday.setDate(yesterday.getDate() - 1);
     const yesterdayStr = yesterday.toISOString().split('T')[0];
 
-    // Reset streak if last study was before yesterday
-    if (state.stats.lastStudyDate &&
-      state.stats.lastStudyDate !== today &&
-      state.stats.lastStudyDate !== yesterdayStr) {
-      state.stats.streak = 0;
-    }
-
-    // If it's a new day, reset daily counters
+    // Reset daily counters for new day
     if (state.stats.lastStudyDate && state.stats.lastStudyDate !== today) {
       state.stats.dailyCorrect = 0;
       state.stats.goalReached = false;
+    }
+
+    // Reset streak if last goal reached was before yesterday
+    if (state.stats.lastGoalDate &&
+      state.stats.lastGoalDate !== today &&
+      state.stats.lastGoalDate !== yesterdayStr) {
+      state.stats.streak = 0;
     }
   },
 
@@ -1644,11 +1640,21 @@ const HomeView = {
             <h1 class="greeting-title">Hallo! 👋</h1>
             <p class="greeting-subtitle">Bereit für dein Training?</p>
           </div>
-          <div class="streak-badge ${streak > 0 ? 'active' : ''}">
-            <span class="streak-icon">🔥</span>
-            <span class="streak-text">${streak} Tage</span>
-          </div>
         </div>
+
+        ${streak > 0 ? `
+          <div class="home-streak-card">
+            <div class="streak-icon-circle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                <path d="M5 12l5 5l10 -10"></path>
+              </svg>
+            </div>
+            <div class="streak-info">
+              <span class="streak-count">${streak}</span>
+              <span class="streak-subtitle">Tage in Folge</span>
+            </div>
+          </div>
+        ` : ''}
 
         <div class="dashboard-grid">
           <!-- Tagesziel Card -->
@@ -1701,7 +1707,11 @@ const HomeView = {
         <!-- Continue Action -->
         ${state.stats.lastCategory ? `
           <div class="continue-action card" onclick="HomeView.continueLastCategory()" role="button">
-            <div class="continue-icon">🚀</div>
+            <div class="continue-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24">
+                <path d="M4 13a8 8 0 0 1 7 7a6 6 0 0 0 3 -5a9 9 0 0 0 6 -8a3 3 0 0 0 -3 -3a9 9 0 0 0 -8 6a6 6 0 0 0 -5 3" /><path d="M7 14a6 6 0 0 0 -3 6a6 6 0 0 0 6 -3" /><path d="M15 9m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+              </svg>
+            </div>
             <div class="continue-info">
               <span class="label">Weitermachen</span>
               <span class="category-name">${this.escapeHtml(state.stats.lastCategory)}</span>
@@ -1716,7 +1726,11 @@ const HomeView = {
 
         <div class="main-actions">
           <button class="action-button primary" onclick="HomeView.quickStart()">
-            <span class="icon">✨</span>
+            <span class="icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="28" height="28">
+                <path d="M13 3l0 10l8 0l-11 11l0 -10l-8 0z" />
+              </svg>
+            </span>
             <div class="text">
                <span class="title">Sitzung starten</span>
                <span class="desc">Quick-Start Modus</span>
@@ -1724,7 +1738,11 @@ const HomeView = {
           </button>
           
           <button class="action-button secondary" onclick="Views.show('learn')">
-            <span class="icon">📚</span>
+            <span class="icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="28" height="28">
+                <path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" />
+              </svg>
+            </span>
              <div class="text">
                <span class="title">Lernmodus wählen</span>
                <span class="desc">Flashcards, MC, Tippen</span>
@@ -1845,18 +1863,6 @@ const LearnView = {
           <button class="btn btn-primary mt-md" onclick="Views.show('words')">
             Zur Wortliste
           </button>
-        </div>
-      ` : ''}
-
-      ${state.stats.streak > 0 ? `
-        <div class="streak-display">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-          </svg>
-          <div>
-            <div class="streak-value">${state.stats.streak}</div>
-            <div class="streak-label">Tage in Folge</div>
-          </div>
         </div>
       ` : ''}
 
@@ -1991,30 +1997,26 @@ const LearnView = {
       Modal.open('Übungsart wählen', `
         <div class="mode-selector">
           <button class="mode-card" onclick="LearnView.selectMode('flashcard')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="5" width="18" height="14" rx="2"/>
-              <path d="M3 10h18"/>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 5l0 14" /><path d="M17 10l2 2l-2 2" /><path d="M7 10l-2 2l2 2" /><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" />
             </svg>
             <span class="mode-card-title">Karteikarten</span>
           </button>
           <button class="mode-card" onclick="LearnView.selectMode('mc')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="3" width="18" height="18" rx="2"/>
-              <path d="M9 12l2 2 4-4"/>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 11l3 3l8 -8" /><path d="M20 12v6a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h9" />
             </svg>
             <span class="mode-card-title">Multiple Choice</span>
           </button>
           <button class="mode-card" onclick="LearnView.selectMode('typing')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="2" y="6" width="20" height="12" rx="2"/>
-              <path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M8 14h8"/>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 5h18v14h-18z" /><path d="M7 15h10" /><path d="M7 10h1" /><path d="M11 10h1" /><path d="M15 10h1" />
             </svg>
             <span class="mode-card-title">Tippen</span>
           </button>
           <button class="mode-card" onclick="LearnView.selectMode('dictation')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 5a3 3 0 0 1 3 -3h0a3 3 0 0 1 3 3v5a3 3 0 0 1 -3 3h0a3 3 0 0 1 -3 -3z" /><path d="M5 10a7 7 0 0 0 14 0" /><path d="M8 21l8 0" /><path d="M12 17l0 4" />
             </svg>
             <span class="mode-card-title">Diktat</span>
           </button>
@@ -2624,9 +2626,8 @@ const WordsView = {
 
     container.innerHTML = `
       <div class="search-wrapper">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8"/>
-          <path d="M21 21l-4.35-4.35"/>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" />
         </svg>
         <input type="text" class="form-input search-input" placeholder="Suchen..."
                value="${this.escapeHtml(this.filter)}" oninput="WordsView.setFilter(this.value)">
@@ -2645,8 +2646,8 @@ const WordsView = {
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-md);">
         <span class="text-muted">${filtered.length} Vokabeln</span>
         <button class="btn btn-primary" onclick="WordsView.showAddModal()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-            <path d="M12 5v14M5 12h14"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 5l0 14" /><path d="M5 12l14 0" />
           </svg>
           Hinzufügen
         </button>
@@ -2664,9 +2665,8 @@ const WordsView = {
 
       ${filtered.length === 0 ? `
         <div class="empty-state">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" />
           </svg>
           <h3>Keine Vokabeln</h3>
           <p>${this.filter || this.category ? 'Keine Treffer für diese Filter.' : 'Füge deine ersten Vokabeln hinzu!'}</p>
@@ -2703,14 +2703,13 @@ const WordsView = {
         </div>
         <div class="vocab-item-actions">
           <button class="btn btn-ghost btn-icon" onclick="WordsView.showEditModal('${vocab.id}')" aria-label="Bearbeiten">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" />
             </svg>
           </button>
           <button class="btn btn-ghost btn-icon" onclick="WordsView.deleteVocab('${vocab.id}')" aria-label="Löschen">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-              <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
             </svg>
           </button>
         </div>
@@ -2924,18 +2923,6 @@ const StatsView = {
     const todayStats = state.stats.dailyStats[today] || { reviews: 0, correct: 0 };
 
     container.innerHTML = `
-      ${state.stats.streak > 0 ? `
-        <div class="streak-display">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-          </svg>
-          <div>
-            <div class="streak-value">${state.stats.streak}</div>
-            <div class="streak-label">Tage Streak</div>
-          </div>
-        </div>
-      ` : ''}
-
       <h2 class="mb-md">Übersicht</h2>
 
       <div class="stats-grid">
@@ -3169,10 +3156,8 @@ const SettingsView = {
           <button class="btn-uiverse" onclick="DataManager.exportData()">
             ${btnPoints}
             <span class="inner">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 9l5 -5l5 5" /><path d="M12 4l0 12" />
               </svg>
               Export
             </span>
@@ -3190,10 +3175,8 @@ const SettingsView = {
             <button class="btn-uiverse" onclick="document.getElementById('import-json').click()">
               ${btnPoints}
               <span class="inner">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                  <polyline points="17 8 12 3 7 8"/>
-                  <line x1="12" y1="3" x2="12" y2="15"/>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 11l5 5l5 -5" /><path d="M12 4l0 12" />
                 </svg>
                 Import
               </span>
@@ -3208,10 +3191,8 @@ const SettingsView = {
           </div>
           <div class="file-input-wrapper" style="display: flex; gap: var(--space-xs);">
             <button class="btn btn-ghost btn-sm" onclick="DataManager.downloadCSVTemplate()" title="Vorlage herunterladen">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 11l5 5l5 -5" /><path d="M12 4l0 12" />
               </svg>
             </button>
             <input type="file" class="file-input" id="import-csv" accept=".csv,.txt"
@@ -3219,11 +3200,8 @@ const SettingsView = {
             <button class="btn-uiverse" onclick="document.getElementById('import-csv').click()">
               ${btnPoints}
               <span class="inner">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                  <polyline points="14 2 14 8 20 8"/>
-                  <line x1="16" y1="13" x2="8" y2="13"/>
-                  <line x1="16" y1="17" x2="8" y2="17"/>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15h3l2 2l5 -5" />
                 </svg>
                 CSV
               </span>
@@ -3241,10 +3219,8 @@ const SettingsView = {
             <div class="settings-item-desc">Auf dem Startbildschirm hinzufügen</div>
           </div>
           <button class="btn btn-primary" onclick="SettingsView.triggerInstall()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-              <polyline points="7 10 12 15 17 10"/>
-              <line x1="12" y1="15" x2="12" y2="3"/>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 11l5 5l5 -5" /><path d="M12 4l0 12" />
             </svg>
             Installieren
           </button>
@@ -3262,8 +3238,8 @@ const SettingsView = {
           <button class="btn-uiverse btn-uiverse-error" onclick="SettingsView.clearAllData()">
             ${btnPoints}
             <span class="inner">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
               </svg>
               Löschen
             </span>

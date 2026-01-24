@@ -1654,24 +1654,45 @@ select.form-input {
   margin: 0;
 }
 
-.home-streak {
+.home-streak-card {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
-  gap: 0.25rem;
-  background: var(--color-bg-tertiary);
-  padding: 0.5rem 0.75rem;
-  border-radius: 9999px;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
 }
 
-.home-streak .streak-value {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--color-text);
+.streak-icon-circle {
+  width: 42px;
+  height: 42px;
+  background: white;
+  color: #d97706;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.home-streak .streak-label {
-  font-size: 0.75rem;
-  color: var(--color-text-secondary);
+.streak-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.streak-count {
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.streak-subtitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  opacity: 0.95;
 }
 
 .home-progress-card {
