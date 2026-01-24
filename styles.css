@@ -2766,6 +2766,11 @@ select.form-input {
   --secondary-color: rgba(239, 68, 68, 0.8);
 }
 
+.btn-uiverse-success {
+  --primary-color: #10b981;
+  --secondary-color: rgba(16, 185, 129, 0.8);
+}
+
 .btn-uiverse::before,
 .btn-uiverse::after {
   content: "";

@@ -3671,8 +3671,14 @@ const SettingsView = {
             <div class="settings-item-label">Impressum & Datenschutz</div>
             <div class="settings-item-desc">Gesetzliche Informationen</div>
           </div>
-          <button class="btn btn-ghost" onclick="SettingsView.showLegalInfo()">
-            Ansehen
+          <button class="btn-uiverse btn-uiverse-success" onclick="SettingsView.showLegalInfo()">
+            ${btnPoints}
+            <span class="inner">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+              </svg>
+              Ansehen
+            </span>
           </button>
         </div>
       </div>
