@@ -215,7 +215,7 @@ p {
 /* Main Content Area */
 .app-main {
   flex: 1;
-  padding: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
   padding-bottom: calc(var(--nav-height) + var(--space-md) + var(--safe-area-bottom));
   overflow-y: auto;
   overflow-x: hidden;
@@ -459,7 +459,7 @@ select.form-input {
 }
 
 .card-body {
-  padding: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
 }
 
 .card-header {

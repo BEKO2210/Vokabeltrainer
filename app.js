@@ -2976,7 +2976,7 @@ const StatsView = {
           <div class="card-body">
             <div class="vocab-list">
               ${errorWords.map(word => `
-                <div class="vocab-item" style="border: none; padding: var(--space-sm) 0;">
+                <div class="vocab-item" style="border: none; padding: var(--space-sm) var(--space-md);">
                   <div class="vocab-item-content">
                     <div class="vocab-item-native">${this.escapeHtml(word.native)}</div>
                     <div class="vocab-item-foreign">${this.escapeHtml(word.foreign)}</div>
