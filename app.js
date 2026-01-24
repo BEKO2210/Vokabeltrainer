@@ -1317,29 +1317,28 @@ const DataManager = {
   },
 
   // Fällige Karten ermitteln (nur ausgewählte)
-  getDueCards() {
+  getDueCards(onlySelected = false) {
     const now = new Date();
     return state.vocabulary.filter(vocab => {
-      // First check if word is selected
-      if (!state.selectedWords.has(vocab.id)) return false;
+      if (onlySelected && !state.selectedWords.has(vocab.id)) return false;
       const progress = state.progress[vocab.id];
       if (!progress || !progress.nextReview) return false;
       return new Date(progress.nextReview) <= now;
     });
   },
 
-  // Neue Karten (noch nie gelernt, nur ausgewählte)
-  getNewCards() {
+  // Neue Karten (noch nie gelernt)
+  getNewCards(onlySelected = false) {
     return state.vocabulary.filter(vocab => {
-      if (!state.selectedWords.has(vocab.id)) return false;
+      if (onlySelected && !state.selectedWords.has(vocab.id)) return false;
       return !state.progress[vocab.id];
     });
   },
 
-  // Fehlerkarten (letzte Antwort falsch oder niedriges Level, nur ausgewählte)
-  getErrorCards() {
+  // Fehlerkarten (letzte Antwort falsch oder niedriges Level)
+  getErrorCards(onlySelected = false) {
     return state.vocabulary.filter(vocab => {
-      if (!state.selectedWords.has(vocab.id)) return false;
+      if (onlySelected && !state.selectedWords.has(vocab.id)) return false;
       const progress = state.progress[vocab.id];
       if (!progress) return false;
       return progress.level === 0 || progress.incorrectCount > progress.correctCount;
@@ -1631,6 +1630,7 @@ const HomeView = {
 
     const masteredCount = Object.values(state.progress).filter(p => p.level >= 5).length;
     const learningCount = Object.keys(state.progress).length;
+    const dueCount = DataManager.getDueCards().length;
     const totalVocab = state.vocabulary.length;
 
     container.innerHTML = `
@@ -1685,12 +1685,12 @@ const HomeView = {
             </div>
             <div class="stats-mini-grid">
               <div class="mini-stat-item">
-                <span class="val">${totalVocab}</span>
-                <span class="lbl">Gesamt</span>
+                <span class="val">${dueCount}</span>
+                <span class="lbl">Fällig</span>
               </div>
               <div class="mini-stat-item">
                 <span class="val">${learningCount}</span>
-                <span class="lbl">In Arbeit</span>
+                <span class="lbl">Gelernt</span>
               </div>
               <div class="mini-stat-item">
                 <span class="val">${masteredCount}</span>
@@ -2040,24 +2040,29 @@ const LearnView = {
 
     // Check if any words are selected
     const selectedCount = state.vocabulary.filter(v => state.selectedWords.has(v.id)).length;
-    if (selectedCount === 0) {
-      Toast.show('Keine Wörter ausgewählt. Wähle Wörter in der Wortliste aus.', 'info');
-      return;
-    }
+
+    // If the cardSet is algorithmic (due, new, errors), we priorityze those over manual selection
+    // if the manual selection is empty. If a selection exists, we still respect it unless it's empty.
+    const respectSelection = (session.cardSet === 'all' || selectedCount > 0);
 
     switch (session.cardSet) {
       case 'due':
-        cards = DataManager.getDueCards();
+        cards = DataManager.getDueCards(!respectSelection ? false : true);
         break;
       case 'new':
-        cards = DataManager.getNewCards();
+        cards = DataManager.getNewCards(!respectSelection ? false : true);
         break;
       case 'errors':
-        cards = DataManager.getErrorCards();
+        cards = DataManager.getErrorCards(!respectSelection ? false : true);
         break;
       case 'all':
       default:
         cards = state.vocabulary.filter(v => state.selectedWords.has(v.id));
+    }
+
+    if (cards.length === 0 && selectedCount === 0) {
+      Toast.show('Keine Wörter verfügbar. Füge Vokabeln hinzu oder wähle sie aus.', 'info');
+      return;
     }
 
     // Apply category filter if set (for "continue last category" feature)
@@ -3228,6 +3233,19 @@ const SettingsView = {
       </div>
 
       <div class="settings-section">
+        <h3>Rechtliches</h3>
+        <div class="settings-item">
+          <div>
+            <div class="settings-item-label">Impressum & Datenschutz</div>
+            <div class="settings-item-desc">Gesetzliche Informationen</div>
+          </div>
+          <button class="btn btn-ghost" onclick="SettingsView.showLegalInfo()">
+            Ansehen
+          </button>
+        </div>
+      </div>
+
+      <div class="settings-section">
         <h3>Gefahrenzone</h3>
 
         <div class="settings-item" style="border-color: var(--color-error);">
@@ -3259,6 +3277,36 @@ const SettingsView = {
     // Also save to localStorage for FOUC prevention script in index.html
     localStorage.setItem('vokabel-theme', theme);
     applyTheme(theme);
+  },
+
+  showLegalInfo() {
+    Modal.open('Impressum & Datenschutz', `
+      <div class="legal-info" style="font-size: 0.875rem; line-height: 1.6;">
+        <h4 class="mb-sm">Impressum</h4>
+        <p><strong>Betreiber der Anwendung:</strong><br>
+        Belkis Aslani<br>
+        Vogelsangstr. 32<br>
+        71691 Freiberg am Neckar</p>
+        
+        <p class="mt-md"><strong>Kontakt:</strong><br>
+        Telefon: +49 176 81462526<br>
+        E-Mail: belkis.aslani@gmail.com</p>
+
+        <h4 class="mt-lg mb-sm">Datenschutzerklärung</h4>
+        <p>Diese Anwendung ("Vokabel Master+") ist eine reine Offline-Anwendung (Progressive Web App). Alle Daten werden ausschließlich lokal in der Datenbank Ihres Webbrowsers (IndexedDB) gespeichert.</p>
+        
+        <p class="mt-md"><strong>Datenerhebung:</strong><br>
+        Es werden keine personenbezogenen Daten an externe Server übertragen. Die von Ihnen eingegebenen Vokabeln und Lernfortschritte verbleiben auf Ihrem Gerät.</p>
+        
+        <p class="mt-md"><strong>Berechtigungen:</strong><br>
+        Die Anwendung nutzt die Cache-Funktion Ihres Browsers (Service Worker), um offline-fähig zu sein. Hierfür werden keine persönlichen Profile erstellt.</p>
+        
+        <p class="mt-md"><strong>Ihre Rechte:</strong><br>
+        Da alle Daten lokal gespeichert sind, können Sie diese jederzeit selbst löschen (über die App-Einstellungen unter "Daten löschen" oder durch Löschen des Browser-Caches).</p>
+      </div>
+    `, `
+      <button class="btn btn-primary btn-block" onclick="Modal.close()">Schließen</button>
+    `);
   },
 
   async setSetting(key, value) {
