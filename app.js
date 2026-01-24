@@ -1597,41 +1597,45 @@ const LearnView = {
     const qa = this.getQuestionAnswer(card);
     const isDeEn = state.settings.practiceDirection === 'de-en';
 
-    // Wrong options come from the answer field of other cards
-    // Filter out cards with the same answer to ensure wrong options are truly wrong
-    const correctAnswer = qa.answer.toLowerCase().trim();
-    const otherCards = state.vocabulary.filter(v => {
-      if (v.id === card.id) return false;
-      const otherAnswer = (isDeEn ? v.foreign : v.native).toLowerCase().trim();
-      return otherAnswer !== correctAnswer;
-    });
+    // Get the correct answer (normalized for comparison)
+    const correctAnswerLower = qa.answer.toLowerCase().trim();
 
-    // Get unique wrong options (no duplicates)
-    const wrongOptionsSet = new Set();
-    const shuffledOthers = this.shuffle(otherCards);
-    for (const v of shuffledOthers) {
-      const option = isDeEn ? v.foreign : v.native;
-      const optionLower = option.toLowerCase().trim();
-      if (!wrongOptionsSet.has(optionLower) && optionLower !== correctAnswer) {
-        wrongOptionsSet.add(optionLower);
-        if (wrongOptionsSet.size >= CONFIG.MC_OPTIONS_COUNT - 1) break;
+    // Collect ALL unique wrong answers from the entire vocabulary
+    const wrongAnswersMap = new Map(); // lowercase -> original
+
+    for (const v of state.vocabulary) {
+      // Skip the current card
+      if (v.id === card.id) continue;
+
+      const answer = isDeEn ? v.foreign : v.native;
+      const answerLower = answer.toLowerCase().trim();
+
+      // Skip if it matches the correct answer
+      if (answerLower === correctAnswerLower) continue;
+
+      // Only add if we haven't seen this answer before (case-insensitive)
+      if (!wrongAnswersMap.has(answerLower)) {
+        wrongAnswersMap.set(answerLower, answer);
       }
     }
 
-    // Convert Set back to array with original casing
-    const wrongOptions = [];
-    const usedLower = new Set();
-    for (const v of shuffledOthers) {
-      const option = isDeEn ? v.foreign : v.native;
-      const optionLower = option.toLowerCase().trim();
-      if (wrongOptionsSet.has(optionLower) && !usedLower.has(optionLower)) {
-        wrongOptions.push(option);
-        usedLower.add(optionLower);
-        if (wrongOptions.length >= CONFIG.MC_OPTIONS_COUNT - 1) break;
-      }
-    }
+    // Convert to array and shuffle
+    const allWrongAnswers = Array.from(wrongAnswersMap.values());
+    const shuffledWrong = this.shuffle(allWrongAnswers);
 
+    // Take only what we need (3 wrong answers for 4 total options)
+    const wrongOptions = shuffledWrong.slice(0, CONFIG.MC_OPTIONS_COUNT - 1);
+
+    // Combine correct + wrong and shuffle
     const options = this.shuffle([qa.answer, ...wrongOptions]);
+
+    // Debug: log to console
+    console.log('Multiple Choice:', {
+      question: qa.question,
+      correct: qa.answer,
+      wrong: wrongOptions,
+      allOptions: options
+    });
 
     container.innerHTML = `
       <div class="typing-question">
@@ -2706,6 +2710,16 @@ function setupInstallPrompt() {
 // ============================================
 
 async function registerServiceWorker() {
+  // Service Worker nur bei https:// oder localhost registrieren (nicht bei file://)
+  const isValidProtocol = location.protocol === 'https:' ||
+                          location.hostname === 'localhost' ||
+                          location.hostname === '127.0.0.1';
+
+  if (!isValidProtocol) {
+    console.log('Service Worker übersprungen (file:// Protokoll)');
+    return;
+  }
+
   if ('serviceWorker' in navigator) {
     try {
       const registration = await navigator.serviceWorker.register('./sw.js');
