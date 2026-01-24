@@ -1,5 +1,5 @@
 // Service Worker für Vokabel Master+
-const CACHE_NAME = 'vokabel-master-v1.1';
+const CACHE_NAME = 'vokabel-master-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -7,7 +7,8 @@ const ASSETS_TO_CACHE = [
   './app.js',
   './manifest.webmanifest',
   './icons/icon-192.svg',
-  './icons/icon-512.svg'
+  './icons/icon-512.svg',
+  './data/preset-vocabulary.json'
 ];
 
 // Installation: Cache alle statischen Assets

@@ -1233,6 +1233,37 @@ select.form-input {
   color: var(--color-text-muted);
 }
 
+/* Word Selection Checkbox */
+.vocab-checkbox {
+  display: flex;
+  align-items: center;
+  margin-right: var(--space-sm);
+  flex-shrink: 0;
+}
+
+.vocab-checkbox input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+/* Selection Controls */
+.selection-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-md);
+}
+
+.selection-buttons {
+  display: flex;
+  gap: var(--space-xs);
+}
+
 /* Scrollbar Styling */
 ::-webkit-scrollbar {
   width: 6px;
