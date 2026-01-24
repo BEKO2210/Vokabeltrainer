@@ -627,11 +627,105 @@ select.form-input {
   margin-top: var(--space-sm);
 }
 
+.flashcard-answer-label,
+.flashcard-example-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-xs);
+}
+
+.flashcard-example-label {
+  margin-top: var(--space-lg);
+}
+
 .flashcard-example {
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
-  margin-top: var(--space-md);
   font-style: italic;
+}
+
+.flashcard-example-translation {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+}
+
+/* Verstanden Button */
+.understood-btn-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-lg);
+}
+
+.understood-btn {
+  cursor: pointer;
+  border: none;
+  background: var(--color-primary);
+  color: #fff;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  display: grid;
+  place-content: center;
+  transition: background 300ms, transform 200ms;
+  font-weight: 600;
+}
+
+.understood-btn__text {
+  position: absolute;
+  inset: 0;
+  animation: text-rotation 8s linear infinite;
+}
+
+.understood-btn__text > span {
+  position: absolute;
+  transform: rotate(calc(18deg * var(--index)));
+  inset: 7px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.understood-btn__circle {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  background: #fff;
+  color: var(--color-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.understood-btn__icon--copy {
+  position: absolute;
+  transform: translate(-150%, 150%);
+}
+
+.understood-btn:hover {
+  background: var(--color-primary-dark, #0e7490);
+  transform: scale(1.05);
+}
+
+.understood-btn:hover .understood-btn__icon:first-child {
+  transition: transform 0.3s ease-in-out;
+  transform: translate(150%, -150%);
+}
+
+.understood-btn:hover .understood-btn__icon--copy {
+  transition: transform 0.3s ease-in-out 0.1s;
+  transform: translate(0);
+}
+
+@keyframes text-rotation {
+  to {
+    rotate: 360deg;
+  }
 }
 
 /* Multiple Choice */

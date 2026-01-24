@@ -46,211 +46,211 @@ const PRESET_VOCABULARY = {
     {
       "name": "Alltag & Reisen",
       "words": [
-        { "native": "der Flughafen", "foreign": "airport", "example": "Wir fahren zum Flughafen." },
-        { "native": "das Flugzeug", "foreign": "airplane", "example": "Das Flugzeug landet um 14 Uhr." },
-        { "native": "der Bahnhof", "foreign": "train station", "example": "Der Bahnhof ist in der Stadtmitte." },
-        { "native": "der Zug", "foreign": "train", "example": "Der Zug kommt in zehn Minuten." },
-        { "native": "die U-Bahn", "foreign": "subway", "example": "Wir nehmen die U-Bahn." },
-        { "native": "der Bus", "foreign": "bus", "example": "Der Bus faehrt alle 15 Minuten." },
-        { "native": "das Taxi", "foreign": "taxi", "example": "Ich rufe ein Taxi." },
-        { "native": "das Auto", "foreign": "car", "example": "Mein Auto ist blau." },
-        { "native": "das Fahrrad", "foreign": "bicycle", "example": "Ich fahre mit dem Fahrrad zur Arbeit." },
-        { "native": "die Fahrkarte", "foreign": "ticket", "example": "Ich kaufe eine Fahrkarte." },
-        { "native": "der Koffer", "foreign": "suitcase", "example": "Mein Koffer ist schwer." },
-        { "native": "der Rucksack", "foreign": "backpack", "example": "Ich packe meinen Rucksack." },
-        { "native": "der Pass", "foreign": "passport", "example": "Vergiss deinen Pass nicht!" },
-        { "native": "das Visum", "foreign": "visa", "example": "Brauche ich ein Visum?" },
-        { "native": "die Grenze", "foreign": "border", "example": "Wir ueberqueren die Grenze." },
-        { "native": "das Hotel", "foreign": "hotel", "example": "Das Hotel hat fuenf Sterne." },
-        { "native": "das Zimmer", "foreign": "room", "example": "Ich moechte ein Zimmer reservieren." },
-        { "native": "die Rezeption", "foreign": "reception", "example": "Die Rezeption ist im Erdgeschoss." },
-        { "native": "der Schluessel", "foreign": "key", "example": "Hier ist Ihr Schluessel." },
-        { "native": "das Fruehstueck", "foreign": "breakfast", "example": "Das Fruehstueck ist inklusive." },
-        { "native": "das Restaurant", "foreign": "restaurant", "example": "Wir essen im Restaurant." },
-        { "native": "das Cafe", "foreign": "cafe", "example": "Treffen wir uns im Cafe?" },
-        { "native": "die Speisekarte", "foreign": "menu", "example": "Kann ich die Speisekarte haben?" },
-        { "native": "die Rechnung", "foreign": "bill", "example": "Die Rechnung, bitte." },
-        { "native": "das Trinkgeld", "foreign": "tip", "example": "Wir geben zehn Prozent Trinkgeld." },
-        { "native": "der Kellner", "foreign": "waiter", "example": "Der Kellner ist sehr freundlich." },
-        { "native": "die Kellnerin", "foreign": "waitress", "example": "Die Kellnerin bringt das Essen." },
-        { "native": "die Strasse", "foreign": "street", "example": "Die Strasse ist sehr lang." },
-        { "native": "die Kreuzung", "foreign": "intersection", "example": "Biegen Sie an der Kreuzung rechts ab." },
-        { "native": "die Ampel", "foreign": "traffic light", "example": "Warten Sie an der Ampel." },
-        { "native": "geradeaus", "foreign": "straight ahead", "example": "Gehen Sie geradeaus." },
-        { "native": "links", "foreign": "left", "example": "Biegen Sie links ab." },
-        { "native": "rechts", "foreign": "right", "example": "Das Museum ist rechts." },
-        { "native": "die Ecke", "foreign": "corner", "example": "Das Geschaeft ist an der Ecke." },
-        { "native": "die Bruecke", "foreign": "bridge", "example": "Gehen Sie ueber die Bruecke." },
-        { "native": "der Platz", "foreign": "square", "example": "Der Marktplatz ist schoen." },
-        { "native": "das Geschaeft", "foreign": "shop", "example": "Das Geschaeft oeffnet um neun." },
-        { "native": "der Supermarkt", "foreign": "supermarket", "example": "Ich kaufe im Supermarkt ein." },
-        { "native": "die Baeckerei", "foreign": "bakery", "example": "Die Baeckerei hat frisches Brot." },
-        { "native": "die Apotheke", "foreign": "pharmacy", "example": "Die Apotheke ist gegenueber." },
-        { "native": "die Bank", "foreign": "bank", "example": "Ich muss zur Bank gehen." },
-        { "native": "das Geld", "foreign": "money", "example": "Ich brauche mehr Geld." },
-        { "native": "der Geldautomat", "foreign": "ATM", "example": "Wo ist der naechste Geldautomat?" },
-        { "native": "die Kreditkarte", "foreign": "credit card", "example": "Kann ich mit Kreditkarte zahlen?" },
-        { "native": "bar", "foreign": "cash", "example": "Ich zahle bar." },
-        { "native": "teuer", "foreign": "expensive", "example": "Das ist zu teuer." },
-        { "native": "billig", "foreign": "cheap", "example": "Diese Jacke ist billig." },
-        { "native": "der Preis", "foreign": "price", "example": "Was ist der Preis?" },
-        { "native": "der Rabatt", "foreign": "discount", "example": "Gibt es einen Rabatt?" },
-        { "native": "das Wetter", "foreign": "weather", "example": "Wie ist das Wetter heute?" },
-        { "native": "die Sonne", "foreign": "sun", "example": "Die Sonne scheint." },
-        { "native": "der Regen", "foreign": "rain", "example": "Es gibt Regen." },
-        { "native": "der Schnee", "foreign": "snow", "example": "Im Winter faellt Schnee." },
-        { "native": "der Wind", "foreign": "wind", "example": "Der Wind ist stark heute." },
-        { "native": "die Wolke", "foreign": "cloud", "example": "Viele Wolken am Himmel." },
-        { "native": "warm", "foreign": "warm", "example": "Es ist warm draussen." },
-        { "native": "kalt", "foreign": "cold", "example": "Der Winter ist kalt." },
-        { "native": "heiss", "foreign": "hot", "example": "Der Sommer ist heiss." },
-        { "native": "kuehl", "foreign": "cool", "example": "Die Abende sind kuehl." },
-        { "native": "die Uhr", "foreign": "clock/watch", "example": "Wie spaet ist es auf der Uhr?" },
-        { "native": "die Stunde", "foreign": "hour", "example": "Wir warten eine Stunde." },
-        { "native": "die Minute", "foreign": "minute", "example": "Fuenf Minuten noch." },
-        { "native": "heute", "foreign": "today", "example": "Heute gehe ich einkaufen." },
-        { "native": "morgen", "foreign": "tomorrow", "example": "Morgen fahren wir ab." },
-        { "native": "gestern", "foreign": "yesterday", "example": "Gestern war ich muede." },
-        { "native": "jetzt", "foreign": "now", "example": "Ich muss jetzt gehen." },
-        { "native": "spaeter", "foreign": "later", "example": "Wir sehen uns spaeter." },
-        { "native": "frueher", "foreign": "earlier", "example": "Ich bin frueher gekommen." },
-        { "native": "die Woche", "foreign": "week", "example": "Naechste Woche habe ich Urlaub." },
-        { "native": "der Monat", "foreign": "month", "example": "Dieser Monat ist kurz." },
-        { "native": "das Jahr", "foreign": "year", "example": "Das neue Jahr beginnt." },
-        { "native": "Guten Morgen", "foreign": "good morning", "example": "Guten Morgen, wie geht es Ihnen?" },
-        { "native": "Guten Tag", "foreign": "good day", "example": "Guten Tag, kann ich Ihnen helfen?" },
-        { "native": "Guten Abend", "foreign": "good evening", "example": "Guten Abend, willkommen." },
-        { "native": "Gute Nacht", "foreign": "good night", "example": "Gute Nacht, schlaf gut." },
-        { "native": "Auf Wiedersehen", "foreign": "goodbye", "example": "Auf Wiedersehen, bis bald!" },
-        { "native": "Tschuess", "foreign": "bye", "example": "Tschuess, bis morgen!" },
-        { "native": "Bitte", "foreign": "please/you're welcome", "example": "Bitte, kommen Sie herein." },
-        { "native": "Danke", "foreign": "thank you", "example": "Danke fuer Ihre Hilfe." },
-        { "native": "Entschuldigung", "foreign": "excuse me/sorry", "example": "Entschuldigung, wo ist die Toilette?" },
-        { "native": "ja", "foreign": "yes", "example": "Ja, das ist richtig." },
-        { "native": "nein", "foreign": "no", "example": "Nein, das stimmt nicht." },
-        { "native": "vielleicht", "foreign": "maybe", "example": "Vielleicht komme ich spaeter." },
-        { "native": "Ich verstehe", "foreign": "I understand", "example": "Ich verstehe, danke." },
-        { "native": "Ich verstehe nicht", "foreign": "I don't understand", "example": "Ich verstehe nicht, bitte wiederholen." },
-        { "native": "Sprechen Sie Englisch?", "foreign": "Do you speak English?", "example": "Entschuldigung, sprechen Sie Englisch?" },
-        { "native": "Wie bitte?", "foreign": "Pardon?", "example": "Wie bitte? Ich habe nicht gehoert." },
-        { "native": "Hilfe", "foreign": "help", "example": "Ich brauche Hilfe!" },
-        { "native": "der Notfall", "foreign": "emergency", "example": "Das ist ein Notfall." },
-        { "native": "die Polizei", "foreign": "police", "example": "Rufen Sie die Polizei." },
-        { "native": "der Arzt", "foreign": "doctor", "example": "Ich brauche einen Arzt." },
-        { "native": "das Krankenhaus", "foreign": "hospital", "example": "Wo ist das naechste Krankenhaus?" },
-        { "native": "die Toilette", "foreign": "toilet/restroom", "example": "Wo ist die Toilette bitte?" },
-        { "native": "der Ausgang", "foreign": "exit", "example": "Der Ausgang ist dort." },
-        { "native": "der Eingang", "foreign": "entrance", "example": "Der Eingang ist auf der anderen Seite." },
-        { "native": "geoeffnet", "foreign": "open", "example": "Das Museum ist geoeffnet." },
-        { "native": "geschlossen", "foreign": "closed", "example": "Das Geschaeft ist geschlossen." },
-        { "native": "frei", "foreign": "free/available", "example": "Ist dieser Platz frei?" },
-        { "native": "besetzt", "foreign": "occupied", "example": "Dieser Tisch ist besetzt." },
-        { "native": "das Handgepaeck", "foreign": "carry-on luggage", "example": "Mein Handgepaeck ist leicht." }
+        { "native": "der Flughafen", "foreign": "airport", "example": "We're going to the airport.", "exampleDe": "Wir fahren zum Flughafen." },
+        { "native": "das Flugzeug", "foreign": "airplane", "example": "The airplane lands at 2 PM.", "exampleDe": "Das Flugzeug landet um 14 Uhr." },
+        { "native": "der Bahnhof", "foreign": "train station", "example": "The train station is in the city center.", "exampleDe": "Der Bahnhof ist in der Stadtmitte." },
+        { "native": "der Zug", "foreign": "train", "example": "The train arrives in ten minutes.", "exampleDe": "Der Zug kommt in zehn Minuten." },
+        { "native": "die U-Bahn", "foreign": "subway", "example": "We take the subway.", "exampleDe": "Wir nehmen die U-Bahn." },
+        { "native": "der Bus", "foreign": "bus", "example": "The bus runs every 15 minutes.", "exampleDe": "Der Bus faehrt alle 15 Minuten." },
+        { "native": "das Taxi", "foreign": "taxi", "example": "I'm calling a taxi.", "exampleDe": "Ich rufe ein Taxi." },
+        { "native": "das Auto", "foreign": "car", "example": "My car is blue.", "exampleDe": "Mein Auto ist blau." },
+        { "native": "das Fahrrad", "foreign": "bicycle", "example": "I ride my bicycle to work.", "exampleDe": "Ich fahre mit dem Fahrrad zur Arbeit." },
+        { "native": "die Fahrkarte", "foreign": "ticket", "example": "I'm buying a ticket.", "exampleDe": "Ich kaufe eine Fahrkarte." },
+        { "native": "der Koffer", "foreign": "suitcase", "example": "My suitcase is heavy.", "exampleDe": "Mein Koffer ist schwer." },
+        { "native": "der Rucksack", "foreign": "backpack", "example": "I'm packing my backpack.", "exampleDe": "Ich packe meinen Rucksack." },
+        { "native": "der Pass", "foreign": "passport", "example": "Don't forget your passport!", "exampleDe": "Vergiss deinen Pass nicht!" },
+        { "native": "das Visum", "foreign": "visa", "example": "Do I need a visa?", "exampleDe": "Brauche ich ein Visum?" },
+        { "native": "die Grenze", "foreign": "border", "example": "We're crossing the border.", "exampleDe": "Wir ueberqueren die Grenze." },
+        { "native": "das Hotel", "foreign": "hotel", "example": "The hotel has five stars.", "exampleDe": "Das Hotel hat fuenf Sterne." },
+        { "native": "das Zimmer", "foreign": "room", "example": "I'd like to book a room.", "exampleDe": "Ich moechte ein Zimmer reservieren." },
+        { "native": "die Rezeption", "foreign": "reception", "example": "The reception is on the ground floor.", "exampleDe": "Die Rezeption ist im Erdgeschoss." },
+        { "native": "der Schluessel", "foreign": "key", "example": "Here is your key.", "exampleDe": "Hier ist Ihr Schluessel." },
+        { "native": "das Fruehstueck", "foreign": "breakfast", "example": "Breakfast is included.", "exampleDe": "Das Fruehstueck ist inklusive." },
+        { "native": "das Restaurant", "foreign": "restaurant", "example": "We're eating at the restaurant.", "exampleDe": "Wir essen im Restaurant." },
+        { "native": "das Cafe", "foreign": "cafe", "example": "Shall we meet at the cafe?", "exampleDe": "Treffen wir uns im Cafe?" },
+        { "native": "die Speisekarte", "foreign": "menu", "example": "Can I have the menu?", "exampleDe": "Kann ich die Speisekarte haben?" },
+        { "native": "die Rechnung", "foreign": "bill", "example": "The bill, please.", "exampleDe": "Die Rechnung, bitte." },
+        { "native": "das Trinkgeld", "foreign": "tip", "example": "We give ten percent tip.", "exampleDe": "Wir geben zehn Prozent Trinkgeld." },
+        { "native": "der Kellner", "foreign": "waiter", "example": "The waiter is very friendly.", "exampleDe": "Der Kellner ist sehr freundlich." },
+        { "native": "die Kellnerin", "foreign": "waitress", "example": "The waitress brings the food.", "exampleDe": "Die Kellnerin bringt das Essen." },
+        { "native": "die Strasse", "foreign": "street", "example": "The street is very long.", "exampleDe": "Die Strasse ist sehr lang." },
+        { "native": "die Kreuzung", "foreign": "intersection", "example": "Turn right at the intersection.", "exampleDe": "Biegen Sie an der Kreuzung rechts ab." },
+        { "native": "die Ampel", "foreign": "traffic light", "example": "Wait at the traffic light.", "exampleDe": "Warten Sie an der Ampel." },
+        { "native": "geradeaus", "foreign": "straight ahead", "example": "Go straight ahead.", "exampleDe": "Gehen Sie geradeaus." },
+        { "native": "links", "foreign": "left", "example": "Turn left.", "exampleDe": "Biegen Sie links ab." },
+        { "native": "rechts", "foreign": "right", "example": "The museum is on the right.", "exampleDe": "Das Museum ist rechts." },
+        { "native": "die Ecke", "foreign": "corner", "example": "The shop is on the corner.", "exampleDe": "Das Geschaeft ist an der Ecke." },
+        { "native": "die Bruecke", "foreign": "bridge", "example": "Go over the bridge.", "exampleDe": "Gehen Sie ueber die Bruecke." },
+        { "native": "der Platz", "foreign": "square", "example": "The market square is beautiful.", "exampleDe": "Der Marktplatz ist schoen." },
+        { "native": "das Geschaeft", "foreign": "shop", "example": "The shop opens at nine.", "exampleDe": "Das Geschaeft oeffnet um neun." },
+        { "native": "der Supermarkt", "foreign": "supermarket", "example": "I shop at the supermarket.", "exampleDe": "Ich kaufe im Supermarkt ein." },
+        { "native": "die Baeckerei", "foreign": "bakery", "example": "The bakery has fresh bread.", "exampleDe": "Die Baeckerei hat frisches Brot." },
+        { "native": "die Apotheke", "foreign": "pharmacy", "example": "The pharmacy is across the street.", "exampleDe": "Die Apotheke ist gegenueber." },
+        { "native": "die Bank", "foreign": "bank", "example": "I need to go to the bank.", "exampleDe": "Ich muss zur Bank gehen." },
+        { "native": "das Geld", "foreign": "money", "example": "I need more money.", "exampleDe": "Ich brauche mehr Geld." },
+        { "native": "der Geldautomat", "foreign": "ATM", "example": "Where is the nearest ATM?", "exampleDe": "Wo ist der naechste Geldautomat?" },
+        { "native": "die Kreditkarte", "foreign": "credit card", "example": "Can I pay by credit card?", "exampleDe": "Kann ich mit Kreditkarte zahlen?" },
+        { "native": "bar", "foreign": "cash", "example": "I'm paying cash.", "exampleDe": "Ich zahle bar." },
+        { "native": "teuer", "foreign": "expensive", "example": "That's too expensive.", "exampleDe": "Das ist zu teuer." },
+        { "native": "billig", "foreign": "cheap", "example": "This jacket is cheap.", "exampleDe": "Diese Jacke ist billig." },
+        { "native": "der Preis", "foreign": "price", "example": "What is the price?", "exampleDe": "Was ist der Preis?" },
+        { "native": "der Rabatt", "foreign": "discount", "example": "Is there a discount?", "exampleDe": "Gibt es einen Rabatt?" },
+        { "native": "das Wetter", "foreign": "weather", "example": "How is the weather today?", "exampleDe": "Wie ist das Wetter heute?" },
+        { "native": "die Sonne", "foreign": "sun", "example": "The sun is shining.", "exampleDe": "Die Sonne scheint." },
+        { "native": "der Regen", "foreign": "rain", "example": "There is rain.", "exampleDe": "Es gibt Regen." },
+        { "native": "der Schnee", "foreign": "snow", "example": "Snow falls in winter.", "exampleDe": "Im Winter faellt Schnee." },
+        { "native": "der Wind", "foreign": "wind", "example": "The wind is strong today.", "exampleDe": "Der Wind ist stark heute." },
+        { "native": "die Wolke", "foreign": "cloud", "example": "Many clouds in the sky.", "exampleDe": "Viele Wolken am Himmel." },
+        { "native": "warm", "foreign": "warm", "example": "It's warm outside.", "exampleDe": "Es ist warm draussen." },
+        { "native": "kalt", "foreign": "cold", "example": "Winter is cold.", "exampleDe": "Der Winter ist kalt." },
+        { "native": "heiss", "foreign": "hot", "example": "Summer is hot.", "exampleDe": "Der Sommer ist heiss." },
+        { "native": "kuehl", "foreign": "cool", "example": "The evenings are cool.", "exampleDe": "Die Abende sind kuehl." },
+        { "native": "die Uhr", "foreign": "clock/watch", "example": "What time is it on the clock?", "exampleDe": "Wie spaet ist es auf der Uhr?" },
+        { "native": "die Stunde", "foreign": "hour", "example": "We wait one hour.", "exampleDe": "Wir warten eine Stunde." },
+        { "native": "die Minute", "foreign": "minute", "example": "Five minutes left.", "exampleDe": "Fuenf Minuten noch." },
+        { "native": "heute", "foreign": "today", "example": "Today I'm going shopping.", "exampleDe": "Heute gehe ich einkaufen." },
+        { "native": "morgen", "foreign": "tomorrow", "example": "Tomorrow we leave.", "exampleDe": "Morgen fahren wir ab." },
+        { "native": "gestern", "foreign": "yesterday", "example": "Yesterday I was tired.", "exampleDe": "Gestern war ich muede." },
+        { "native": "jetzt", "foreign": "now", "example": "I have to go now.", "exampleDe": "Ich muss jetzt gehen." },
+        { "native": "spaeter", "foreign": "later", "example": "See you later.", "exampleDe": "Wir sehen uns spaeter." },
+        { "native": "frueher", "foreign": "earlier", "example": "I came earlier.", "exampleDe": "Ich bin frueher gekommen." },
+        { "native": "die Woche", "foreign": "week", "example": "Next week I have vacation.", "exampleDe": "Naechste Woche habe ich Urlaub." },
+        { "native": "der Monat", "foreign": "month", "example": "This month is short.", "exampleDe": "Dieser Monat ist kurz." },
+        { "native": "das Jahr", "foreign": "year", "example": "The new year begins.", "exampleDe": "Das neue Jahr beginnt." },
+        { "native": "Guten Morgen", "foreign": "good morning", "example": "Good morning, how are you?", "exampleDe": "Guten Morgen, wie geht es Ihnen?" },
+        { "native": "Guten Tag", "foreign": "good day", "example": "Good day, can I help you?", "exampleDe": "Guten Tag, kann ich Ihnen helfen?" },
+        { "native": "Guten Abend", "foreign": "good evening", "example": "Good evening, welcome.", "exampleDe": "Guten Abend, willkommen." },
+        { "native": "Gute Nacht", "foreign": "good night", "example": "Good night, sleep well.", "exampleDe": "Gute Nacht, schlaf gut." },
+        { "native": "Auf Wiedersehen", "foreign": "goodbye", "example": "Goodbye, see you soon!", "exampleDe": "Auf Wiedersehen, bis bald!" },
+        { "native": "Tschuess", "foreign": "bye", "example": "Bye, see you tomorrow!", "exampleDe": "Tschuess, bis morgen!" },
+        { "native": "Bitte", "foreign": "please/you're welcome", "example": "Please, come in.", "exampleDe": "Bitte, kommen Sie herein." },
+        { "native": "Danke", "foreign": "thank you", "example": "Thank you for your help.", "exampleDe": "Danke fuer Ihre Hilfe." },
+        { "native": "Entschuldigung", "foreign": "excuse me/sorry", "example": "Excuse me, where is the restroom?", "exampleDe": "Entschuldigung, wo ist die Toilette?" },
+        { "native": "ja", "foreign": "yes", "example": "Yes, that's correct.", "exampleDe": "Ja, das ist richtig." },
+        { "native": "nein", "foreign": "no", "example": "No, that's not right.", "exampleDe": "Nein, das stimmt nicht." },
+        { "native": "vielleicht", "foreign": "maybe", "example": "Maybe I'll come later.", "exampleDe": "Vielleicht komme ich spaeter." },
+        { "native": "Ich verstehe", "foreign": "I understand", "example": "I understand, thank you.", "exampleDe": "Ich verstehe, danke." },
+        { "native": "Ich verstehe nicht", "foreign": "I don't understand", "example": "I don't understand, please repeat.", "exampleDe": "Ich verstehe nicht, bitte wiederholen." },
+        { "native": "Sprechen Sie Englisch?", "foreign": "Do you speak English?", "example": "Excuse me, do you speak English?", "exampleDe": "Entschuldigung, sprechen Sie Englisch?" },
+        { "native": "Wie bitte?", "foreign": "Pardon?", "example": "Pardon? I didn't hear.", "exampleDe": "Wie bitte? Ich habe nicht gehoert." },
+        { "native": "Hilfe", "foreign": "help", "example": "I need help!", "exampleDe": "Ich brauche Hilfe!" },
+        { "native": "der Notfall", "foreign": "emergency", "example": "This is an emergency.", "exampleDe": "Das ist ein Notfall." },
+        { "native": "die Polizei", "foreign": "police", "example": "Call the police.", "exampleDe": "Rufen Sie die Polizei." },
+        { "native": "der Arzt", "foreign": "doctor", "example": "I need a doctor.", "exampleDe": "Ich brauche einen Arzt." },
+        { "native": "das Krankenhaus", "foreign": "hospital", "example": "Where is the nearest hospital?", "exampleDe": "Wo ist das naechste Krankenhaus?" },
+        { "native": "die Toilette", "foreign": "toilet/restroom", "example": "Where is the restroom please?", "exampleDe": "Wo ist die Toilette bitte?" },
+        { "native": "der Ausgang", "foreign": "exit", "example": "The exit is over there.", "exampleDe": "Der Ausgang ist dort." },
+        { "native": "der Eingang", "foreign": "entrance", "example": "The entrance is on the other side.", "exampleDe": "Der Eingang ist auf der anderen Seite." },
+        { "native": "geoeffnet", "foreign": "open", "example": "The museum is open.", "exampleDe": "Das Museum ist geoeffnet." },
+        { "native": "geschlossen", "foreign": "closed", "example": "The shop is closed.", "exampleDe": "Das Geschaeft ist geschlossen." },
+        { "native": "frei", "foreign": "free/available", "example": "Is this seat free?", "exampleDe": "Ist dieser Platz frei?" },
+        { "native": "besetzt", "foreign": "occupied", "example": "This table is occupied.", "exampleDe": "Dieser Tisch ist besetzt." },
+        { "native": "das Handgepaeck", "foreign": "carry-on luggage", "example": "My carry-on luggage is light.", "exampleDe": "Mein Handgepaeck ist leicht." }
       ]
     },
     {
       "name": "Schule & Bildung",
       "words": [
-        { "native": "die Schule", "foreign": "school", "example": "Die Schule beginnt um acht Uhr." },
-        { "native": "die Universitaet", "foreign": "university", "example": "Ich studiere an der Universitaet." },
-        { "native": "der Lehrer", "foreign": "teacher (male)", "example": "Der Lehrer erklaert die Aufgabe." },
-        { "native": "die Lehrerin", "foreign": "teacher (female)", "example": "Die Lehrerin ist sehr nett." },
-        { "native": "der Schueler", "foreign": "student (male)", "example": "Der Schueler macht Hausaufgaben." },
-        { "native": "die Schuelerin", "foreign": "student (female)", "example": "Die Schuelerin lernt fleissig." },
-        { "native": "der Student", "foreign": "university student (male)", "example": "Der Student besucht Vorlesungen." },
-        { "native": "die Studentin", "foreign": "university student (female)", "example": "Die Studentin schreibt ihre Arbeit." },
-        { "native": "das Klassenzimmer", "foreign": "classroom", "example": "Das Klassenzimmer ist gross." },
-        { "native": "die Tafel", "foreign": "blackboard", "example": "Der Lehrer schreibt an die Tafel." },
-        { "native": "der Schreibtisch", "foreign": "desk", "example": "Mein Schreibtisch ist ordentlich." },
-        { "native": "der Stuhl", "foreign": "chair", "example": "Bitte setzen Sie sich auf den Stuhl." },
-        { "native": "das Buch", "foreign": "book", "example": "Ich lese ein Buch." },
-        { "native": "das Heft", "foreign": "notebook", "example": "Ich schreibe in mein Heft." },
-        { "native": "der Bleistift", "foreign": "pencil", "example": "Ich brauche einen Bleistift." },
-        { "native": "der Kugelschreiber", "foreign": "pen", "example": "Hast du einen Kugelschreiber?" },
-        { "native": "der Radiergummi", "foreign": "eraser", "example": "Ich habe meinen Radiergummi vergessen." },
-        { "native": "das Lineal", "foreign": "ruler", "example": "Zeichne mit dem Lineal eine Linie." },
-        { "native": "die Schere", "foreign": "scissors", "example": "Ich schneide mit der Schere." },
-        { "native": "der Taschenrechner", "foreign": "calculator", "example": "Du darfst den Taschenrechner benutzen." },
-        { "native": "der Computer", "foreign": "computer", "example": "Wir arbeiten am Computer." },
-        { "native": "das Woerterbuch", "foreign": "dictionary", "example": "Schlag das Wort im Woerterbuch nach." },
-        { "native": "die Bibliothek", "foreign": "library", "example": "Ich lerne in der Bibliothek." },
-        { "native": "die Hausaufgabe", "foreign": "homework", "example": "Ich mache meine Hausaufgaben." },
-        { "native": "die Pruefung", "foreign": "exam", "example": "Morgen habe ich eine Pruefung." },
-        { "native": "der Test", "foreign": "test", "example": "Der Test war schwer." },
-        { "native": "die Note", "foreign": "grade", "example": "Ich habe eine gute Note bekommen." },
-        { "native": "das Zeugnis", "foreign": "report card", "example": "Mein Zeugnis ist sehr gut." },
-        { "native": "bestehen", "foreign": "to pass", "example": "Ich habe die Pruefung bestanden." },
-        { "native": "durchfallen", "foreign": "to fail", "example": "Er ist leider durchgefallen." },
-        { "native": "lernen", "foreign": "to learn", "example": "Ich lerne jeden Tag." },
-        { "native": "studieren", "foreign": "to study", "example": "Sie studiert Medizin." },
-        { "native": "lesen", "foreign": "to read", "example": "Ich lese gern Buecher." },
-        { "native": "schreiben", "foreign": "to write", "example": "Schreib deinen Namen." },
-        { "native": "rechnen", "foreign": "to calculate", "example": "Kinder lernen rechnen." },
-        { "native": "verstehen", "foreign": "to understand", "example": "Ich verstehe die Frage nicht." },
-        { "native": "erklaeren", "foreign": "to explain", "example": "Kannst du das erklaeren?" },
-        { "native": "fragen", "foreign": "to ask", "example": "Darf ich Sie etwas fragen?" },
-        { "native": "antworten", "foreign": "to answer", "example": "Bitte antworte auf die Frage." },
-        { "native": "ueben", "foreign": "to practice", "example": "Ich muss mehr ueben." },
-        { "native": "wiederholen", "foreign": "to repeat", "example": "Bitte wiederholen Sie das." },
-        { "native": "uebersetzen", "foreign": "to translate", "example": "Uebersetze den Satz ins Englische." },
-        { "native": "die Mathematik", "foreign": "mathematics", "example": "Mathematik ist mein Lieblingsfach." },
-        { "native": "die Physik", "foreign": "physics", "example": "Physik ist interessant." },
-        { "native": "die Chemie", "foreign": "chemistry", "example": "In Chemie machen wir Experimente." },
-        { "native": "die Biologie", "foreign": "biology", "example": "Biologie handelt von Lebewesen." },
-        { "native": "die Geschichte", "foreign": "history", "example": "Ich mag Geschichte." },
-        { "native": "die Geographie", "foreign": "geography", "example": "Wir lernen Laender in Geographie." },
-        { "native": "die Kunst", "foreign": "art", "example": "In Kunst malen wir Bilder." },
-        { "native": "die Musik", "foreign": "music", "example": "Wir singen im Musikunterricht." },
-        { "native": "der Sport", "foreign": "sports/PE", "example": "Sport macht mir Spass." },
-        { "native": "die Sprache", "foreign": "language", "example": "Ich lerne eine neue Sprache." },
-        { "native": "das Deutsch", "foreign": "German (subject)", "example": "Deutsch ist nicht schwer." },
-        { "native": "das Englisch", "foreign": "English (subject)", "example": "Mein Englisch wird besser." },
-        { "native": "das Franzoesisch", "foreign": "French (subject)", "example": "Franzoesisch klingt schoen." },
-        { "native": "die Informatik", "foreign": "computer science", "example": "In Informatik programmieren wir." },
-        { "native": "die Philosophie", "foreign": "philosophy", "example": "Philosophie regt zum Denken an." },
-        { "native": "die Literatur", "foreign": "literature", "example": "Wir lesen klassische Literatur." },
-        { "native": "das Fach", "foreign": "subject", "example": "Welches Fach magst du am meisten?" },
-        { "native": "der Stundenplan", "foreign": "schedule/timetable", "example": "Mein Stundenplan ist voll." },
-        { "native": "die Stunde", "foreign": "lesson/period", "example": "Die Stunde dauert 45 Minuten." },
-        { "native": "die Pause", "foreign": "break", "example": "In der Pause essen wir." },
-        { "native": "der Unterricht", "foreign": "class/instruction", "example": "Der Unterricht beginnt um 8 Uhr." },
-        { "native": "die Vorlesung", "foreign": "lecture", "example": "Die Vorlesung war interessant." },
-        { "native": "das Seminar", "foreign": "seminar", "example": "Im Seminar diskutieren wir." },
-        { "native": "der Kurs", "foreign": "course", "example": "Ich besuche einen Deutschkurs." },
-        { "native": "das Projekt", "foreign": "project", "example": "Wir arbeiten an einem Projekt." },
-        { "native": "die Praesentation", "foreign": "presentation", "example": "Morgen halte ich eine Praesentation." },
-        { "native": "das Referat", "foreign": "report/presentation", "example": "Mein Referat ist fertig." },
-        { "native": "die Aufgabe", "foreign": "task/exercise", "example": "Diese Aufgabe ist schwierig." },
-        { "native": "die Loesung", "foreign": "solution", "example": "Ich habe die Loesung gefunden." },
-        { "native": "das Ergebnis", "foreign": "result", "example": "Das Ergebnis ist richtig." },
-        { "native": "der Fehler", "foreign": "mistake", "example": "Ich habe einen Fehler gemacht." },
-        { "native": "richtig", "foreign": "correct", "example": "Die Antwort ist richtig." },
-        { "native": "falsch", "foreign": "wrong", "example": "Das ist leider falsch." },
-        { "native": "schwer", "foreign": "difficult", "example": "Die Pruefung war schwer." },
-        { "native": "leicht", "foreign": "easy", "example": "Die Aufgabe war leicht." },
-        { "native": "fleissig", "foreign": "hardworking", "example": "Sie ist eine fleissige Schuelerin." },
-        { "native": "faul", "foreign": "lazy", "example": "Sei nicht so faul!" },
-        { "native": "intelligent", "foreign": "intelligent", "example": "Er ist sehr intelligent." },
-        { "native": "kreativ", "foreign": "creative", "example": "Kuenstler sind kreativ." },
-        { "native": "neugierig", "foreign": "curious", "example": "Kinder sind neugierig." },
-        { "native": "aufmerksam", "foreign": "attentive", "example": "Sei aufmerksam im Unterricht." },
-        { "native": "das Wissen", "foreign": "knowledge", "example": "Wissen ist Macht." },
-        { "native": "die Bildung", "foreign": "education", "example": "Bildung ist wichtig." },
-        { "native": "das Lernen", "foreign": "learning", "example": "Lernen macht Spass." },
-        { "native": "die Forschung", "foreign": "research", "example": "Die Forschung ist wichtig." },
-        { "native": "das Experiment", "foreign": "experiment", "example": "Wir fuehren ein Experiment durch." },
-        { "native": "die Theorie", "foreign": "theory", "example": "Die Theorie ist komplex." },
-        { "native": "die Praxis", "foreign": "practice", "example": "Theorie und Praxis gehoeren zusammen." },
-        { "native": "der Erfolg", "foreign": "success", "example": "Ich wuensche dir viel Erfolg!" },
-        { "native": "der Abschluss", "foreign": "graduation/degree", "example": "Nach dem Abschluss suche ich Arbeit." },
-        { "native": "das Diplom", "foreign": "diploma", "example": "Ich habe mein Diplom erhalten." },
-        { "native": "der Bachelor", "foreign": "bachelor's degree", "example": "Ich mache meinen Bachelor." },
-        { "native": "der Master", "foreign": "master's degree", "example": "Danach folgt der Master." },
-        { "native": "die Doktorarbeit", "foreign": "doctoral thesis", "example": "Sie schreibt ihre Doktorarbeit." },
-        { "native": "das Stipendium", "foreign": "scholarship", "example": "Ich habe ein Stipendium bekommen." },
-        { "native": "die Nachhilfe", "foreign": "tutoring", "example": "Ich gebe Nachhilfe in Mathe." },
-        { "native": "der Austausch", "foreign": "exchange", "example": "Ich mache einen Austausch nach Deutschland." },
-        { "native": "die Pruefungsangst", "foreign": "exam anxiety", "example": "Pruefungsangst ist normal." }
+        { "native": "die Schule", "foreign": "school", "example": "School starts at eight o'clock.", "exampleDe": "Die Schule beginnt um acht Uhr." },
+        { "native": "die Universitaet", "foreign": "university", "example": "I study at the university.", "exampleDe": "Ich studiere an der Universitaet." },
+        { "native": "der Lehrer", "foreign": "teacher (male)", "example": "The teacher explains the task.", "exampleDe": "Der Lehrer erklaert die Aufgabe." },
+        { "native": "die Lehrerin", "foreign": "teacher (female)", "example": "The teacher is very nice.", "exampleDe": "Die Lehrerin ist sehr nett." },
+        { "native": "der Schueler", "foreign": "student (male)", "example": "The student does homework.", "exampleDe": "Der Schueler macht Hausaufgaben." },
+        { "native": "die Schuelerin", "foreign": "student (female)", "example": "The student studies diligently.", "exampleDe": "Die Schuelerin lernt fleissig." },
+        { "native": "der Student", "foreign": "university student (male)", "example": "The student attends lectures.", "exampleDe": "Der Student besucht Vorlesungen." },
+        { "native": "die Studentin", "foreign": "university student (female)", "example": "The student writes her thesis.", "exampleDe": "Die Studentin schreibt ihre Arbeit." },
+        { "native": "das Klassenzimmer", "foreign": "classroom", "example": "The classroom is large.", "exampleDe": "Das Klassenzimmer ist gross." },
+        { "native": "die Tafel", "foreign": "blackboard", "example": "The teacher writes on the blackboard.", "exampleDe": "Der Lehrer schreibt an die Tafel." },
+        { "native": "der Schreibtisch", "foreign": "desk", "example": "My desk is tidy.", "exampleDe": "Mein Schreibtisch ist ordentlich." },
+        { "native": "der Stuhl", "foreign": "chair", "example": "Please sit on the chair.", "exampleDe": "Bitte setzen Sie sich auf den Stuhl." },
+        { "native": "das Buch", "foreign": "book", "example": "I'm reading a book.", "exampleDe": "Ich lese ein Buch." },
+        { "native": "das Heft", "foreign": "notebook", "example": "I write in my notebook.", "exampleDe": "Ich schreibe in mein Heft." },
+        { "native": "der Bleistift", "foreign": "pencil", "example": "I need a pencil.", "exampleDe": "Ich brauche einen Bleistift." },
+        { "native": "der Kugelschreiber", "foreign": "pen", "example": "Do you have a pen?", "exampleDe": "Hast du einen Kugelschreiber?" },
+        { "native": "der Radiergummi", "foreign": "eraser", "example": "I forgot my eraser.", "exampleDe": "Ich habe meinen Radiergummi vergessen." },
+        { "native": "das Lineal", "foreign": "ruler", "example": "Draw a line with the ruler.", "exampleDe": "Zeichne mit dem Lineal eine Linie." },
+        { "native": "die Schere", "foreign": "scissors", "example": "I cut with the scissors.", "exampleDe": "Ich schneide mit der Schere." },
+        { "native": "der Taschenrechner", "foreign": "calculator", "example": "You may use the calculator.", "exampleDe": "Du darfst den Taschenrechner benutzen." },
+        { "native": "der Computer", "foreign": "computer", "example": "We work on the computer.", "exampleDe": "Wir arbeiten am Computer." },
+        { "native": "das Woerterbuch", "foreign": "dictionary", "example": "Look up the word in the dictionary.", "exampleDe": "Schlag das Wort im Woerterbuch nach." },
+        { "native": "die Bibliothek", "foreign": "library", "example": "I study in the library.", "exampleDe": "Ich lerne in der Bibliothek." },
+        { "native": "die Hausaufgabe", "foreign": "homework", "example": "I'm doing my homework.", "exampleDe": "Ich mache meine Hausaufgaben." },
+        { "native": "die Pruefung", "foreign": "exam", "example": "Tomorrow I have an exam.", "exampleDe": "Morgen habe ich eine Pruefung." },
+        { "native": "der Test", "foreign": "test", "example": "The test was difficult.", "exampleDe": "Der Test war schwer." },
+        { "native": "die Note", "foreign": "grade", "example": "I got a good grade.", "exampleDe": "Ich habe eine gute Note bekommen." },
+        { "native": "das Zeugnis", "foreign": "report card", "example": "My report card is very good.", "exampleDe": "Mein Zeugnis ist sehr gut." },
+        { "native": "bestehen", "foreign": "to pass", "example": "I passed the exam.", "exampleDe": "Ich habe die Pruefung bestanden." },
+        { "native": "durchfallen", "foreign": "to fail", "example": "Unfortunately he failed.", "exampleDe": "Er ist leider durchgefallen." },
+        { "native": "lernen", "foreign": "to learn", "example": "I learn every day.", "exampleDe": "Ich lerne jeden Tag." },
+        { "native": "studieren", "foreign": "to study", "example": "She studies medicine.", "exampleDe": "Sie studiert Medizin." },
+        { "native": "lesen", "foreign": "to read", "example": "I like to read books.", "exampleDe": "Ich lese gern Buecher." },
+        { "native": "schreiben", "foreign": "to write", "example": "Write your name.", "exampleDe": "Schreib deinen Namen." },
+        { "native": "rechnen", "foreign": "to calculate", "example": "Children learn to calculate.", "exampleDe": "Kinder lernen rechnen." },
+        { "native": "verstehen", "foreign": "to understand", "example": "I don't understand the question.", "exampleDe": "Ich verstehe die Frage nicht." },
+        { "native": "erklaeren", "foreign": "to explain", "example": "Can you explain that?", "exampleDe": "Kannst du das erklaeren?" },
+        { "native": "fragen", "foreign": "to ask", "example": "May I ask you something?", "exampleDe": "Darf ich Sie etwas fragen?" },
+        { "native": "antworten", "foreign": "to answer", "example": "Please answer the question.", "exampleDe": "Bitte antworte auf die Frage." },
+        { "native": "ueben", "foreign": "to practice", "example": "I need to practice more.", "exampleDe": "Ich muss mehr ueben." },
+        { "native": "wiederholen", "foreign": "to repeat", "example": "Please repeat that.", "exampleDe": "Bitte wiederholen Sie das." },
+        { "native": "uebersetzen", "foreign": "to translate", "example": "Translate the sentence into English.", "exampleDe": "Uebersetze den Satz ins Englische." },
+        { "native": "die Mathematik", "foreign": "mathematics", "example": "Mathematics is my favorite subject.", "exampleDe": "Mathematik ist mein Lieblingsfach." },
+        { "native": "die Physik", "foreign": "physics", "example": "Physics is interesting.", "exampleDe": "Physik ist interessant." },
+        { "native": "die Chemie", "foreign": "chemistry", "example": "In chemistry we do experiments.", "exampleDe": "In Chemie machen wir Experimente." },
+        { "native": "die Biologie", "foreign": "biology", "example": "Biology is about living things.", "exampleDe": "Biologie handelt von Lebewesen." },
+        { "native": "die Geschichte", "foreign": "history", "example": "I like history.", "exampleDe": "Ich mag Geschichte." },
+        { "native": "die Geographie", "foreign": "geography", "example": "We learn countries in geography.", "exampleDe": "Wir lernen Laender in Geographie." },
+        { "native": "die Kunst", "foreign": "art", "example": "In art we paint pictures.", "exampleDe": "In Kunst malen wir Bilder." },
+        { "native": "die Musik", "foreign": "music", "example": "We sing in music class.", "exampleDe": "Wir singen im Musikunterricht." },
+        { "native": "der Sport", "foreign": "sports/PE", "example": "Sports is fun for me.", "exampleDe": "Sport macht mir Spass." },
+        { "native": "die Sprache", "foreign": "language", "example": "I'm learning a new language.", "exampleDe": "Ich lerne eine neue Sprache." },
+        { "native": "das Deutsch", "foreign": "German (subject)", "example": "German is not difficult.", "exampleDe": "Deutsch ist nicht schwer." },
+        { "native": "das Englisch", "foreign": "English (subject)", "example": "My English is getting better.", "exampleDe": "Mein Englisch wird besser." },
+        { "native": "das Franzoesisch", "foreign": "French (subject)", "example": "French sounds beautiful.", "exampleDe": "Franzoesisch klingt schoen." },
+        { "native": "die Informatik", "foreign": "computer science", "example": "In computer science we program.", "exampleDe": "In Informatik programmieren wir." },
+        { "native": "die Philosophie", "foreign": "philosophy", "example": "Philosophy encourages thinking.", "exampleDe": "Philosophie regt zum Denken an." },
+        { "native": "die Literatur", "foreign": "literature", "example": "We read classic literature.", "exampleDe": "Wir lesen klassische Literatur." },
+        { "native": "das Fach", "foreign": "subject", "example": "Which subject do you like most?", "exampleDe": "Welches Fach magst du am meisten?" },
+        { "native": "der Stundenplan", "foreign": "schedule/timetable", "example": "My schedule is full.", "exampleDe": "Mein Stundenplan ist voll." },
+        { "native": "die Stunde", "foreign": "lesson/period", "example": "The lesson lasts 45 minutes.", "exampleDe": "Die Stunde dauert 45 Minuten." },
+        { "native": "die Pause", "foreign": "break", "example": "During the break we eat.", "exampleDe": "In der Pause essen wir." },
+        { "native": "der Unterricht", "foreign": "class/instruction", "example": "Class starts at 8 o'clock.", "exampleDe": "Der Unterricht beginnt um 8 Uhr." },
+        { "native": "die Vorlesung", "foreign": "lecture", "example": "The lecture was interesting.", "exampleDe": "Die Vorlesung war interessant." },
+        { "native": "das Seminar", "foreign": "seminar", "example": "In the seminar we discuss.", "exampleDe": "Im Seminar diskutieren wir." },
+        { "native": "der Kurs", "foreign": "course", "example": "I'm taking a German course.", "exampleDe": "Ich besuche einen Deutschkurs." },
+        { "native": "das Projekt", "foreign": "project", "example": "We're working on a project.", "exampleDe": "Wir arbeiten an einem Projekt." },
+        { "native": "die Praesentation", "foreign": "presentation", "example": "Tomorrow I'm giving a presentation.", "exampleDe": "Morgen halte ich eine Praesentation." },
+        { "native": "das Referat", "foreign": "report/presentation", "example": "My report is finished.", "exampleDe": "Mein Referat ist fertig." },
+        { "native": "die Aufgabe", "foreign": "task/exercise", "example": "This task is difficult.", "exampleDe": "Diese Aufgabe ist schwierig." },
+        { "native": "die Loesung", "foreign": "solution", "example": "I found the solution.", "exampleDe": "Ich habe die Loesung gefunden." },
+        { "native": "das Ergebnis", "foreign": "result", "example": "The result is correct.", "exampleDe": "Das Ergebnis ist richtig." },
+        { "native": "der Fehler", "foreign": "mistake", "example": "I made a mistake.", "exampleDe": "Ich habe einen Fehler gemacht." },
+        { "native": "richtig", "foreign": "correct", "example": "The answer is correct.", "exampleDe": "Die Antwort ist richtig." },
+        { "native": "falsch", "foreign": "wrong", "example": "That's unfortunately wrong.", "exampleDe": "Das ist leider falsch." },
+        { "native": "schwer", "foreign": "difficult", "example": "The exam was difficult.", "exampleDe": "Die Pruefung war schwer." },
+        { "native": "leicht", "foreign": "easy", "example": "The task was easy.", "exampleDe": "Die Aufgabe war leicht." },
+        { "native": "fleissig", "foreign": "hardworking", "example": "She is a hardworking student.", "exampleDe": "Sie ist eine fleissige Schuelerin." },
+        { "native": "faul", "foreign": "lazy", "example": "Don't be so lazy!", "exampleDe": "Sei nicht so faul!" },
+        { "native": "intelligent", "foreign": "intelligent", "example": "He is very intelligent.", "exampleDe": "Er ist sehr intelligent." },
+        { "native": "kreativ", "foreign": "creative", "example": "Artists are creative.", "exampleDe": "Kuenstler sind kreativ." },
+        { "native": "neugierig", "foreign": "curious", "example": "Children are curious.", "exampleDe": "Kinder sind neugierig." },
+        { "native": "aufmerksam", "foreign": "attentive", "example": "Be attentive in class.", "exampleDe": "Sei aufmerksam im Unterricht." },
+        { "native": "das Wissen", "foreign": "knowledge", "example": "Knowledge is power.", "exampleDe": "Wissen ist Macht." },
+        { "native": "die Bildung", "foreign": "education", "example": "Education is important.", "exampleDe": "Bildung ist wichtig." },
+        { "native": "das Lernen", "foreign": "learning", "example": "Learning is fun.", "exampleDe": "Lernen macht Spass." },
+        { "native": "die Forschung", "foreign": "research", "example": "Research is important.", "exampleDe": "Die Forschung ist wichtig." },
+        { "native": "das Experiment", "foreign": "experiment", "example": "We're conducting an experiment.", "exampleDe": "Wir fuehren ein Experiment durch." },
+        { "native": "die Theorie", "foreign": "theory", "example": "The theory is complex.", "exampleDe": "Die Theorie ist komplex." },
+        { "native": "die Praxis", "foreign": "practice", "example": "Theory and practice go together.", "exampleDe": "Theorie und Praxis gehoeren zusammen." },
+        { "native": "der Erfolg", "foreign": "success", "example": "I wish you much success!", "exampleDe": "Ich wuensche dir viel Erfolg!" },
+        { "native": "der Abschluss", "foreign": "graduation/degree", "example": "After graduation I'll look for work.", "exampleDe": "Nach dem Abschluss suche ich Arbeit." },
+        { "native": "das Diplom", "foreign": "diploma", "example": "I received my diploma.", "exampleDe": "Ich habe mein Diplom erhalten." },
+        { "native": "der Bachelor", "foreign": "bachelor's degree", "example": "I'm doing my bachelor's.", "exampleDe": "Ich mache meinen Bachelor." },
+        { "native": "der Master", "foreign": "master's degree", "example": "After that comes the master's.", "exampleDe": "Danach folgt der Master." },
+        { "native": "die Doktorarbeit", "foreign": "doctoral thesis", "example": "She's writing her doctoral thesis.", "exampleDe": "Sie schreibt ihre Doktorarbeit." },
+        { "native": "das Stipendium", "foreign": "scholarship", "example": "I got a scholarship.", "exampleDe": "Ich habe ein Stipendium bekommen." },
+        { "native": "die Nachhilfe", "foreign": "tutoring", "example": "I tutor in math.", "exampleDe": "Ich gebe Nachhilfe in Mathe." },
+        { "native": "der Austausch", "foreign": "exchange", "example": "I'm doing an exchange to Germany.", "exampleDe": "Ich mache einen Austausch nach Deutschland." },
+        { "native": "die Pruefungsangst", "foreign": "exam anxiety", "example": "Exam anxiety is normal.", "exampleDe": "Pruefungsangst ist normal." }
       ]
     },
     {
@@ -760,6 +760,7 @@ const DataManager = {
             native: word.native,
             foreign: word.foreign,
             example: word.example || '',
+            exampleDe: word.exampleDe || '',
             category: category.name,
             difficulty: 1,
             note: ''
@@ -1546,6 +1547,12 @@ const LearnView = {
 
   renderFlashcard(container, card) {
     const qa = this.getQuestionAnswer(card);
+    const exampleHtml = card.example ? `
+      <div class="flashcard-example-label">Beispiel</div>
+      <div class="flashcard-example">${this.escapeHtml(card.example)}</div>
+      ${card.exampleDe ? `<div class="flashcard-example-translation">${this.escapeHtml(card.exampleDe)}</div>` : ''}
+    ` : '';
+
     container.innerHTML = `
       <div class="flashcard-container">
         <div class="flashcard" id="flashcard" onclick="LearnView.flipCard()" role="button" tabindex="0" aria-label="Karte umdrehen">
@@ -1554,24 +1561,45 @@ const LearnView = {
             ${state.settings.showHints && card.category ? `<div class="flashcard-hint">${this.escapeHtml(card.category)}</div>` : ''}
           </div>
           <div class="flashcard-face flashcard-back">
+            <div class="flashcard-answer-label">Antwort</div>
             <div class="flashcard-word">${this.escapeHtml(qa.answer)}</div>
-            ${card.example ? `<div class="flashcard-example">${this.escapeHtml(card.example)}</div>` : ''}
+            ${exampleHtml}
           </div>
         </div>
       </div>
       <p class="text-center text-muted mb-md">Tippe auf die Karte zum Umdrehen</p>
-      <div class="action-row" id="flashcard-actions" style="display: none;">
-        <button class="btn btn-error btn-lg" onclick="LearnView.answer(false)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-            <path d="M18 6L6 18M6 6l12 12"/>
-          </svg>
-          Falsch
-        </button>
-        <button class="btn btn-success btn-lg" onclick="LearnView.answer(true)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-            <path d="M20 6L9 17l-5-5"/>
-          </svg>
-          Richtig
+      <div class="understood-btn-wrapper" id="flashcard-actions" style="display: none;">
+        <button class="understood-btn" onclick="LearnView.answer(true)" aria-label="Verstanden">
+          <p class="understood-btn__text">
+            <span style="--index: 0;">V</span>
+            <span style="--index: 1;">E</span>
+            <span style="--index: 2;">R</span>
+            <span style="--index: 3;">S</span>
+            <span style="--index: 4;">T</span>
+            <span style="--index: 5;">A</span>
+            <span style="--index: 6;">N</span>
+            <span style="--index: 7;">D</span>
+            <span style="--index: 8;">E</span>
+            <span style="--index: 9;">N</span>
+            <span style="--index: 10;"> </span>
+            <span style="--index: 11;">•</span>
+            <span style="--index: 12;"> </span>
+            <span style="--index: 13;">W</span>
+            <span style="--index: 14;">E</span>
+            <span style="--index: 15;">I</span>
+            <span style="--index: 16;">T</span>
+            <span style="--index: 17;">E</span>
+            <span style="--index: 18;">R</span>
+            <span style="--index: 19;"> </span>
+          </p>
+          <div class="understood-btn__circle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20" height="20" class="understood-btn__icon">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20" height="20" class="understood-btn__icon understood-btn__icon--copy">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+          </div>
         </button>
       </div>
     `;
@@ -2554,6 +2582,25 @@ const SettingsView = {
         </div>
       </div>
 
+      <div class="settings-section" id="settings-install-section" style="${deferredPrompt ? '' : 'display: none;'}">
+        <h3>App</h3>
+
+        <div class="settings-item">
+          <div>
+            <div class="settings-item-label">App installieren</div>
+            <div class="settings-item-desc">Auf dem Startbildschirm hinzufügen</div>
+          </div>
+          <button class="btn btn-primary" onclick="SettingsView.triggerInstall()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Installieren
+          </button>
+        </div>
+      </div>
+
       <div class="settings-section">
         <h3>Gefahrenzone</h3>
 
@@ -2635,6 +2682,24 @@ const SettingsView = {
 
     Toast.show('Alle Daten gelöscht', 'info');
     Views.show('home');
+  },
+
+  async triggerInstall() {
+    if (!deferredPrompt) {
+      Toast.show('Installation nicht verfügbar', 'error');
+      return;
+    }
+
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+
+    if (outcome === 'accepted') {
+      Toast.show('App wird installiert!', 'success');
+    }
+
+    deferredPrompt = null;
+    const section = document.getElementById('settings-install-section');
+    if (section) section.style.display = 'none';
   }
 };
 
@@ -2675,6 +2740,9 @@ function setupInstallPrompt() {
     e.preventDefault();
     deferredPrompt = e;
     installButton.classList.add('show');
+    // Also show settings install section if visible
+    const settingsSection = document.getElementById('settings-install-section');
+    if (settingsSection) settingsSection.style.display = '';
   });
 
   // Handle install button click
@@ -2697,6 +2765,9 @@ function setupInstallPrompt() {
     installButton.classList.remove('show');
     deferredPrompt = null;
     Toast.show('App erfolgreich installiert!', 'success');
+    // Also hide settings install section
+    const settingsSection = document.getElementById('settings-install-section');
+    if (settingsSection) settingsSection.style.display = 'none';
   });
 
   // Check if running as installed PWA
