@@ -2295,6 +2295,10 @@ const HomeView = {
     const learningCount = Object.keys(state.progress).length;
     const dueCount = DataManager.getDueCards().length;
     const totalVocab = state.vocabulary.length;
+    // Gesamtfortschritt: Summe aller Level / (Anzahl Vokabeln * Max-Level)
+    const maxLevel = CONFIG.INTERVALS.length - 1;
+    const totalLevelSum = Object.values(state.progress).reduce((sum, p) => sum + p.level, 0);
+    const overallProgress = totalVocab > 0 ? Math.round((totalLevelSum / (totalVocab * maxLevel)) * 100) : 0;
 
     container.innerHTML = `
       <div class="dashboard">
@@ -2361,8 +2365,8 @@ const HomeView = {
               </div>
             </div>
             <div class="mastery-bar-container">
-               <div class="mastery-label">Meisterungs-Grad: ${Math.round((masteredCount / (totalVocab || 1)) * 100)}%</div>
-               <div class="mastery-bar-bg"><div class="mastery-bar-fill" style="width: ${(masteredCount / (totalVocab || 1)) * 100}%"></div></div>
+               <div class="mastery-label">Fortschritt: ${overallProgress}%${masteredCount > 0 ? ` · ${masteredCount} gemeistert` : ''}</div>
+               <div class="mastery-bar-bg"><div class="mastery-bar-fill" style="width: ${overallProgress}%"></div></div>
             </div>
           </div>
         </div>
