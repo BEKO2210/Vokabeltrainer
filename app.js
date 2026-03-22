@@ -2681,25 +2681,7 @@ const HomeView = {
           </div>
         </div>
 
-        <!-- Continue Action -->
-        ${state.stats.lastCategory ? `
-          <div class="continue-action card" onclick="HomeView.continueLastCategory()" role="button">
-            <div class="continue-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24">
-                <path d="M4 13a8 8 0 0 1 7 7a6 6 0 0 0 3 -5a9 9 0 0 0 6 -8a3 3 0 0 0 -3 -3a9 9 0 0 0 -8 6a6 6 0 0 0 -5 3" /><path d="M7 14a6 6 0 0 0 -3 6a6 6 0 0 0 6 -3" /><path d="M15 9m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-              </svg>
-            </div>
-            <div class="continue-info">
-              <span class="label">Weitermachen</span>
-              <span class="category-name">${this.escapeHtml(state.stats.lastCategory)}</span>
-            </div>
-            <div class="continue-arrow">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
-                <path d="M9 5l7 7-7 7"/>
-              </svg>
-            </div>
-          </div>
-        ` : ''}
+        <!-- Continue Action removed -->
 
         <div class="main-actions">
           <button class="action-button primary" onclick="HomeView.quickStart()">
@@ -3623,22 +3605,6 @@ const WordsView = {
     }
 
     container.innerHTML = `
-      ${totalSelected > 0 ? `
-        <div class="selection-summary">
-          <div class="selection-summary-header">
-            <span class="selection-summary-count">${totalSelected} Wörter ausgewählt</span>
-            <button class="btn btn-sm btn-ghost" onclick="WordsView.deselectAll()" title="Alle abwählen">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 6L6 18M6 6l12 12"/></svg>
-            </button>
-          </div>
-          <div class="selection-summary-categories">
-            ${selectedCategories.map(([cat, s]) => `
-              <span class="selection-summary-chip">${this.escapeHtml(cat)} <strong>${s.selected}</strong></span>
-            `).join('')}
-          </div>
-        </div>
-      ` : ''}
-
       <div class="search-wrapper">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" />
@@ -3696,6 +3662,21 @@ const WordsView = {
           ${filtered.map(vocab => this.renderVocabItem(vocab)).join('')}
         </div>
       `}
+
+      ${totalSelected > 0 ? `
+        <div class="selection-sticky-bar">
+          <div class="selection-sticky-info">
+            <span class="selection-sticky-count">${totalSelected}</span>
+            <span class="selection-sticky-label">ausgewählt</span>
+          </div>
+          <div class="selection-sticky-chips">
+            ${selectedCategories.map(([cat, s]) => `<span class="selection-sticky-chip">${this.escapeHtml(cat)} <strong>${s.selected}</strong></span>`).join('')}
+          </div>
+          <button class="btn btn-sm btn-ghost selection-sticky-clear" onclick="WordsView.deselectAll()" title="Alle abwählen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+      ` : ''}
     `;
   },
 
@@ -4329,8 +4310,9 @@ const SettingsView = {
       </div>
 
       <div class="text-center text-muted mt-lg">
-        <p>Vokabel Master+ v1.0</p>
+        <p>Vokabel Master+</p>
         <p style="font-size: 0.75rem;">Made with ❤️ for learners</p>
+        <p style="font-size: 0.7rem; margin-top: var(--space-sm);"><a href="#" onclick="event.preventDefault(); SettingsView.showAGB()" style="color: var(--color-text-muted); text-decoration: underline;">AGB & Nutzungsbedingungen</a></p>
       </div>
     `;
   },
@@ -4450,6 +4432,43 @@ const SettingsView = {
     deferredPrompt = null;
     const section = document.getElementById('settings-install-section');
     if (section) section.style.display = 'none';
+  },
+
+  showAGB() {
+    Modal.open('AGB & Nutzungsbedingungen', `
+      <div class="agb-content">
+        <h3>Allgemeine Geschäftsbedingungen</h3>
+        <p><strong>Vokabel Master+</strong> — Vokabeltrainer-App</p>
+
+        <h4>1. Geltungsbereich</h4>
+        <p>Diese Nutzungsbedingungen gelten für die Nutzung der App "Vokabel Master+". Die App wird kostenlos und ohne Gewinnabsicht bereitgestellt.</p>
+
+        <h4>2. Bereitstellung & Wartung</h4>
+        <p>Die App wird vom Entwickler gepflegt und gewartet, solange die Kinder die App nutzen und Unterstützung benötigen. Sobald die Kinder in der Lage sind, die App eigenständig zu verwalten und weiterzuentwickeln, wird die Verantwortung an sie übergeben.</p>
+
+        <h4>3. Kostenfreiheit</h4>
+        <p>Die Nutzung der App ist vollständig kostenlos. Es fallen keine Gebühren, Abonnements oder In-App-Käufe an. Es werden keine Werbeanzeigen geschaltet.</p>
+
+        <h4>4. Datenschutz</h4>
+        <p>Alle Lern-Daten (Vokabeln, Fortschritt, Einstellungen) werden ausschließlich lokal auf dem Gerät des Nutzers gespeichert. Es werden keine persönlichen Daten an Server oder Dritte übermittelt. Die App funktioniert vollständig offline.</p>
+
+        <h4>5. Haftung</h4>
+        <p>Die App wird "wie besehen" bereitgestellt. Für die Richtigkeit der enthaltenen Vokabeln und Übersetzungen wird keine Garantie übernommen. Die App ersetzt keinen professionellen Sprachunterricht.</p>
+
+        <h4>6. Urheberrecht</h4>
+        <p>Die Vokabellisten basieren auf dem öffentlich zugänglichen Grundwortschatz des Lehrplans für Gymnasien. Die App selbst und ihr Quellcode sind Eigentum des Entwicklers.</p>
+
+        <h4>7. Übergabe</h4>
+        <p>Es ist ausdrücklich vorgesehen, dass diese App zu einem späteren Zeitpunkt an die Kinder übergeben wird, damit sie die Anwendung eigenständig weiterentwickeln und pflegen können. Dies ist Teil des Lernprozesses.</p>
+
+        <h4>8. Änderungen</h4>
+        <p>Diese Bedingungen können jederzeit angepasst werden. Bei wesentlichen Änderungen wird innerhalb der App darauf hingewiesen.</p>
+
+        <p class="text-muted" style="margin-top: var(--space-lg); font-size: 0.75rem;">Stand: März 2026</p>
+      </div>
+    `, `
+      <button class="btn btn-primary" onclick="Modal.close()">Verstanden</button>
+    `);
   }
 };
 
