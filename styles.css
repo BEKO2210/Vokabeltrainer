@@ -15,6 +15,7 @@
   --color-border: #e2e8f0;
   --color-primary: #06b6d4;
   --color-primary-hover: #0891b2;
+  --color-primary-dark: #0e7490;
   --color-primary-light: #cffafe;
   --color-success: #10b981;
   --color-success-light: #d1fae5;
@@ -208,12 +209,8 @@ p {
   gap: var(--space-xs);
 }
 
-#install-button {
-  display: none;
-}
-
 #install-button.show {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   animation: fadeIn 0.3s ease;
 }
