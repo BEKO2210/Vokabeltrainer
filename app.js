@@ -2058,21 +2058,29 @@ const DataManager = {
 
             const parts = line.split(';').map(p => p.trim());
             if (parts.length >= 2) {
-              const vocab = {
-                native: parts[0],
-                foreign: parts[1],
-                example: parts[2] || '',
-                exampleDe: parts[3] || '',
-                category: parts[4] || parts[3] || 'Eigene Wörter',
-                difficulty: parseInt(parts[5]) || parseInt(parts[4]) || 1,
-                note: parts[6] || parts[5] || ''
-              };
-              // Handle old 5-column format (native;foreign;example;category;difficulty)
+              let vocab;
               if (parts.length === 5) {
-                vocab.exampleDe = '';
-                vocab.category = parts[3] || 'Eigene Wörter';
-                vocab.difficulty = parseInt(parts[4]) || 1;
-                vocab.note = '';
+                // Old 5-column format: native;foreign;example;category;difficulty
+                vocab = {
+                  native: parts[0],
+                  foreign: parts[1],
+                  example: parts[2] || '',
+                  exampleDe: '',
+                  category: parts[3] || 'Eigene Wörter',
+                  difficulty: parseInt(parts[4]) || 1,
+                  note: ''
+                };
+              } else {
+                // New 6-column format: native;foreign;example;exampleDe;category;difficulty
+                vocab = {
+                  native: parts[0],
+                  foreign: parts[1],
+                  example: parts[2] || '',
+                  exampleDe: parts[3] || '',
+                  category: parts[4] || 'Eigene Wörter',
+                  difficulty: parseInt(parts[5]) || 1,
+                  note: parts[6] || ''
+                };
               }
               await this.saveVocab(vocab);
               count++;
@@ -3036,9 +3044,9 @@ const LearnView = {
 
     container.innerHTML = `
       <div class="dictation-controls">
-        <button class="speak-btn" onclick="LearnView.speakWithLang('${this.escapeAttr(qa.answer)}', '${qa.answerLang}')"
+        <button class="speak-btn" onclick="LearnView.speakWithLang('${this.escapeAttr(qa.answer)}', '${this.escapeAttr(qa.answerLang)}')"
                 ${!speechAvailable ? 'disabled title="Sprachausgabe nicht verfügbar"' : ''}
-                aria-label="Wort anhoren">
+                aria-label="Wort anhören">
           <svg viewBox="0 0 24 24" fill="currentColor">
             <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
           </svg>
