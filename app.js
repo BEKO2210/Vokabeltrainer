@@ -7,6 +7,29 @@
 // KONSTANTEN & KONFIGURATION
 // ============================================
 
+// PWA Install Prompt (moved to top so it's available everywhere)
+let deferredPrompt = null;
+
+// Shared utility functions
+const Utils = {
+  escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  },
+  escapeAttr(text) {
+    if (!text) return '';
+    return text
+      .replace(/\\/g, '\\\\')
+      .replace(/'/g, "\\'")
+      .replace(/"/g, '\\"')
+      .replace(/\n/g, '\\n')
+      .replace(/\r/g, '\\r')
+      .replace(/`/g, '\\`');
+  }
+};
+
 const CONFIG = {
   // Spaced Repetition Intervalle (in Tagen)
   INTERVALS: [1, 3, 7, 14, 30, 60],
@@ -1836,6 +1859,18 @@ const DataManager = {
       state.stats.lastGoalDate !== yesterdayStr) {
       state.stats.streak = 0;
     }
+
+    // Prune dailyStats older than 90 days to prevent unbounded growth
+    if (state.stats.dailyStats) {
+      const cutoff = new Date();
+      cutoff.setDate(cutoff.getDate() - 90);
+      const cutoffStr = cutoff.toISOString().split('T')[0];
+      for (const date of Object.keys(state.stats.dailyStats)) {
+        if (date < cutoffStr) {
+          delete state.stats.dailyStats[date];
+        }
+      }
+    }
   },
 
   // Seed preset vocabulary on first launch
@@ -1881,8 +1916,9 @@ const DataManager = {
 
       for (const category of vocabData.categories) {
         for (const word of category.words) {
-          // Find existing word by native term
-          const existing = state.vocabulary.find(v => v.native === word.native);
+          // Find existing word by native term AND category to avoid cross-category overwrites
+          const existing = state.vocabulary.find(v => v.native === word.native && v.category === category.name)
+            || state.vocabulary.find(v => v.native === word.native && v.foreign === word.foreign);
 
           if (existing) {
             // Check if needs update (example or exampleDe changed)
@@ -2055,8 +2091,8 @@ const DataManager = {
 
   // Download CSV Template
   downloadCSVTemplate() {
-    const headers = 'native;foreign;example;category;difficulty';
-    const example = 'Haus;house;The house is big.;Haus & Wohnen;1';
+    const headers = 'native;foreign;example;exampleDe;category;difficulty';
+    const example = 'Haus;house;The house is big.;Das Haus ist groß.;Eigene Wörter;1';
     const csvContent = `${headers}\n${example}`;
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -2118,7 +2154,7 @@ const Modal = {
     const modal = this.overlay.querySelector('.modal');
     modal.innerHTML = `
       <div class="modal-header">
-        <h2>${title}</h2>
+        <h2 id="modal-title">${Utils.escapeHtml(title)}</h2>
         <button class="btn btn-ghost btn-icon" onclick="Modal.close()" aria-label="Schließen">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M18 6L6 18M6 6l12 12"/>
@@ -2129,6 +2165,7 @@ const Modal = {
       ${footer ? `<div class="modal-footer">${footer}</div>` : ''}
     `;
     this.overlay.classList.add('active');
+    this.overlay.setAttribute('aria-hidden', 'false');
 
     // Focus trap
     const focusable = modal.querySelectorAll('button, input, select, textarea');
@@ -2137,6 +2174,7 @@ const Modal = {
 
   close() {
     this.overlay.classList.remove('active');
+    this.overlay.setAttribute('aria-hidden', 'true');
   }
 };
 
@@ -2818,29 +2856,23 @@ const LearnView = {
         </div>
       </div>
       <p class="text-center text-muted mb-md">Tippe auf die Karte zum Umdrehen</p>
-      <div class="understood-btn-wrapper" id="flashcard-actions" style="display: none;">
-        <button class="understood-btn" onclick="LearnView.answer(true)" aria-label="Verstanden">
+      <div class="flashcard-action-buttons" id="flashcard-actions" style="display: none;">
+        <button class="btn btn-lg" style="flex: 1; background: var(--color-error); color: white; border: none; padding: 1rem; border-radius: var(--radius-lg); font-weight: 600; font-size: 1rem;" onclick="LearnView.answer(false)" aria-label="Nicht gewusst">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="22" height="22" style="margin-right: 0.5rem; vertical-align: middle;">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+          Nicht gewusst
+        </button>
+        <button class="understood-btn" onclick="LearnView.answer(true)" aria-label="Gewusst" style="flex: 1;">
           <p class="understood-btn__text">
-            <span style="--index: 0;">V</span>
+            <span style="--index: 0;">G</span>
             <span style="--index: 1;">E</span>
-            <span style="--index: 2;">R</span>
-            <span style="--index: 3;">S</span>
-            <span style="--index: 4;">T</span>
-            <span style="--index: 5;">A</span>
-            <span style="--index: 6;">N</span>
-            <span style="--index: 7;">D</span>
-            <span style="--index: 8;">E</span>
-            <span style="--index: 9;">N</span>
-            <span style="--index: 10;"> </span>
-            <span style="--index: 11;">•</span>
-            <span style="--index: 12;"> </span>
-            <span style="--index: 13;">W</span>
-            <span style="--index: 14;">E</span>
-            <span style="--index: 15;">I</span>
-            <span style="--index: 16;">T</span>
-            <span style="--index: 17;">E</span>
-            <span style="--index: 18;">R</span>
-            <span style="--index: 19;"> </span>
+            <span style="--index: 2;">W</span>
+            <span style="--index: 3;">U</span>
+            <span style="--index: 4;">S</span>
+            <span style="--index: 5;">S</span>
+            <span style="--index: 6;">T</span>
+            <span style="--index: 7;"> </span>
           </p>
           <div class="understood-btn__circle">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20" height="20" class="understood-btn__icon">
@@ -2951,11 +2983,11 @@ const LearnView = {
   renderTyping(container, card) {
     const qa = this.getQuestionAnswer(card);
     const isDeEn = state.settings.practiceDirection === 'de-en';
-    const placeholder = isDeEn ? 'English translation...' : 'Deutsche Ubersetzung...';
+    const placeholder = isDeEn ? 'English translation...' : 'Deutsche Übersetzung...';
 
     container.innerHTML = `
       <div class="typing-question">
-        <div class="text-muted mb-sm">Ubersetze...</div>
+        <div class="text-muted mb-sm">Übersetze...</div>
         <div>${this.escapeHtml(qa.question)}</div>
       </div>
       <div class="typing-input-wrapper">
@@ -2963,7 +2995,7 @@ const LearnView = {
                placeholder="${placeholder}" autocomplete="off" autocapitalize="off" autofocus>
       </div>
       <button class="btn btn-primary btn-block btn-lg" onclick="LearnView.checkTypingAnswer('${this.escapeAttr(qa.answer)}')">
-        Prufen
+        Prüfen
       </button>
       <div id="typing-feedback"></div>
     `;
@@ -3005,16 +3037,16 @@ const LearnView = {
     container.innerHTML = `
       <div class="dictation-controls">
         <button class="speak-btn" onclick="LearnView.speakWithLang('${this.escapeAttr(qa.answer)}', '${qa.answerLang}')"
-                ${!speechAvailable ? 'disabled title="Sprachausgabe nicht verfugbar"' : ''}
+                ${!speechAvailable ? 'disabled title="Sprachausgabe nicht verfügbar"' : ''}
                 aria-label="Wort anhoren">
           <svg viewBox="0 0 24 24" fill="currentColor">
             <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
           </svg>
         </button>
-        <p class="text-muted">${speechAvailable ? 'Tippe zum Anhoren' : 'Sprachausgabe nicht verfugbar'}</p>
+        <p class="text-muted">${speechAvailable ? 'Tippe zum Anhören' : 'Sprachausgabe nicht verfügbar'}</p>
       </div>
       <div class="typing-question">
-        <div class="text-muted mb-sm">Schreibe das gehorte Wort</div>
+        <div class="text-muted mb-sm">Schreibe das gehörte Wort</div>
         ${!speechAvailable ? `<div class="text-muted" style="font-size: 0.875rem;">Hinweis: ${this.escapeHtml(qa.question)}</div>` : ''}
       </div>
       <div class="typing-input-wrapper">
@@ -3022,7 +3054,7 @@ const LearnView = {
                placeholder="Deine Antwort..." autocomplete="off" autocapitalize="off">
       </div>
       <button class="btn btn-primary btn-block btn-lg" onclick="LearnView.checkDictationAnswer('${this.escapeAttr(qa.answer)}')">
-        Prufen
+        Prüfen
       </button>
       <div id="dictation-feedback"></div>
     `;
@@ -3177,7 +3209,7 @@ const LearnView = {
               <button class="btn btn-secondary" onclick="LearnView.init()">
                 Zurück
               </button>
-              <button class="btn btn-primary" onclick="LearnView.beginSession()">
+              <button class="btn btn-primary" onclick="LearnView.restartSession()">
                 Nochmal
               </button>
             </div>
@@ -3185,9 +3217,20 @@ const LearnView = {
         </div>
       </div>
     `;
+  },
 
-    // Session zurücksetzen
-    state.currentSession = null;
+  restartSession() {
+    // Re-initialize session with same mode and card set for "Nochmal"
+    if (!state.currentSession) {
+      // Fallback: go back to learn menu
+      this.init();
+      return;
+    }
+    state.currentCardIndex = 0;
+    state.sessionResults = [];
+    // Re-shuffle cards
+    state.currentSession.cards = this.shuffle(state.currentSession.cards);
+    this.renderExercise();
   },
 
   endSession() {
@@ -3663,7 +3706,7 @@ const StatsView = {
               <strong>${state.stats.correctAnswers}</strong>
             </div>
             <div style="display: flex; justify-content: space-between;">
-              <span>Längster Streak</span>
+              <span>Aktueller Streak</span>
               <strong>${state.stats.streak} Tage</strong>
             </div>
           </div>
@@ -3758,7 +3801,7 @@ const SettingsView = {
 
         <div class="settings-item">
           <div>
-            <div class="settings-item-label">Ubungsrichtung</div>
+            <div class="settings-item-label">Übungsrichtung</div>
             <div class="settings-item-desc">Welche Sprache wird gezeigt, welche gefragt</div>
           </div>
           <select class="form-input" style="width: auto;" onchange="SettingsView.setSetting('practiceDirection', this.value)">
@@ -4030,7 +4073,11 @@ const SettingsView = {
       lastCategory: null
     };
 
-    Toast.show('Alle Daten gelöscht', 'info');
+    // Preset-Vokabeln neu laden
+    await DataManager.seedPresetVocabulary();
+    await DataManager.loadAll();
+
+    Toast.show('Alle Daten gelöscht und Vokabeln neu geladen', 'info');
     Views.show('home');
   },
 
@@ -4078,8 +4125,6 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () 
 // ============================================
 // PWA INSTALL PROMPT
 // ============================================
-
-let deferredPrompt = null;
 
 function setupInstallPrompt() {
   const installButton = document.getElementById('install-button');
@@ -4195,7 +4240,7 @@ async function initApp() {
       <div style="padding: 2rem; text-align: center;">
         <h1>Fehler</h1>
         <p>Die App konnte nicht geladen werden.</p>
-        <p>${error.message}</p>
+        <p>${Utils.escapeHtml(error.message)}</p>
         <button onclick="location.reload()">Neu laden</button>
       </div>
     `;
@@ -4205,15 +4250,7 @@ async function initApp() {
 // App starten wenn DOM geladen
 document.addEventListener('DOMContentLoaded', initApp);
 
-// Prevent zoom on double-tap for iOS
-let lastTouchEnd = 0;
-document.addEventListener('touchend', (event) => {
-  const now = Date.now();
-  if (now - lastTouchEnd <= 300) {
-    event.preventDefault();
-  }
-  lastTouchEnd = now;
-}, false);
+// Double-tap zoom prevention handled via CSS touch-action: manipulation
 
 // Keyboard shortcut for accessibility
 document.addEventListener('keydown', (e) => {

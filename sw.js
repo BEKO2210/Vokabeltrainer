@@ -1,5 +1,5 @@
 // Service Worker für Vokabel Master+
-const CACHE_NAME = 'vokabel-master-v5';
+const CACHE_NAME = 'vokabel-master-v6';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -7,8 +7,7 @@ const ASSETS_TO_CACHE = [
   './app.js',
   './manifest.webmanifest',
   './icons/icon-192.svg',
-  './icons/icon-512.svg',
-  './data/preset-vocabulary.json'
+  './icons/icon-512.svg'
 ];
 
 // Installation: Cache alle statischen Assets
@@ -59,12 +58,16 @@ self.addEventListener('fetch', (event) => {
             caches.open(CACHE_NAME)
               .then((cache) => {
                 cache.put(event.request, responseToCache);
+              })
+              .catch((err) => {
+                console.warn('Cache put failed:', err);
               });
             return response;
           })
           .catch(() => {
             // Offline-Fallback für HTML
-            if (event.request.headers.get('accept').includes('text/html')) {
+            const accept = event.request.headers.get('accept');
+            if (accept && accept.includes('text/html')) {
               return caches.match('./index.html');
             }
           });
