@@ -1307,6 +1307,172 @@ const PRESET_VOCABULARY = {
         { "native": "geschlossen", "foreign": "closed", "example": "The store is closed.", "exampleDe": "Der Laden ist geschlossen." },
         { "native": "leer", "foreign": "empty", "example": "The glass is empty.", "exampleDe": "Das Glas ist leer." }
       ]
+    },
+    {
+      "name": "5. Klasse Gymnasium",
+      "words": [
+        { "native": "die Schule", "foreign": "school", "example": "I go to school every day.", "exampleDe": "Ich gehe jeden Tag zur Schule." },
+        { "native": "der Schüler", "foreign": "pupil / student", "example": "The pupil is in class 5.", "exampleDe": "Der Schüler ist in der 5. Klasse." },
+        { "native": "die Schülerin", "foreign": "female pupil / student", "example": "The student reads a book.", "exampleDe": "Die Schülerin liest ein Buch." },
+        { "native": "der Lehrer", "foreign": "teacher (male)", "example": "The teacher explains the lesson.", "exampleDe": "Der Lehrer erklärt die Stunde." },
+        { "native": "die Lehrerin", "foreign": "teacher (female)", "example": "The teacher is very nice.", "exampleDe": "Die Lehrerin ist sehr nett." },
+        { "native": "das Klassenzimmer", "foreign": "classroom", "example": "The classroom is big.", "exampleDe": "Das Klassenzimmer ist groß." },
+        { "native": "die Tafel", "foreign": "blackboard", "example": "Write on the blackboard.", "exampleDe": "Schreib an die Tafel." },
+        { "native": "der Stundenplan", "foreign": "timetable", "example": "Look at the timetable.", "exampleDe": "Schau auf den Stundenplan." },
+        { "native": "die Hausaufgabe", "foreign": "homework", "example": "I have to do my homework.", "exampleDe": "Ich muss meine Hausaufgaben machen." },
+        { "native": "die Pause", "foreign": "break", "example": "The break is at 10 o'clock.", "exampleDe": "Die Pause ist um 10 Uhr." },
+        { "native": "das Heft", "foreign": "exercise book / notebook", "example": "Write in your exercise book.", "exampleDe": "Schreib in dein Heft." },
+        { "native": "der Bleistift", "foreign": "pencil", "example": "I need a pencil.", "exampleDe": "Ich brauche einen Bleistift." },
+        { "native": "der Kugelschreiber", "foreign": "pen", "example": "May I borrow your pen?", "exampleDe": "Darf ich deinen Kugelschreiber leihen?" },
+        { "native": "das Lineal", "foreign": "ruler", "example": "Use a ruler to draw a line.", "exampleDe": "Benutze ein Lineal, um eine Linie zu zeichnen." },
+        { "native": "der Radiergummi", "foreign": "eraser / rubber", "example": "I need an eraser.", "exampleDe": "Ich brauche einen Radiergummi." },
+        { "native": "die Schere", "foreign": "scissors", "example": "Cut the paper with scissors.", "exampleDe": "Schneide das Papier mit der Schere." },
+        { "native": "der Kleber", "foreign": "glue", "example": "Stick it with glue.", "exampleDe": "Klebe es mit dem Kleber." },
+        { "native": "der Ranzen", "foreign": "school bag", "example": "My school bag is heavy.", "exampleDe": "Mein Ranzen ist schwer." },
+        { "native": "das Mäppchen", "foreign": "pencil case", "example": "The pencil case is blue.", "exampleDe": "Das Mäppchen ist blau." },
+        { "native": "die Familie", "foreign": "family", "example": "My family is big.", "exampleDe": "Meine Familie ist groß." },
+        { "native": "die Eltern", "foreign": "parents", "example": "My parents are at home.", "exampleDe": "Meine Eltern sind zu Hause." },
+        { "native": "die Mutter", "foreign": "mother", "example": "My mother cooks dinner.", "exampleDe": "Meine Mutter kocht Abendessen." },
+        { "native": "der Vater", "foreign": "father", "example": "My father reads the newspaper.", "exampleDe": "Mein Vater liest die Zeitung." },
+        { "native": "der Bruder", "foreign": "brother", "example": "My brother is 12 years old.", "exampleDe": "Mein Bruder ist 12 Jahre alt." },
+        { "native": "die Schwester", "foreign": "sister", "example": "My sister plays the piano.", "exampleDe": "Meine Schwester spielt Klavier." },
+        { "native": "die Großeltern", "foreign": "grandparents", "example": "We visit our grandparents.", "exampleDe": "Wir besuchen unsere Großeltern." },
+        { "native": "die Großmutter / Oma", "foreign": "grandmother / grandma", "example": "Grandma bakes a cake.", "exampleDe": "Oma backt einen Kuchen." },
+        { "native": "der Großvater / Opa", "foreign": "grandfather / grandpa", "example": "Grandpa tells stories.", "exampleDe": "Opa erzählt Geschichten." },
+        { "native": "das Haustier", "foreign": "pet", "example": "Do you have a pet?", "exampleDe": "Hast du ein Haustier?" },
+        { "native": "der Hund", "foreign": "dog", "example": "The dog is playing in the garden.", "exampleDe": "Der Hund spielt im Garten." },
+        { "native": "die Katze", "foreign": "cat", "example": "The cat sleeps on the sofa.", "exampleDe": "Die Katze schläft auf dem Sofa." },
+        { "native": "der Freund", "foreign": "friend (male)", "example": "He is my best friend.", "exampleDe": "Er ist mein bester Freund." },
+        { "native": "die Freundin", "foreign": "friend (female)", "example": "She is my best friend.", "exampleDe": "Sie ist meine beste Freundin." },
+        { "native": "Hallo", "foreign": "hello", "example": "Hello, how are you?", "exampleDe": "Hallo, wie geht es dir?" },
+        { "native": "Tschüss", "foreign": "bye", "example": "Bye, see you tomorrow!", "exampleDe": "Tschüss, bis morgen!" },
+        { "native": "bitte", "foreign": "please", "example": "Can I have some water, please?", "exampleDe": "Kann ich bitte etwas Wasser haben?" },
+        { "native": "danke", "foreign": "thank you / thanks", "example": "Thank you very much!", "exampleDe": "Vielen Dank!" },
+        { "native": "Entschuldigung", "foreign": "excuse me / sorry", "example": "Excuse me, where is the library?", "exampleDe": "Entschuldigung, wo ist die Bibliothek?" },
+        { "native": "ja", "foreign": "yes", "example": "Yes, I can help you.", "exampleDe": "Ja, ich kann dir helfen." },
+        { "native": "nein", "foreign": "no", "example": "No, that is wrong.", "exampleDe": "Nein, das ist falsch." },
+        { "native": "Wie geht es dir?", "foreign": "How are you?", "example": "How are you today?", "exampleDe": "Wie geht es dir heute?" },
+        { "native": "Mir geht es gut.", "foreign": "I'm fine.", "example": "I'm fine, thank you.", "exampleDe": "Mir geht es gut, danke." },
+        { "native": "Wie heißt du?", "foreign": "What is your name?", "example": "What is your name?", "exampleDe": "Wie heißt du?" },
+        { "native": "Ich heiße...", "foreign": "My name is...", "example": "My name is Anna.", "exampleDe": "Ich heiße Anna." },
+        { "native": "Wie alt bist du?", "foreign": "How old are you?", "example": "How old are you?", "exampleDe": "Wie alt bist du?" },
+        { "native": "Ich bin ... Jahre alt.", "foreign": "I am ... years old.", "example": "I am 10 years old.", "exampleDe": "Ich bin 10 Jahre alt." },
+        { "native": "Wo wohnst du?", "foreign": "Where do you live?", "example": "Where do you live?", "exampleDe": "Wo wohnst du?" },
+        { "native": "Ich wohne in...", "foreign": "I live in...", "example": "I live in Berlin.", "exampleDe": "Ich wohne in Berlin." },
+        { "native": "die Farbe", "foreign": "colour", "example": "What is your favourite colour?", "exampleDe": "Was ist deine Lieblingsfarbe?" },
+        { "native": "rot", "foreign": "red", "example": "The apple is red.", "exampleDe": "Der Apfel ist rot." },
+        { "native": "blau", "foreign": "blue", "example": "The sky is blue.", "exampleDe": "Der Himmel ist blau." },
+        { "native": "grün", "foreign": "green", "example": "The grass is green.", "exampleDe": "Das Gras ist grün." },
+        { "native": "gelb", "foreign": "yellow", "example": "The sun is yellow.", "exampleDe": "Die Sonne ist gelb." },
+        { "native": "schwarz", "foreign": "black", "example": "The cat is black.", "exampleDe": "Die Katze ist schwarz." },
+        { "native": "weiß", "foreign": "white", "example": "The snow is white.", "exampleDe": "Der Schnee ist weiß." },
+        { "native": "die Zahl", "foreign": "number", "example": "Write the number on the board.", "exampleDe": "Schreib die Zahl an die Tafel." },
+        { "native": "eins", "foreign": "one", "example": "I have one brother.", "exampleDe": "Ich habe einen Bruder." },
+        { "native": "zwei", "foreign": "two", "example": "I have two cats.", "exampleDe": "Ich habe zwei Katzen." },
+        { "native": "drei", "foreign": "three", "example": "There are three books.", "exampleDe": "Da sind drei Bücher." },
+        { "native": "zehn", "foreign": "ten", "example": "I count to ten.", "exampleDe": "Ich zähle bis zehn." },
+        { "native": "zwanzig", "foreign": "twenty", "example": "There are twenty pupils in the class.", "exampleDe": "Es sind zwanzig Schüler in der Klasse." },
+        { "native": "hundert", "foreign": "hundred", "example": "A hundred is a big number.", "exampleDe": "Hundert ist eine große Zahl." },
+        { "native": "der Montag", "foreign": "Monday", "example": "On Monday I have English.", "exampleDe": "Am Montag habe ich Englisch." },
+        { "native": "der Dienstag", "foreign": "Tuesday", "example": "On Tuesday we have sports.", "exampleDe": "Am Dienstag haben wir Sport." },
+        { "native": "der Mittwoch", "foreign": "Wednesday", "example": "Wednesday is in the middle of the week.", "exampleDe": "Mittwoch ist in der Mitte der Woche." },
+        { "native": "der Donnerstag", "foreign": "Thursday", "example": "On Thursday I go swimming.", "exampleDe": "Am Donnerstag gehe ich schwimmen." },
+        { "native": "der Freitag", "foreign": "Friday", "example": "Friday is the last school day.", "exampleDe": "Freitag ist der letzte Schultag." },
+        { "native": "der Samstag", "foreign": "Saturday", "example": "On Saturday we go shopping.", "exampleDe": "Am Samstag gehen wir einkaufen." },
+        { "native": "der Sonntag", "foreign": "Sunday", "example": "On Sunday we rest.", "exampleDe": "Am Sonntag ruhen wir uns aus." },
+        { "native": "der Januar", "foreign": "January", "example": "January is the first month.", "exampleDe": "Januar ist der erste Monat." },
+        { "native": "der Februar", "foreign": "February", "example": "February is short.", "exampleDe": "Februar ist kurz." },
+        { "native": "der März", "foreign": "March", "example": "Spring starts in March.", "exampleDe": "Der Frühling beginnt im März." },
+        { "native": "der Frühling", "foreign": "spring", "example": "In spring the flowers bloom.", "exampleDe": "Im Frühling blühen die Blumen." },
+        { "native": "der Sommer", "foreign": "summer", "example": "In summer we go swimming.", "exampleDe": "Im Sommer gehen wir schwimmen." },
+        { "native": "der Herbst", "foreign": "autumn / fall", "example": "In autumn the leaves fall.", "exampleDe": "Im Herbst fallen die Blätter." },
+        { "native": "der Winter", "foreign": "winter", "example": "In winter it snows.", "exampleDe": "Im Winter schneit es." },
+        { "native": "das Frühstück", "foreign": "breakfast", "example": "I eat breakfast at 7.", "exampleDe": "Ich frühstücke um 7 Uhr." },
+        { "native": "das Mittagessen", "foreign": "lunch", "example": "Lunch is at 12 o'clock.", "exampleDe": "Das Mittagessen ist um 12 Uhr." },
+        { "native": "das Abendessen", "foreign": "dinner / supper", "example": "We have dinner together.", "exampleDe": "Wir essen zusammen Abendessen." },
+        { "native": "das Brot", "foreign": "bread", "example": "I eat bread for breakfast.", "exampleDe": "Ich esse Brot zum Frühstück." },
+        { "native": "die Butter", "foreign": "butter", "example": "Put butter on the bread.", "exampleDe": "Tu Butter aufs Brot." },
+        { "native": "der Käse", "foreign": "cheese", "example": "I like cheese.", "exampleDe": "Ich mag Käse." },
+        { "native": "die Milch", "foreign": "milk", "example": "I drink milk every morning.", "exampleDe": "Ich trinke jeden Morgen Milch." },
+        { "native": "der Saft", "foreign": "juice", "example": "Orange juice is healthy.", "exampleDe": "Orangensaft ist gesund." },
+        { "native": "das Wasser", "foreign": "water", "example": "I drink water.", "exampleDe": "Ich trinke Wasser." },
+        { "native": "der Apfel", "foreign": "apple", "example": "The apple is red and sweet.", "exampleDe": "Der Apfel ist rot und süß." },
+        { "native": "die Banane", "foreign": "banana", "example": "A banana is yellow.", "exampleDe": "Eine Banane ist gelb." },
+        { "native": "das Zimmer", "foreign": "room", "example": "My room is tidy.", "exampleDe": "Mein Zimmer ist ordentlich." },
+        { "native": "die Küche", "foreign": "kitchen", "example": "We eat in the kitchen.", "exampleDe": "Wir essen in der Küche." },
+        { "native": "das Badezimmer", "foreign": "bathroom", "example": "The bathroom is upstairs.", "exampleDe": "Das Badezimmer ist oben." },
+        { "native": "das Wohnzimmer", "foreign": "living room", "example": "We watch TV in the living room.", "exampleDe": "Wir sehen im Wohnzimmer fern." },
+        { "native": "der Garten", "foreign": "garden", "example": "We play in the garden.", "exampleDe": "Wir spielen im Garten." },
+        { "native": "die Uhr", "foreign": "clock / watch", "example": "What time is it?", "exampleDe": "Wie viel Uhr ist es?" },
+        { "native": "die Stunde", "foreign": "hour / lesson", "example": "The lesson is 45 minutes.", "exampleDe": "Die Stunde dauert 45 Minuten." },
+        { "native": "die Minute", "foreign": "minute", "example": "Wait five minutes.", "exampleDe": "Warte fünf Minuten." },
+        { "native": "heute", "foreign": "today", "example": "Today is Monday.", "exampleDe": "Heute ist Montag." },
+        { "native": "morgen", "foreign": "tomorrow", "example": "Tomorrow we have a test.", "exampleDe": "Morgen haben wir einen Test." },
+        { "native": "gestern", "foreign": "yesterday", "example": "Yesterday was Sunday.", "exampleDe": "Gestern war Sonntag." },
+        { "native": "immer", "foreign": "always", "example": "I always do my homework.", "exampleDe": "Ich mache immer meine Hausaufgaben." },
+        { "native": "manchmal", "foreign": "sometimes", "example": "Sometimes I play football.", "exampleDe": "Manchmal spiele ich Fußball." },
+        { "native": "nie", "foreign": "never", "example": "I never lie.", "exampleDe": "Ich lüge nie." },
+        { "native": "der Sport", "foreign": "sport / PE", "example": "I like sport.", "exampleDe": "Ich mag Sport." },
+        { "native": "Englisch", "foreign": "English", "example": "I learn English at school.", "exampleDe": "Ich lerne Englisch in der Schule." },
+        { "native": "Deutsch", "foreign": "German", "example": "German is my first language.", "exampleDe": "Deutsch ist meine Muttersprache." },
+        { "native": "Mathematik / Mathe", "foreign": "mathematics / maths", "example": "Maths is my favourite subject.", "exampleDe": "Mathe ist mein Lieblingsfach." },
+        { "native": "Musik", "foreign": "music", "example": "We sing in music class.", "exampleDe": "Wir singen im Musikunterricht." },
+        { "native": "Kunst", "foreign": "art", "example": "In art class we paint pictures.", "exampleDe": "Im Kunstunterricht malen wir Bilder." },
+        { "native": "können", "foreign": "can / to be able to", "example": "I can swim.", "exampleDe": "Ich kann schwimmen." },
+        { "native": "müssen", "foreign": "must / to have to", "example": "I must go to school.", "exampleDe": "Ich muss in die Schule gehen." },
+        { "native": "möchten", "foreign": "would like", "example": "I would like an ice cream.", "exampleDe": "Ich möchte ein Eis." },
+        { "native": "dürfen", "foreign": "may / to be allowed to", "example": "May I go to the toilet?", "exampleDe": "Darf ich auf die Toilette gehen?" },
+        { "native": "spielen", "foreign": "to play", "example": "The children play in the park.", "exampleDe": "Die Kinder spielen im Park." },
+        { "native": "machen", "foreign": "to do / to make", "example": "What are you doing?", "exampleDe": "Was machst du?" },
+        { "native": "haben", "foreign": "to have", "example": "I have a dog.", "exampleDe": "Ich habe einen Hund." },
+        { "native": "sein", "foreign": "to be", "example": "I am happy.", "exampleDe": "Ich bin glücklich." },
+        { "native": "gern / gerne", "foreign": "gladly / to like doing", "example": "I like reading.", "exampleDe": "Ich lese gerne." },
+        { "native": "das Hobby", "foreign": "hobby", "example": "My hobby is swimming.", "exampleDe": "Mein Hobby ist Schwimmen." },
+        { "native": "der Fußball", "foreign": "football / soccer", "example": "I play football after school.", "exampleDe": "Ich spiele nach der Schule Fußball." },
+        { "native": "das Fahrrad", "foreign": "bicycle / bike", "example": "I ride my bike to school.", "exampleDe": "Ich fahre mit dem Fahrrad zur Schule." },
+        { "native": "der Computer", "foreign": "computer", "example": "I use the computer for homework.", "exampleDe": "Ich benutze den Computer für Hausaufgaben." },
+        { "native": "das Handy", "foreign": "mobile phone / cell phone", "example": "I got a new mobile phone.", "exampleDe": "Ich habe ein neues Handy bekommen." },
+        { "native": "das Buch", "foreign": "book", "example": "I read a book.", "exampleDe": "Ich lese ein Buch." },
+        { "native": "der Film", "foreign": "film / movie", "example": "The film was great!", "exampleDe": "Der Film war toll!" },
+        { "native": "das Spiel", "foreign": "game", "example": "Let's play a game.", "exampleDe": "Lass uns ein Spiel spielen." },
+        { "native": "der Geburtstag", "foreign": "birthday", "example": "Happy birthday!", "exampleDe": "Alles Gute zum Geburtstag!" },
+        { "native": "das Geschenk", "foreign": "present / gift", "example": "Thank you for the present.", "exampleDe": "Danke für das Geschenk." },
+        { "native": "die Party", "foreign": "party", "example": "I go to a party.", "exampleDe": "Ich gehe auf eine Party." },
+        { "native": "toll", "foreign": "great / awesome", "example": "That's great!", "exampleDe": "Das ist toll!" },
+        { "native": "super", "foreign": "super / great", "example": "That's super!", "exampleDe": "Das ist super!" },
+        { "native": "lustig", "foreign": "funny", "example": "The clown is funny.", "exampleDe": "Der Clown ist lustig." },
+        { "native": "traurig", "foreign": "sad", "example": "I am sad.", "exampleDe": "Ich bin traurig." },
+        { "native": "müde", "foreign": "tired", "example": "I am very tired.", "exampleDe": "Ich bin sehr müde." },
+        { "native": "hungrig", "foreign": "hungry", "example": "I am hungry.", "exampleDe": "Ich bin hungrig." },
+        { "native": "durstig", "foreign": "thirsty", "example": "I am thirsty.", "exampleDe": "Ich bin durstig." },
+        { "native": "glücklich", "foreign": "happy", "example": "I am happy.", "exampleDe": "Ich bin glücklich." },
+        { "native": "krank", "foreign": "ill / sick", "example": "I am ill today.", "exampleDe": "Ich bin heute krank." },
+        { "native": "gesund", "foreign": "healthy", "example": "Fruit is healthy.", "exampleDe": "Obst ist gesund." },
+        { "native": "der Kopf", "foreign": "head", "example": "My head hurts.", "exampleDe": "Mein Kopf tut weh." },
+        { "native": "die Hand", "foreign": "hand", "example": "Wash your hands.", "exampleDe": "Wasch dir die Hände." },
+        { "native": "der Fuß", "foreign": "foot", "example": "My foot hurts.", "exampleDe": "Mein Fuß tut weh." },
+        { "native": "das Auge", "foreign": "eye", "example": "She has blue eyes.", "exampleDe": "Sie hat blaue Augen." },
+        { "native": "das Ohr", "foreign": "ear", "example": "I hear with my ears.", "exampleDe": "Ich höre mit meinen Ohren." },
+        { "native": "die Nase", "foreign": "nose", "example": "My nose is cold.", "exampleDe": "Meine Nase ist kalt." },
+        { "native": "der Mund", "foreign": "mouth", "example": "Open your mouth.", "exampleDe": "Öffne deinen Mund." },
+        { "native": "links", "foreign": "left", "example": "Turn left.", "exampleDe": "Biege links ab." },
+        { "native": "rechts", "foreign": "right", "example": "Turn right.", "exampleDe": "Biege rechts ab." },
+        { "native": "geradeaus", "foreign": "straight ahead", "example": "Go straight ahead.", "exampleDe": "Geh geradeaus." },
+        { "native": "neben", "foreign": "next to", "example": "The school is next to the park.", "exampleDe": "Die Schule ist neben dem Park." },
+        { "native": "zwischen", "foreign": "between", "example": "I sit between my friends.", "exampleDe": "Ich sitze zwischen meinen Freunden." },
+        { "native": "vor", "foreign": "in front of / before", "example": "The tree is in front of the house.", "exampleDe": "Der Baum ist vor dem Haus." },
+        { "native": "hinter", "foreign": "behind", "example": "The garden is behind the house.", "exampleDe": "Der Garten ist hinter dem Haus." },
+        { "native": "über", "foreign": "above / over", "example": "The lamp hangs over the table.", "exampleDe": "Die Lampe hängt über dem Tisch." },
+        { "native": "unter", "foreign": "under / below", "example": "The cat is under the table.", "exampleDe": "Die Katze ist unter dem Tisch." },
+        { "native": "Ich verstehe nicht.", "foreign": "I don't understand.", "example": "I don't understand the question.", "exampleDe": "Ich verstehe die Frage nicht." },
+        { "native": "Können Sie das wiederholen?", "foreign": "Can you repeat that?", "example": "Can you repeat that, please?", "exampleDe": "Können Sie das bitte wiederholen?" },
+        { "native": "Wie sagt man ... auf Englisch?", "foreign": "How do you say ... in English?", "example": "How do you say 'Hund' in English?", "exampleDe": "Wie sagt man 'Hund' auf Englisch?" },
+        { "native": "das Wetter", "foreign": "weather", "example": "The weather is nice today.", "exampleDe": "Das Wetter ist heute schön." },
+        { "native": "die Sonne", "foreign": "sun", "example": "The sun is shining.", "exampleDe": "Die Sonne scheint." },
+        { "native": "der Regen", "foreign": "rain", "example": "It's raining.", "exampleDe": "Es regnet." },
+        { "native": "der Schnee", "foreign": "snow", "example": "It's snowing!", "exampleDe": "Es schneit!" },
+        { "native": "warm", "foreign": "warm", "example": "It is warm today.", "exampleDe": "Es ist heute warm." }
+      ]
     }
   ]
 };
@@ -1521,7 +1687,18 @@ const DataManager = {
   async saveVocab(vocab) {
     const isNew = !vocab.id;
     if (!vocab.id) {
-      vocab.id = 'v_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      // Check for duplicates by native+foreign before creating new
+      const duplicate = state.vocabulary.find(v =>
+        v.native.toLowerCase().trim() === vocab.native.toLowerCase().trim() &&
+        v.foreign.toLowerCase().trim() === vocab.foreign.toLowerCase().trim()
+      );
+      if (duplicate) {
+        // Update existing instead of creating duplicate
+        vocab.id = duplicate.id;
+        vocab.createdAt = duplicate.createdAt;
+      } else {
+        vocab.id = 'v_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      }
     }
     vocab.createdAt = vocab.createdAt || new Date().toISOString();
     vocab.updatedAt = new Date().toISOString();
@@ -1830,7 +2007,7 @@ const DataManager = {
     });
   },
 
-  // Import aus CSV (Format: native;foreign;example;category;difficulty)
+  // Import aus CSV (Format: native;foreign;example;exampleDe;category;difficulty)
   async importCSV(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -1849,10 +2026,18 @@ const DataManager = {
                 native: parts[0],
                 foreign: parts[1],
                 example: parts[2] || '',
-                category: parts[3] || '',
-                difficulty: parseInt(parts[4]) || 1,
-                note: parts[5] || ''
+                exampleDe: parts[3] || '',
+                category: parts[4] || parts[3] || 'Eigene Wörter',
+                difficulty: parseInt(parts[5]) || parseInt(parts[4]) || 1,
+                note: parts[6] || parts[5] || ''
               };
+              // Handle old 5-column format (native;foreign;example;category;difficulty)
+              if (parts.length === 5) {
+                vocab.exampleDe = '';
+                vocab.category = parts[3] || 'Eigene Wörter';
+                vocab.difficulty = parseInt(parts[4]) || 1;
+                vocab.note = '';
+              }
               await this.saveVocab(vocab);
               count++;
             }
@@ -3026,7 +3211,7 @@ const LearnView = {
 
   escapeAttr(text) {
     if (!text) return '';
-    return text.replace(/'/g, "\\'").replace(/"/g, '\\"');
+    return text.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
   }
 };
 
@@ -3080,14 +3265,16 @@ const WordsView = {
         </div>
       ` : ''}
 
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-md);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-md); gap: var(--space-xs); flex-wrap: wrap;">
         <span class="text-muted">${filtered.length} Vokabeln</span>
-        <button class="btn btn-primary" onclick="WordsView.showAddModal()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 5l0 14" /><path d="M5 12l14 0" />
-          </svg>
-          Hinzufügen
-        </button>
+        <div style="display: flex; gap: var(--space-xs);">
+          <button class="btn btn-primary" onclick="WordsView.showAddModal('Eigene Wörter')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 5l0 14" /><path d="M5 12l14 0" />
+            </svg>
+            Eigenes Wort
+          </button>
+        </div>
       </div>
 
       ${filtered.length > 0 ? `
@@ -3172,8 +3359,8 @@ const WordsView = {
     this.render();
   },
 
-  showAddModal() {
-    Modal.open('Neue Vokabel', this.getVocabForm(), `
+  showAddModal(defaultCategory = '') {
+    Modal.open('Neue Vokabel', this.getVocabForm({}, defaultCategory), `
       <button class="btn btn-secondary" onclick="Modal.close()">Abbrechen</button>
       <button class="btn btn-primary" onclick="WordsView.saveVocab()">Speichern</button>
     `);
@@ -3185,39 +3372,57 @@ const WordsView = {
     const vocab = state.vocabulary.find(v => v.id === id);
     if (!vocab) return;
 
-    Modal.open('Vokabel bearbeiten', this.getVocabForm(vocab), `
+    Modal.open('Vokabel bearbeiten', this.getVocabForm(vocab, vocab.category), `
       <button class="btn btn-secondary" onclick="Modal.close()">Abbrechen</button>
       <button class="btn btn-primary" onclick="WordsView.saveVocab('${id}')">Speichern</button>
     `);
   },
 
-  getVocabForm(vocab = {}) {
+  getVocabForm(vocab = {}, defaultCategory = '') {
+    const categories = [...new Set(state.vocabulary.map(v => v.category).filter(Boolean))];
+    // Ensure "Eigene Wörter" is always an option
+    if (!categories.includes('Eigene Wörter')) {
+      categories.unshift('Eigene Wörter');
+    }
+    const currentCategory = vocab.category || defaultCategory || 'Eigene Wörter';
+
     return `
       <form id="vocab-form" onsubmit="event.preventDefault(); WordsView.saveVocab('${vocab.id || ''}');">
         <div class="form-group">
-          <label class="form-label" for="vocab-native">Muttersprache (z.B. Deutsch) *</label>
+          <label class="form-label" for="vocab-native">Deutsch *</label>
           <input type="text" class="form-input" id="vocab-native" required
                  value="${this.escapeHtml(vocab.native || '')}" placeholder="z.B. Hund">
         </div>
         <div class="form-group">
-          <label class="form-label" for="vocab-foreign">Fremdsprache (z.B. Englisch) *</label>
+          <label class="form-label" for="vocab-foreign">Englisch *</label>
           <input type="text" class="form-input" id="vocab-foreign" required
                  value="${this.escapeHtml(vocab.foreign || '')}" placeholder="z.B. dog">
         </div>
         <div class="form-group">
-          <label class="form-label" for="vocab-example">Beispielsatz (optional)</label>
+          <label class="form-label" for="vocab-example">Beispielsatz Englisch (optional)</label>
           <textarea class="form-input" id="vocab-example" rows="2"
                     placeholder="z.B. The dog is running.">${this.escapeHtml(vocab.example || '')}</textarea>
         </div>
         <div class="form-group">
-          <label class="form-label" for="vocab-category">Kategorie/Unit (optional)</label>
-          <input type="text" class="form-input" id="vocab-category"
-                 value="${this.escapeHtml(vocab.category || '')}" placeholder="z.B. Unit 1, Tiere">
+          <label class="form-label" for="vocab-example-de">Beispielsatz Deutsch (optional)</label>
+          <textarea class="form-input" id="vocab-example-de" rows="2"
+                    placeholder="z.B. Der Hund rennt.">${this.escapeHtml(vocab.exampleDe || '')}</textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="vocab-category">Kategorie</label>
+          <select class="form-input" id="vocab-category-select" onchange="WordsView.onCategorySelectChange(this.value)">
+            ${categories.map(cat => `
+              <option value="${this.escapeHtml(cat)}" ${currentCategory === cat ? 'selected' : ''}>${this.escapeHtml(cat)}</option>
+            `).join('')}
+            <option value="__custom__">+ Neue Kategorie...</option>
+          </select>
+          <input type="text" class="form-input" id="vocab-category" style="display: none; margin-top: var(--space-xs);"
+                 value="" placeholder="Neue Kategorie eingeben...">
         </div>
         <div class="form-group">
           <label class="form-label" for="vocab-difficulty">Schwierigkeit</label>
           <select class="form-input" id="vocab-difficulty">
-            <option value="1" ${vocab.difficulty === 1 ? 'selected' : ''}>Leicht</option>
+            <option value="1" ${(vocab.difficulty || 1) === 1 ? 'selected' : ''}>Leicht</option>
             <option value="2" ${vocab.difficulty === 2 ? 'selected' : ''}>Mittel</option>
             <option value="3" ${vocab.difficulty === 3 ? 'selected' : ''}>Schwer</option>
           </select>
@@ -3231,6 +3436,17 @@ const WordsView = {
     `;
   },
 
+  onCategorySelectChange(value) {
+    const customInput = document.getElementById('vocab-category');
+    if (value === '__custom__') {
+      customInput.style.display = 'block';
+      customInput.focus();
+    } else {
+      customInput.style.display = 'none';
+      customInput.value = '';
+    }
+  },
+
   async saveVocab(id = '') {
     const native = document.getElementById('vocab-native').value.trim();
     const foreign = document.getElementById('vocab-foreign').value.trim();
@@ -3240,12 +3456,25 @@ const WordsView = {
       return;
     }
 
+    // Determine category from select or custom input
+    const categorySelect = document.getElementById('vocab-category-select');
+    const categoryCustom = document.getElementById('vocab-category');
+    let category = '';
+    if (categorySelect) {
+      category = categorySelect.value === '__custom__'
+        ? (categoryCustom ? categoryCustom.value.trim() : '')
+        : categorySelect.value;
+    } else if (categoryCustom) {
+      category = categoryCustom.value.trim();
+    }
+
     const vocab = {
       id: id || undefined,
       native,
       foreign,
       example: document.getElementById('vocab-example').value.trim(),
-      category: document.getElementById('vocab-category').value.trim(),
+      exampleDe: (document.getElementById('vocab-example-de') || {}).value ? document.getElementById('vocab-example-de').value.trim() : '',
+      category: category || 'Eigene Wörter',
       difficulty: parseInt(document.getElementById('vocab-difficulty').value),
       note: document.getElementById('vocab-note').value.trim()
     };
@@ -3319,7 +3548,7 @@ const WordsView = {
 
   escapeAttr(text) {
     if (!text) return '';
-    return text.replace(/'/g, "\\'").replace(/"/g, '\\"');
+    return text.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
   }
 };
 
@@ -3784,15 +4013,21 @@ const SettingsView = {
     await DB.clear(CONFIG.STORE_VOCAB);
     await DB.clear(CONFIG.STORE_PROGRESS);
     await DB.clear(CONFIG.STORE_STATS);
+    await DB.clear(CONFIG.STORE_SELECTION);
 
     state.vocabulary = [];
     state.progress = {};
+    state.selectedWords = new Set();
     state.stats = {
       totalReviews: 0,
       correctAnswers: 0,
       streak: 0,
       lastStudyDate: null,
-      dailyStats: {}
+      lastGoalDate: null,
+      dailyStats: {},
+      dailyCorrect: 0,
+      goalReached: false,
+      lastCategory: null
     };
 
     Toast.show('Alle Daten gelöscht', 'info');
