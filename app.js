@@ -3288,6 +3288,17 @@ const WordsView = {
     // Kategorien sammeln
     const categories = [...new Set(state.vocabulary.map(v => v.category).filter(Boolean))];
 
+    // Auswahl pro Kategorie berechnen
+    const selectionByCategory = {};
+    state.vocabulary.forEach(v => {
+      const cat = v.category || 'Ohne Kategorie';
+      if (!selectionByCategory[cat]) selectionByCategory[cat] = { total: 0, selected: 0 };
+      selectionByCategory[cat].total++;
+      if (state.selectedWords.has(v.id)) selectionByCategory[cat].selected++;
+    });
+    const totalSelected = state.vocabulary.filter(v => state.selectedWords.has(v.id)).length;
+    const selectedCategories = Object.entries(selectionByCategory).filter(([, s]) => s.selected > 0);
+
     // Filtern
     let filtered = state.vocabulary;
     if (this.filter) {
@@ -3302,6 +3313,22 @@ const WordsView = {
     }
 
     container.innerHTML = `
+      ${totalSelected > 0 ? `
+        <div class="selection-summary">
+          <div class="selection-summary-header">
+            <span class="selection-summary-count">${totalSelected} Wörter ausgewählt</span>
+            <button class="btn btn-sm btn-ghost" onclick="WordsView.deselectAll()" title="Alle abwählen">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+          <div class="selection-summary-categories">
+            ${selectedCategories.map(([cat, s]) => `
+              <span class="selection-summary-chip">${this.escapeHtml(cat)} <strong>${s.selected}</strong></span>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
+
       <div class="search-wrapper">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" />
@@ -3313,10 +3340,14 @@ const WordsView = {
       ${categories.length > 0 ? `
         <div class="filter-chips">
           <button class="filter-chip ${!this.category ? 'active' : ''}" onclick="WordsView.setCategory('')">Alle</button>
-          ${categories.map(cat => `
-            <button class="filter-chip ${this.category === cat ? 'active' : ''}"
-                    onclick="WordsView.setCategory('${this.escapeAttr(cat)}')">${this.escapeHtml(cat)}</button>
-          `).join('')}
+          ${categories.map(cat => {
+            const s = selectionByCategory[cat] || { selected: 0, total: 0 };
+            return `
+            <button class="filter-chip ${this.category === cat ? 'active' : ''} ${s.selected > 0 ? 'has-selection' : ''}"
+                    onclick="WordsView.setCategory('${this.escapeAttr(cat)}')">
+              ${this.escapeHtml(cat)}${s.selected > 0 ? ` <span class="chip-count">${s.selected}</span>` : ''}
+            </button>`;
+          }).join('')}
         </div>
       ` : ''}
 
@@ -3364,7 +3395,7 @@ const WordsView = {
     const isSelected = state.selectedWords.has(vocab.id);
 
     return `
-      <div class="vocab-item">
+      <div class="vocab-item ${isSelected ? 'vocab-item--selected' : ''}">
         <label class="vocab-checkbox">
           <input type="checkbox"
                  ${isSelected ? 'checked' : ''}
