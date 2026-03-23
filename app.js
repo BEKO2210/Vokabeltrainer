@@ -2458,6 +2458,7 @@ const Toast = {
 
 const Modal = {
   overlay: null,
+  _savedScrollY: 0,
 
   init() {
     this.overlay = document.getElementById('modal-overlay');
@@ -2485,12 +2486,28 @@ const Modal = {
     this.overlay.classList.add('active');
     this.overlay.setAttribute('aria-hidden', 'false');
 
-    // Focus trap
-    const focusable = modal.querySelectorAll('button, input, select, textarea');
-    if (focusable.length) focusable[0].focus();
+    // Body-Scroll sperren (iOS braucht position:fixed)
+    this._savedScrollY = window.scrollY;
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    document.body.style.top = `-${this._savedScrollY}px`;
+
+    // Focus verzögern damit iOS Keyboard nicht sofort aufgeht
+    const focusable = modal.querySelectorAll('input, select, textarea');
+    if (focusable.length) {
+      setTimeout(() => focusable[0].focus(), 300);
+    }
   },
 
   close() {
+    // Body-Scroll wiederherstellen
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
+    document.body.style.top = '';
+    window.scrollTo(0, this._savedScrollY || 0);
+
     this.overlay.classList.remove('active');
     this.overlay.setAttribute('aria-hidden', 'true');
   }
@@ -3741,8 +3758,6 @@ const WordsView = {
       <button class="btn btn-secondary" onclick="Modal.close()">Abbrechen</button>
       <button class="btn btn-primary" onclick="WordsView.saveVocab()">Speichern</button>
     `);
-
-    document.getElementById('vocab-native').focus();
   },
 
   showEditModal(id) {

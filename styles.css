@@ -435,6 +435,8 @@ textarea.form-input {
 
 select.form-input {
   cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
@@ -909,20 +911,24 @@ select.form-input {
   inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 200;
-  align-items: center;
-  justify-content: center;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   padding: var(--space-md);
+  padding-bottom: calc(var(--space-md) + var(--safe-area-bottom));
 }
 
 .modal-overlay.active {
   display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .modal {
   width: 100%;
   max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
+  margin: auto;
+  flex-shrink: 0;
+  overflow-y: visible;
   background-color: var(--color-bg-secondary);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
@@ -1952,6 +1958,7 @@ select.form-input {
   box-shadow:
     inset 2px 2px 5px rgba(0, 0, 0, 0.3),
     inset -2px -2px 5px rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-border);
 }
 
 .form-input:focus {
