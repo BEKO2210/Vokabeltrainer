@@ -1,5 +1,5 @@
 // Service Worker für Vokabel Master+
-const CACHE_NAME = 'vokabel-master-v6';
+const CACHE_NAME = 'vokabel-master-v1.0.1';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
