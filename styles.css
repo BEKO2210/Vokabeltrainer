@@ -1317,6 +1317,36 @@ select.form-input {
 }
 
 /* Filter Chips */
+.category-filter-panel {
+  margin-bottom: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-secondary);
+  overflow: hidden;
+}
+
+.category-filter-panel summary {
+  cursor: pointer;
+  list-style: none;
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  font-weight: 600;
+}
+
+.category-filter-panel summary::-webkit-details-marker {
+  display: none;
+}
+
+.category-filter-panel[open] summary {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.category-filter-panel .filter-chips {
+  padding: var(--space-sm);
+  margin-bottom: 0;
+}
+
 .filter-chips {
   display: flex;
   flex-wrap: wrap;
@@ -1360,6 +1390,18 @@ select.form-input {
 
 .difficulty-dot.filled {
   background-color: var(--color-primary);
+}
+
+.difficulty--easy .difficulty-dot.filled {
+  background-color: var(--color-success);
+}
+
+.difficulty--medium .difficulty-dot.filled {
+  background-color: #3b82f6;
+}
+
+.difficulty--hard .difficulty-dot.filled {
+  background-color: var(--color-error);
 }
 
 /* Toast Notifications */

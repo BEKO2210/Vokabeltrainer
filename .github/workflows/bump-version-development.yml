@@ -71,6 +71,17 @@ jobs:
           print(f"Bumped version: {current} -> {new_version}")
           PY
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate app files
+        run: |
+          node --check app.js
+          node --check sw.js
+          python3 -m json.tool manifest.webmanifest > /dev/null
+
       - name: Commit and push
         run: |
           if git diff --quiet; then

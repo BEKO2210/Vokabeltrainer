@@ -54,7 +54,8 @@ const CONFIG = {
     nativeLang: 'de-DE',
     cardsPerSession: 20,
     soundEnabled: false, // Sound effects for correct/incorrect answers (default off)
-    practiceDirection: 'de-en' // 'de-en' = show German, answer English; 'en-de' = opposite
+    practiceDirection: 'de-en', // 'de-en' = show German, answer English; 'en-de' = opposite
+    difficultyMigrationV1Done: false
   },
   // Quiz Optionen
   MC_OPTIONS_COUNT: 4
@@ -1946,6 +1947,60 @@ const DB = {
 // ============================================
 
 const DataManager = {
+  calculateDifficulty(vocab, progress) {
+    // Base score from word complexity (for cards without progress history)
+    const native = (vocab.native || '').trim();
+    const foreign = (vocab.foreign || '').trim();
+    const avgLen = Math.round((native.length + foreign.length) / 2);
+    const isPhrase = /\s/.test(native) || /\s/.test(foreign);
+
+    let baseDifficulty = 2; // Mittel
+    if (!isPhrase && avgLen <= 7) baseDifficulty = 1; // Leicht
+    else if (isPhrase || avgLen >= 12) baseDifficulty = 3; // Schwer
+
+    if (!progress) return baseDifficulty;
+
+    // Refine from learning history
+    const correct = progress.correctCount || 0;
+    const incorrect = progress.incorrectCount || 0;
+    const total = correct + incorrect;
+    const level = progress.level || 0;
+    const accuracy = total > 0 ? (correct / total) : 0;
+
+    if (total >= 3) {
+      if (accuracy >= 0.85 && level >= 3) return 1;
+      if (accuracy < 0.6 || incorrect > correct || level <= 1) return 3;
+      return 2;
+    }
+
+    if (incorrect > correct && total > 0) return 3;
+    if (level >= 4) return 1;
+    return baseDifficulty;
+  },
+
+  async migrateDifficultyBands() {
+    let updated = 0;
+
+    for (const vocab of state.vocabulary) {
+      const progress = state.progress[vocab.id];
+      const targetDifficulty = this.calculateDifficulty(vocab, progress);
+      const currentDifficulty = parseInt(vocab.difficulty, 10) || 0;
+
+      if (currentDifficulty !== targetDifficulty) {
+        const updatedVocab = { ...vocab, difficulty: targetDifficulty };
+        await DB.put(CONFIG.STORE_VOCAB, updatedVocab);
+
+        const index = state.vocabulary.findIndex(v => v.id === vocab.id);
+        if (index >= 0) state.vocabulary[index] = updatedVocab;
+        updated++;
+      }
+    }
+
+    if (updated > 0) {
+      console.log(`Difficulty migration applied: ${updated} cards updated`);
+    }
+  },
+
   sanitizeVocabularyEntry(raw) {
     if (!raw || typeof raw !== 'object') return null;
 
@@ -2050,6 +2105,12 @@ const DataManager = {
 
       // Selection laden
       await this.loadSelection();
+
+      // Existing cards einmalig in Leicht/Mittel/Schwer einordnen
+      if (!state.settings.difficultyMigrationV1Done) {
+        await this.migrateDifficultyBands();
+        await this.saveSettings({ difficultyMigrationV1Done: true });
+      }
 
       // Streak prüfen
       this.checkStreak();
@@ -3782,17 +3843,22 @@ const WordsView = {
       </div>
 
       ${categories.length > 0 ? `
-        <div class="filter-chips">
-          <button class="filter-chip ${!this.category ? 'active' : ''}" onclick="WordsView.setCategory('')">Alle</button>
-          ${categories.map(cat => {
-            const s = selectionByCategory[cat] || { selected: 0, total: 0 };
-            return `
-            <button class="filter-chip ${this.category === cat ? 'active' : ''} ${s.selected > 0 ? 'has-selection' : ''}"
-                    onclick="WordsView.setCategory('${this.escapeAttr(cat)}')">
-              ${this.escapeHtml(cat)}${s.selected > 0 ? ` <span class="chip-count">${s.selected}</span>` : ''}
-            </button>`;
-          }).join('')}
-        </div>
+        <details class="category-filter-panel" ${this.category ? 'open' : ''}>
+          <summary>
+            Kategorien ${this.category ? `· ${this.escapeHtml(this.category)}` : 'auswählen'}
+          </summary>
+          <div class="filter-chips">
+            <button class="filter-chip ${!this.category ? 'active' : ''}" onclick="WordsView.setCategory('')">Alle</button>
+            ${categories.map(cat => {
+              const s = selectionByCategory[cat] || { selected: 0, total: 0 };
+              return `
+              <button class="filter-chip ${this.category === cat ? 'active' : ''} ${s.selected > 0 ? 'has-selection' : ''}"
+                      onclick="WordsView.setCategory('${this.escapeAttr(cat)}')">
+                ${this.escapeHtml(cat)}${s.selected > 0 ? ` <span class="chip-count">${s.selected}</span>` : ''}
+              </button>`;
+            }).join('')}
+          </div>
+        </details>
       ` : ''}
 
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-md); gap: var(--space-xs); flex-wrap: wrap;">
@@ -3868,7 +3934,8 @@ const WordsView = {
           <div class="vocab-item-meta">
             ${vocab.category ? `<span class="badge">${this.escapeHtml(vocab.category)}</span> ` : ''}
             ${this.renderDifficulty(vocab.difficulty || 1)}
-            ${level >= 0 ? ` · Level ${level + 1}` : ' · Neu'}
+            · ${this.getDifficultyLabel(vocab.difficulty || 1)}
+            ${level >= 0 ? ` · Level ${level + 1}` : ''}
           </div>
         </div>
         <div class="vocab-item-actions">
@@ -3888,11 +3955,18 @@ const WordsView = {
   },
 
   renderDifficulty(level) {
+    const difficultyClass = level <= 1 ? 'easy' : (level === 2 ? 'medium' : 'hard');
     return `
-      <span class="difficulty">
+      <span class="difficulty difficulty--${difficultyClass}">
         ${[1, 2, 3].map(i => `<span class="difficulty-dot ${i <= level ? 'filled' : ''}"></span>`).join('')}
       </span>
     `;
+  },
+
+  getDifficultyLabel(level) {
+    if (level <= 1) return 'Leicht';
+    if (level === 2) return 'Mittel';
+    return 'Schwer';
   },
 
   setFilter(value) {
