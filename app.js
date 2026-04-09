@@ -3534,6 +3534,7 @@ const LearnView = {
       }
     });
 
+    this.playFeedbackSound(isCorrect);
     setTimeout(() => this.answer(isCorrect), 1000);
   },
 
@@ -3582,6 +3583,7 @@ const LearnView = {
       `;
     }
 
+    this.playFeedbackSound(isCorrect);
     input.disabled = true;
 
     setTimeout(() => this.answer(isCorrect), 1500);
@@ -3696,29 +3698,34 @@ const LearnView = {
 
       if (!this._audioCtx) this._audioCtx = new Ctx();
       const ctx = this._audioCtx;
+      if (ctx.state === 'suspended') {
+        ctx.resume().catch(() => null);
+      }
 
-      const now = ctx.currentTime;
+      const now = ctx.currentTime + 0.005;
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.connect(gain);
       gain.connect(ctx.destination);
 
       if (isCorrect) {
+        // Apple-like positive chime (up)
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(620, now);
-        osc.frequency.exponentialRampToValueAtTime(880, now + 0.12);
+        osc.frequency.setValueAtTime(740, now);
+        osc.frequency.exponentialRampToValueAtTime(988, now + 0.11);
       } else {
+        // Gentle negative chime (down)
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(320, now);
-        osc.frequency.exponentialRampToValueAtTime(190, now + 0.16);
+        osc.frequency.setValueAtTime(360, now);
+        osc.frequency.exponentialRampToValueAtTime(240, now + 0.13);
       }
 
       gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(0.08, now + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + (isCorrect ? 0.16 : 0.2));
+      gain.gain.exponentialRampToValueAtTime(0.09, now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + (isCorrect ? 0.16 : 0.18));
 
       osc.start(now);
-      osc.stop(now + (isCorrect ? 0.17 : 0.21));
+      osc.stop(now + (isCorrect ? 0.17 : 0.19));
     } catch (error) {
       console.warn('Sound feedback not available:', error);
     }
@@ -3741,6 +3748,7 @@ const LearnView = {
       `;
     }
 
+    this.playFeedbackSound(isCorrect);
     input.disabled = true;
 
     setTimeout(() => this.answer(isCorrect), 1500);
