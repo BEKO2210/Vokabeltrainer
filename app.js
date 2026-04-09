@@ -1951,30 +1951,12 @@ const DataManager = {
     // Base score from word complexity (for cards without progress history)
     const native = (vocab.native || '').trim();
     const foreign = (vocab.foreign || '').trim();
-    
-    // Remove German articles for fair calculation (der, die, das, dem, den, des, ein, eine, eines, einem)
-    const nativeWithoutArticles = native.replace(/^(der|die|das|dem|den|des|ein|eine|eines|einem|einer)\s+/i, '').trim();
-    
-    // Calculate lengths
-    const nativeLen = nativeWithoutArticles.length;
-    const foreignLen = foreign.length;
-    
-    // A "real phrase" has multiple words in the foreign word (what the user must learn)
-    const isRealPhrase = foreign.includes(' ');
-    const isLongCompound = nativeLen >= 12 || foreignLen >= 10;
-    
-    // Difficulty logic:
-    // 1 (Easy): Short words (≤5 chars foreign), no phrase
-    // 2 (Medium): Medium words (6-9 chars foreign) OR German with article but short core
-    // 3 (Hard): Long words (≥10 chars), real phrases, or very long compounds
-    let baseDifficulty = 2; // Mittel (default)
-    
-    if (!isRealPhrase && foreignLen <= 5) {
-      baseDifficulty = 1; // Leicht: short foreign words
-    } else if (isRealPhrase || isLongCompound) {
-      baseDifficulty = 3; // Schwer: phrases or long words
-    }
-    // Everything else stays Medium (2)
+    const avgLen = Math.round((native.length + foreign.length) / 2);
+    const isPhrase = /\s/.test(native) || /\s/.test(foreign);
+
+    let baseDifficulty = 2; // Mittel
+    if (!isPhrase && avgLen <= 7) baseDifficulty = 1; // Leicht
+    else if (isPhrase || avgLen >= 12) baseDifficulty = 3; // Schwer
 
     if (!progress) return baseDifficulty;
 
@@ -4492,6 +4474,23 @@ const SettingsView = {
 
         <div class="settings-item">
           <div>
+            <div class="settings-item-label">App-Cache leeren</div>
+            <div class="settings-item-desc">Lädt beim nächsten Öffnen die neueste Version</div>
+          </div>
+          <button class="btn-uiverse btn-uiverse-success" onclick="SettingsView.clearAppCache()">
+            ${btnPoints}
+            <span class="inner">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 3 -6.7" />
+                <path d="M3 3v6h6" />
+              </svg>
+              Cache leeren
+            </span>
+          </button>
+        </div>
+
+        <div class="settings-item">
+          <div>
             <div class="settings-item-label">JSON importieren</div>
             <div class="settings-item-desc">Backup wiederherstellen</div>
           </div>
@@ -4668,6 +4667,38 @@ const SettingsView = {
       this.render();
     } catch (error) {
       Toast.show('Fehler beim Import', 'error');
+      console.error(error);
+    }
+  },
+
+  async clearAppCache() {
+    if (!confirm('App-Cache wirklich leeren und neu laden?')) return;
+
+    try {
+      // Service Worker aktiv aktualisieren (wenn vorhanden)
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(registrations.map(reg => reg.update().catch(() => null)));
+      }
+
+      // Nur app-spezifische Caches löschen
+      if ('caches' in window) {
+        const cacheNames = await caches.keys();
+        await Promise.all(
+          cacheNames
+            .filter(name => name.startsWith('vokabel-master-'))
+            .map(name => caches.delete(name))
+        );
+      }
+
+      Toast.show('Cache geleert – App wird neu geladen', 'success', 1800);
+      setTimeout(() => {
+        const url = new URL(location.href);
+        url.searchParams.set('cacheReset', Date.now().toString());
+        location.replace(url.toString());
+      }, 300);
+    } catch (error) {
+      Toast.show('Cache konnte nicht geleert werden', 'error');
       console.error(error);
     }
   },
