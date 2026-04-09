@@ -2342,7 +2342,7 @@ const DataManager = {
             example: word.example || '',
             exampleDe: word.exampleDe || '',
             category: category.name,
-            difficulty: 1,
+            difficulty: this.calculateDifficulty({native: word.native, foreign: word.foreign}, null),
             note: ''
           };
           await this.saveVocab(vocab);
@@ -2388,7 +2388,7 @@ const DataManager = {
               example: word.example || '',
               exampleDe: word.exampleDe || '',
               category: category.name,
-              difficulty: 1,
+              difficulty: this.calculateDifficulty({native: word.native, foreign: word.foreign}, null),
               note: ''
             };
             await this.saveVocab(vocab);
@@ -3784,6 +3784,7 @@ const LearnView = {
       correct: isCorrect
     });
 
+    this.playFeedbackSound(isCorrect);
     await DataManager.saveProgress(card.id, isCorrect);
 
     state.currentCardIndex++;
