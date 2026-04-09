@@ -2,6 +2,7 @@
   "name": "Vokabel Master+",
   "short_name": "Vokabel+",
   "description": "Premium Vokabeltrainer für Schüler und Sprachenlerner",
+  "version": "1.0.1",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#0f172a",
