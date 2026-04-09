@@ -1951,12 +1951,30 @@ const DataManager = {
     // Base score from word complexity (for cards without progress history)
     const native = (vocab.native || '').trim();
     const foreign = (vocab.foreign || '').trim();
-    const avgLen = Math.round((native.length + foreign.length) / 2);
-    const isPhrase = /\s/.test(native) || /\s/.test(foreign);
-
-    let baseDifficulty = 2; // Mittel
-    if (!isPhrase && avgLen <= 7) baseDifficulty = 1; // Leicht
-    else if (isPhrase || avgLen >= 12) baseDifficulty = 3; // Schwer
+    
+    // Remove German articles for fair calculation (der, die, das, dem, den, des, ein, eine, eines, einem)
+    const nativeWithoutArticles = native.replace(/^(der|die|das|dem|den|des|ein|eine|eines|einem|einer)\s+/i, '').trim();
+    
+    // Calculate lengths
+    const nativeLen = nativeWithoutArticles.length;
+    const foreignLen = foreign.length;
+    
+    // A "real phrase" has multiple words in the foreign word (what the user must learn)
+    const isRealPhrase = foreign.includes(' ');
+    const isLongCompound = nativeLen >= 12 || foreignLen >= 10;
+    
+    // Difficulty logic:
+    // 1 (Easy): Short words (≤5 chars foreign), no phrase
+    // 2 (Medium): Medium words (6-9 chars foreign) OR German with article but short core
+    // 3 (Hard): Long words (≥10 chars), real phrases, or very long compounds
+    let baseDifficulty = 2; // Mittel (default)
+    
+    if (!isRealPhrase && foreignLen <= 5) {
+      baseDifficulty = 1; // Leicht: short foreign words
+    } else if (isRealPhrase || isLongCompound) {
+      baseDifficulty = 3; // Schwer: phrases or long words
+    }
+    // Everything else stays Medium (2)
 
     if (!progress) return baseDifficulty;
 
