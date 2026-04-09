@@ -3636,7 +3636,9 @@ const LearnView = {
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = state.settings.speechLang;
-        utterance.rate = 0.8;
+        utterance.rate = 0.9;
+        utterance.pitch = 1.0;
+        utterance.voice = this.getBestVoiceForLang(state.settings.speechLang);
         window.speechSynthesis.speak(utterance);
       };
 
@@ -3657,7 +3659,9 @@ const LearnView = {
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = lang;
-        utterance.rate = 0.8;
+        utterance.rate = 0.9;
+        utterance.pitch = 1.0;
+        utterance.voice = this.getBestVoiceForLang(lang);
         window.speechSynthesis.speak(utterance);
       };
 
@@ -3666,6 +3670,57 @@ const LearnView = {
       } else {
         speechSynthesis.addEventListener('voiceschanged', doSpeak, { once: true });
       }
+    }
+  },
+
+  getBestVoiceForLang(lang) {
+    const voices = speechSynthesis.getVoices();
+    if (!voices || voices.length === 0) return null;
+
+    const normalizedLang = (lang || '').toLowerCase();
+    const exactLang = voices.filter(v => (v.lang || '').toLowerCase() === normalizedLang);
+    const sameFamily = voices.filter(v => (v.lang || '').toLowerCase().startsWith(normalizedLang.split('-')[0]));
+    const candidates = exactLang.length ? exactLang : (sameFamily.length ? sameFamily : voices);
+
+    const premiumHint = /(google|microsoft|natural|enhanced|premium|neural|siri)/i;
+    const best = candidates.find(v => premiumHint.test(v.name || ''));
+    return best || candidates[0] || null;
+  },
+
+  playFeedbackSound(isCorrect) {
+    if (!state.settings.soundEnabled) return;
+
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return;
+
+      if (!this._audioCtx) this._audioCtx = new Ctx();
+      const ctx = this._audioCtx;
+
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      if (isCorrect) {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(620, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.12);
+      } else {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(320, now);
+        osc.frequency.exponentialRampToValueAtTime(190, now + 0.16);
+      }
+
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.08, now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + (isCorrect ? 0.16 : 0.2));
+
+      osc.start(now);
+      osc.stop(now + (isCorrect ? 0.17 : 0.21));
+    } catch (error) {
+      console.warn('Sound feedback not available:', error);
     }
   },
 
@@ -3721,6 +3776,7 @@ const LearnView = {
       correct: isCorrect
     });
 
+    this.playFeedbackSound(isCorrect);
     await DataManager.saveProgress(card.id, isCorrect);
 
     state.currentCardIndex++;
@@ -4475,7 +4531,7 @@ const SettingsView = {
         <div class="settings-item">
           <div>
             <div class="settings-item-label">App-Cache leeren</div>
-            <div class="settings-item-desc">Lädt beim nächsten Öffnen die neueste Version</div>
+            <div class="settings-item-desc">Aktualisiert nur App-Dateien (keine Lerndaten)</div>
           </div>
           <button class="btn-uiverse btn-uiverse-success" onclick="SettingsView.clearAppCache()">
             ${btnPoints}
@@ -4576,8 +4632,8 @@ const SettingsView = {
 
         <div class="settings-item" style="border-color: var(--color-error);">
           <div>
-            <div class="settings-item-label">Alle Daten löschen</div>
-            <div class="settings-item-desc">Unwiderruflich!</div>
+            <div class="settings-item-label">Lerndaten komplett löschen</div>
+            <div class="settings-item-desc">Vokabeln, Fortschritt & Auswahl werden zurückgesetzt</div>
           </div>
           <button class="btn-uiverse btn-uiverse-error" onclick="SettingsView.clearAllData()">
             ${btnPoints}
@@ -4703,7 +4759,31 @@ const SettingsView = {
     }
   },
 
+  countCustomWords() {
+    // Als "eigene Wörter" zählen wir manuell gepflegte Kategorien
+    // sowie Wörter außerhalb der eingebetteten Preset-Liste.
+    const presetPairs = new Set();
+    for (const category of PRESET_VOCABULARY.categories) {
+      for (const word of category.words) {
+        presetPairs.add(`${word.native}|||${word.foreign}`);
+      }
+    }
+
+    return state.vocabulary.filter(v => {
+      if ((v.category || '').trim().toLowerCase() === 'eigene wörter') return true;
+      return !presetPairs.has(`${v.native}|||${v.foreign}`);
+    }).length;
+  },
+
   async clearAllData() {
+    const customCount = this.countCustomWords();
+    if (customCount > 0) {
+      const proceed = confirm(
+        `Du hast ${customCount} eigene Wörter.\nBitte vorher ein JSON-Backup exportieren.\n\nOhne Backup gehen diese Daten verloren.\nTrotzdem fortfahren?`
+      );
+      if (!proceed) return;
+    }
+
     if (!confirm('Wirklich ALLE Daten löschen? Dies kann nicht rückgängig gemacht werden!')) return;
     if (!confirm('Bist du sicher? Alle Vokabeln und Fortschritte gehen verloren!')) return;
 
