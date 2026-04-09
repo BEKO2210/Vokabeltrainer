@@ -2729,12 +2729,22 @@ function showGoalCelebration() {
   overlay.className = 'celebration-overlay';
   overlay.innerHTML = `
     <div class="celebration-content">
-      <div class="celebration-emoji">🎉</div>
+      <div class="celebration-emoji" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 3v4"></path><path d="M19 3v4"></path><path d="M3 8h18"></path>
+          <path d="M7 8v6a5 5 0 0 0 10 0V8"></path>
+          <path d="M12 19v2"></path>
+        </svg>
+      </div>
       <div class="celebration-title">Tagesziel erreicht!</div>
       <div class="celebration-subtitle">Du hast heute ${CONFIG.DAILY_GOAL} Wörter gelernt</div>
       ${streak > 0 ? `
         <div class="celebration-streak">
-          <span class="streak-fire">🔥</span>
+          <span class="streak-fire" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3c2 3 4 4 4 8a4 4 0 1 1-8 0c0-2 1-4 4-8z"></path>
+            </svg>
+          </span>
           <span>${streak} Tage Streak!</span>
         </div>
       ` : ''}
@@ -2829,14 +2839,12 @@ const HomeView = {
     const streak = state.stats.streak || 0;
     const progressPercent = Math.min((dailyCorrect / CONFIG.DAILY_GOAL) * 100, 100);
 
-    const masteredCount = Object.values(state.progress).filter(p => p.level >= 5).length;
-    const learningCount = Object.keys(state.progress).length;
+    const todayStats = state.stats.dailyStats[today] || { reviews: 0, correct: 0 };
+    const openToday = Math.max(CONFIG.DAILY_GOAL - dailyCorrect, 0);
     const dueCount = DataManager.getDueCards().length;
-    const totalVocab = state.vocabulary.length;
-    // Gesamtfortschritt: Summe aller Level / (Anzahl Vokabeln * Max-Level)
-    const maxLevel = CONFIG.INTERVALS.length - 1;
-    const totalLevelSum = Object.values(state.progress).reduce((sum, p) => sum + p.level, 0);
-    const overallProgress = totalVocab > 0 ? Math.round((totalLevelSum / (totalVocab * maxLevel)) * 100) : 0;
+    const todayAccuracy = todayStats.reviews > 0
+      ? Math.round((todayStats.correct / todayStats.reviews) * 100)
+      : 0;
 
     container.innerHTML = `
       <div class="dashboard">
@@ -2865,7 +2873,13 @@ const HomeView = {
           <!-- Tagesziel Card -->
           <div class="db-card goal-card ${goalReached ? 'reached' : ''}">
             <div class="db-card-header">
-              <span class="db-card-icon">🎯</span>
+              <span class="db-card-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="18" height="18" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <circle cx="12" cy="12" r="5"></circle>
+                  <circle cx="12" cy="12" r="2"></circle>
+                </svg>
+              </span>
               <h3>Tagesziel</h3>
             </div>
             <div class="goal-progress-container">
@@ -2879,32 +2893,43 @@ const HomeView = {
                 <span class="goal-total">/ ${CONFIG.DAILY_GOAL}</span>
               </div>
             </div>
-            <p class="db-card-footer">${goalReached ? 'Ziel erreicht! 🎉' : `Noch ${CONFIG.DAILY_GOAL - dailyCorrect} Wörter`}</p>
+            <p class="db-card-footer">${goalReached ? 'Ziel erreicht!' : `Noch ${openToday} Wörter`}</p>
           </div>
 
           <!-- Fortschritt Card -->
           <div class="db-card progress-card">
             <div class="db-card-header">
-              <span class="db-card-icon">📊</span>
+              <span class="db-card-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="18" height="18" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19h16"></path>
+                  <path d="M7 15v-4"></path>
+                  <path d="M12 15V9"></path>
+                  <path d="M17 15V6"></path>
+                </svg>
+              </span>
               <h3>Fortschritt</h3>
             </div>
             <div class="stats-mini-grid">
+              <div class="mini-stat-item">
+                <span class="val">${openToday}</span>
+                <span class="lbl">Offen</span>
+              </div>
+              <div class="mini-stat-item">
+                <span class="val">${dailyCorrect}</span>
+                <span class="lbl">Heute gelernt</span>
+              </div>
               <div class="mini-stat-item">
                 <span class="val">${dueCount}</span>
                 <span class="lbl">Fällig</span>
               </div>
               <div class="mini-stat-item">
-                <span class="val">${learningCount}</span>
-                <span class="lbl">Gelernt</span>
-              </div>
-              <div class="mini-stat-item">
-                <span class="val">${masteredCount}</span>
-                <span class="lbl">Meister</span>
+                <span class="val">${todayAccuracy}%</span>
+                <span class="lbl">Heute korrekt</span>
               </div>
             </div>
             <div class="mastery-bar-container">
-               <div class="mastery-label">Fortschritt: ${overallProgress}%${masteredCount > 0 ? ` · ${masteredCount} gemeistert` : ''}</div>
-               <div class="mastery-bar-bg"><div class="mastery-bar-fill" style="width: ${overallProgress}%"></div></div>
+               <div class="mastery-label">Fortschritt heute: ${progressPercent}% · Ziel 50</div>
+               <div class="mastery-bar-bg"><div class="mastery-bar-fill" style="width: ${progressPercent}%"></div></div>
             </div>
           </div>
         </div>

@@ -2671,6 +2671,17 @@ select.form-input {
   margin: 0;
 }
 
+.db-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+  border-radius: var(--radius-md);
+}
+
 .goal-progress-container {
   position: relative;
   display: flex;
@@ -2732,7 +2743,7 @@ select.form-input {
 .stats-mini-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-sm);
+  gap: 0.35rem var(--space-sm);
 }
 
 .mini-stat-item {
@@ -2741,7 +2752,7 @@ select.form-input {
 }
 
 .mini-stat-item .val {
-  font-size: var(--font-size-xl);
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--color-text);
 }
