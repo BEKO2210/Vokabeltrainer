@@ -1,5 +1,5 @@
 // Service Worker für Vokabel Master+
-const CACHE_NAME = 'vokabel-master-v6';
+const CACHE_NAME = 'vokabel-master-v1.0.1';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -42,6 +42,18 @@ self.addEventListener('activate', (event) => {
 
 // Fetch: Cache-First Strategie
 self.addEventListener('fetch', (event) => {
+  // Nur idempotente GET-Requests behandeln, um Nebenwirkungen
+  // bei zukünftigen POST/PUT/DELETE-Endpunkten zu vermeiden.
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
+  // Nicht-http(s) Requests (z.B. Browser-Extensions) ignorieren
+  const url = new URL(event.request.url);
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then((cachedResponse) => {

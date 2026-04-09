@@ -1946,6 +1946,84 @@ const DB = {
 // ============================================
 
 const DataManager = {
+  sanitizeVocabularyEntry(raw) {
+    if (!raw || typeof raw !== 'object') return null;
+
+    const native = typeof raw.native === 'string' ? raw.native.trim() : '';
+    const foreign = typeof raw.foreign === 'string' ? raw.foreign.trim() : '';
+    if (!native || !foreign) return null;
+
+    const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+    const toSafeString = (value, maxLen = 300) => {
+      if (typeof value !== 'string') return '';
+      return value.trim().slice(0, maxLen);
+    };
+
+    return {
+      id: typeof raw.id === 'string' && raw.id.trim() ? raw.id.trim().slice(0, 120) : undefined,
+      native: toSafeString(native, 160),
+      foreign: toSafeString(foreign, 160),
+      example: toSafeString(raw.example, 500),
+      exampleDe: toSafeString(raw.exampleDe, 500),
+      category: toSafeString(raw.category, 80) || 'Eigene Wörter',
+      difficulty: clamp(parseInt(raw.difficulty, 10) || 1, 1, 3),
+      note: toSafeString(raw.note, 500),
+      createdAt: typeof raw.createdAt === 'string' ? raw.createdAt : undefined
+    };
+  },
+
+  sanitizeProgressEntry(raw, allowedIds) {
+    if (!raw || typeof raw !== 'object') return null;
+    const vocabId = typeof raw.vocabId === 'string' ? raw.vocabId.trim() : '';
+    if (!vocabId || !allowedIds.has(vocabId)) return null;
+
+    const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+    const level = clamp(parseInt(raw.level, 10) || 0, 0, CONFIG.INTERVALS.length - 1);
+    const correctCount = clamp(parseInt(raw.correctCount, 10) || 0, 0, 1000000);
+    const incorrectCount = clamp(parseInt(raw.incorrectCount, 10) || 0, 0, 1000000);
+
+    return {
+      vocabId,
+      level,
+      correctCount,
+      incorrectCount,
+      lastReview: typeof raw.lastReview === 'string' ? raw.lastReview : null,
+      nextReview: typeof raw.nextReview === 'string' ? raw.nextReview : null
+    };
+  },
+
+  parseCSVLine(line) {
+    const values = [];
+    let current = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      const next = line[i + 1];
+
+      if (char === '"' && inQuotes && next === '"') {
+        current += '"';
+        i++;
+        continue;
+      }
+
+      if (char === '"') {
+        inQuotes = !inQuotes;
+        continue;
+      }
+
+      if (char === ';' && !inQuotes) {
+        values.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+
+    values.push(current.trim());
+    return { values, inQuotes };
+  },
+
   async loadAll() {
     try {
       // Vokabeln laden
@@ -2308,7 +2386,7 @@ const DataManager = {
       settings: state.settings,
       stats: state.stats,
       exportedAt: new Date().toISOString(),
-      version: '1.0'
+      version: '1.0.1'
     };
 
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -2327,23 +2405,73 @@ const DataManager = {
       reader.onload = async (e) => {
         try {
           const data = JSON.parse(e.target.result);
-
-          // Vokabeln importieren
-          if (data.vocabulary && Array.isArray(data.vocabulary)) {
-            for (const vocab of data.vocabulary) {
-              await this.saveVocab(vocab);
-            }
+          if (!data || typeof data !== 'object') {
+            throw new Error('Ungültiges JSON-Format');
           }
 
-          // Progress importieren
-          if (data.progress && Array.isArray(data.progress)) {
-            for (const prog of data.progress) {
-              await DB.put(CONFIG.STORE_PROGRESS, prog);
-              state.progress[prog.vocabId] = prog;
+          const vocabulary = Array.isArray(data.vocabulary) ? data.vocabulary : [];
+          const progress = Array.isArray(data.progress) ? data.progress : [];
+
+          let importedVocab = 0;
+          let skippedVocab = 0;
+          let importedProgress = 0;
+          let skippedProgress = 0;
+
+          const idMap = new Map();
+          const seenImportIds = new Set();
+          const existingIds = new Set(state.vocabulary.map(v => v.id));
+
+          for (const rawVocab of vocabulary) {
+            const vocab = this.sanitizeVocabularyEntry(rawVocab);
+            if (!vocab) {
+              skippedVocab++;
+              continue;
             }
+
+            const originalId = vocab.id;
+            if (vocab.id) {
+              if (seenImportIds.has(vocab.id)) {
+                vocab.id = undefined; // duplicate ID in import file
+              } else {
+                seenImportIds.add(vocab.id);
+              }
+
+              // Prevent foreign collision with existing entries
+              if (vocab.id && existingIds.has(vocab.id)) {
+                const existing = state.vocabulary.find(v => v.id === vocab.id);
+                const sameWord = existing &&
+                  existing.native.toLowerCase().trim() === vocab.native.toLowerCase().trim() &&
+                  existing.foreign.toLowerCase().trim() === vocab.foreign.toLowerCase().trim();
+                if (!sameWord) {
+                  vocab.id = undefined;
+                }
+              }
+            }
+
+            const saved = await this.saveVocab(vocab);
+            importedVocab++;
+            if (originalId) idMap.set(originalId, saved.id);
           }
 
-          resolve(data.vocabulary?.length || 0);
+          // Progress importieren (nur für valide/mappbare IDs)
+          const importableIds = new Set(state.vocabulary.map(v => v.id));
+          for (const rawProg of progress) {
+            const mapped = { ...rawProg };
+            if (typeof mapped.vocabId === 'string' && idMap.has(mapped.vocabId)) {
+              mapped.vocabId = idMap.get(mapped.vocabId);
+            }
+            const prog = this.sanitizeProgressEntry(mapped, importableIds);
+            if (!prog) {
+              skippedProgress++;
+              continue;
+            }
+
+            await DB.put(CONFIG.STORE_PROGRESS, prog);
+            state.progress[prog.vocabId] = prog;
+            importedProgress++;
+          }
+
+          resolve({ importedVocab, skippedVocab, importedProgress, skippedProgress });
         } catch (error) {
           reject(error);
         }
@@ -2359,14 +2487,23 @@ const DataManager = {
       const reader = new FileReader();
       reader.onload = async (e) => {
         try {
-          const lines = e.target.result.split('\n').filter(l => l.trim());
-          let count = 0;
+          const lines = e.target.result
+            .split(/\r?\n/)
+            .map(l => l.trim())
+            .filter(l => l);
+          let imported = 0;
+          let skipped = 0;
 
           for (let i = 0; i < lines.length; i++) {
             const line = lines[i].trim();
             if (!line || (i === 0 && line.toLowerCase().includes('native'))) continue;
 
-            const parts = line.split(';').map(p => p.trim());
+            const { values: parts, inQuotes } = this.parseCSVLine(line);
+            if (inQuotes) {
+              skipped++;
+              continue;
+            }
+
             if (parts.length >= 2) {
               let vocab;
               if (parts.length === 5) {
@@ -2392,12 +2529,19 @@ const DataManager = {
                   note: parts[6] || ''
                 };
               }
-              await this.saveVocab(vocab);
-              count++;
+              const sanitized = this.sanitizeVocabularyEntry(vocab);
+              if (!sanitized) {
+                skipped++;
+                continue;
+              }
+              await this.saveVocab(sanitized);
+              imported++;
+            } else {
+              skipped++;
             }
           }
 
-          resolve(count);
+          resolve({ imported, skipped });
         } catch (error) {
           reject(error);
         }
@@ -2569,13 +2713,19 @@ const Views = {
   show(viewName) {
     // Aktive View wechseln
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => {
+      n.classList.remove('active');
+      n.removeAttribute('aria-current');
+    });
 
     const viewEl = document.getElementById(`view-${viewName}`);
     const navEl = document.querySelector(`[data-view="${viewName}"]`);
 
     if (viewEl) viewEl.classList.add('active');
-    if (navEl) navEl.classList.add('active');
+    if (navEl) {
+      navEl.classList.add('active');
+      navEl.setAttribute('aria-current', 'page');
+    }
 
     this.current = viewName;
     state.currentView = viewName;
@@ -3574,8 +3724,7 @@ const LearnView = {
   },
 
   escapeAttr(text) {
-    if (!text) return '';
-    return text.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
+    return Utils.escapeAttr(text);
   }
 };
 
@@ -3939,8 +4088,7 @@ const WordsView = {
   },
 
   escapeAttr(text) {
-    if (!text) return '';
-    return text.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
+    return Utils.escapeAttr(text);
   }
 };
 
@@ -4245,7 +4393,7 @@ const SettingsView = {
         <div class="settings-item">
           <div>
             <div class="settings-item-label">CSV importieren</div>
-            <div class="settings-item-desc">Format: native;foreign;example;category;difficulty</div>
+            <div class="settings-item-desc">Format: native;foreign;example;exampleDe;category;difficulty</div>
           </div>
           <div class="file-input-wrapper" style="display: flex; gap: var(--space-xs);">
             <button class="btn btn-ghost btn-sm" onclick="DataManager.downloadCSVTemplate()" title="Vorlage herunterladen">
@@ -4376,8 +4524,12 @@ const SettingsView = {
   async importJSON(file) {
     if (!file) return;
     try {
-      const count = await DataManager.importJSON(file);
-      Toast.show(`${count} Vokabeln importiert`, 'success');
+      const result = await DataManager.importJSON(file);
+      const msg = `${result.importedVocab} Vokabeln importiert`;
+      const detail = result.skippedVocab > 0 || result.skippedProgress > 0
+        ? ` (${result.skippedVocab} Vokabeln / ${result.skippedProgress} Fortschritte übersprungen)`
+        : '';
+      Toast.show(`${msg}${detail}`, 'success', 4500);
       await DataManager.loadAll();
       this.render();
     } catch (error) {
@@ -4389,8 +4541,9 @@ const SettingsView = {
   async importCSV(file) {
     if (!file) return;
     try {
-      const count = await DataManager.importCSV(file);
-      Toast.show(`${count} Vokabeln importiert`, 'success');
+      const result = await DataManager.importCSV(file);
+      const detail = result.skipped > 0 ? ` (${result.skipped} Zeilen übersprungen)` : '';
+      Toast.show(`${result.imported} Vokabeln importiert${detail}`, 'success', 4500);
       await DataManager.loadAll();
       this.render();
     } catch (error) {
