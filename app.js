@@ -3756,6 +3756,8 @@ const WordsView = {
     });
     const totalSelected = state.vocabulary.filter(v => state.selectedWords.has(v.id)).length;
     const selectedCategories = Object.entries(selectionByCategory).filter(([, s]) => s.selected > 0);
+    const visibleCategoryChips = selectedCategories.slice(0, 2);
+    const hiddenCategoryCount = Math.max(0, selectedCategories.length - visibleCategoryChips.length);
 
     // Filtern
     let filtered = state.vocabulary;
@@ -3836,7 +3838,8 @@ const WordsView = {
             <span class="selection-sticky-label">ausgewählt</span>
           </div>
           <div class="selection-sticky-chips">
-            ${selectedCategories.map(([cat, s]) => `<span class="selection-sticky-chip">${this.escapeHtml(cat)} <strong>${s.selected}</strong></span>`).join('')}
+            ${visibleCategoryChips.map(([cat, s]) => `<span class="selection-sticky-chip">${this.escapeHtml(cat)} <strong>${s.selected}</strong></span>`).join('')}
+            ${hiddenCategoryCount > 0 ? `<span class="selection-sticky-chip selection-sticky-chip-more">+${hiddenCategoryCount} weitere</span>` : ''}
           </div>
           <button class="btn btn-sm btn-ghost selection-sticky-clear" onclick="WordsView.deselectAll()" title="Alle abwählen">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 6L6 18M6 6l12 12"/></svg>

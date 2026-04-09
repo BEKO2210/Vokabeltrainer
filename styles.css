@@ -2440,6 +2440,13 @@ select.form-input {
   white-space: nowrap;
 }
 
+.selection-sticky-chip-more {
+  background: rgba(6, 182, 212, 0.18);
+  color: var(--color-primary);
+  border-color: rgba(6, 182, 212, 0.35);
+  font-weight: 600;
+}
+
 .selection-sticky-chip strong {
   color: var(--color-primary);
 }

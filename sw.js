@@ -37,6 +37,18 @@ self.addEventListener('activate', (event) => {
       .then(() => {
         return self.clients.claim();
       })
+      .then(async () => {
+        // Offene Tabs sofort auf die neue Version bringen
+        const clients = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+        await Promise.all(
+          clients.map((client) => {
+            if ('navigate' in client && client.url) {
+              return client.navigate(client.url).catch(() => null);
+            }
+            return Promise.resolve();
+          })
+        );
+      })
   );
 });
 
@@ -51,6 +63,24 @@ self.addEventListener('fetch', (event) => {
   // Nicht-http(s) Requests (z.B. Browser-Extensions) ignorieren
   const url = new URL(event.request.url);
   if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+    return;
+  }
+
+  // Navigationsanfragen: bevorzugt Netzwerk, damit Updates direkt sichtbar sind
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          if (response && response.status === 200) {
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put('./index.html', responseToCache);
+            });
+          }
+          return response;
+        })
+        .catch(() => caches.match('./index.html'))
+    );
     return;
   }
 
