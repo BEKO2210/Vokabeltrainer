@@ -1,0 +1,95 @@
+name: Bump Version on Development
+
+on:
+  push:
+    branches:
+      - development
+
+permissions:
+  contents: write
+
+jobs:
+  bump-version:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Bump patch version and sync files
+        run: |
+          python3 - <<'PY'
+          import json
+          import re
+          from pathlib import Path
+
+          version_file = Path("VERSION")
+          if version_file.exists():
+            current = version_file.read_text(encoding="utf-8").strip()
+          else:
+            current = "1.0.0"
+
+          m = re.fullmatch(r"(\d+)\.(\d+)\.(\d+)", current)
+          if not m:
+            raise SystemExit(f"Invalid VERSION format: {current}")
+
+          major, minor, patch = map(int, m.groups())
+          new_version = f"{major}.{minor}.{patch + 1}"
+
+          version_file.write_text(new_version + "\n", encoding="utf-8")
+
+          app_path = Path("app.js")
+          app_content = app_path.read_text(encoding="utf-8")
+          app_content = re.sub(
+            r"version:\s*'[^']+'",
+            f"version: '{new_version}'",
+            app_content,
+            count=1,
+          )
+          app_path.write_text(app_content, encoding="utf-8")
+
+          sw_path = Path("sw.js")
+          sw_content = sw_path.read_text(encoding="utf-8")
+          sw_content = re.sub(
+            r"const CACHE_NAME = 'vokabel-master-v[^']+';",
+            f"const CACHE_NAME = 'vokabel-master-v{new_version}';",
+            sw_content,
+            count=1,
+          )
+          sw_path.write_text(sw_content, encoding="utf-8")
+
+          manifest_path = Path("manifest.webmanifest")
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          manifest["version"] = new_version
+          manifest_path.write_text(
+            json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+          )
+
+          print(f"Bumped version: {current} -> {new_version}")
+          PY
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate app files
+        run: |
+          node --check app.js
+          node --check sw.js
+          python3 -m json.tool manifest.webmanifest > /dev/null
+
+      - name: Commit and push
+        run: |
+          if git diff --quiet; then
+            echo "No version changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add VERSION app.js sw.js manifest.webmanifest
+          git commit -m "chore: bump version [skip ci]"
+          git push

@@ -54,7 +54,8 @@ const CONFIG = {
     nativeLang: 'de-DE',
     cardsPerSession: 20,
     soundEnabled: false, // Sound effects for correct/incorrect answers (default off)
-    practiceDirection: 'de-en' // 'de-en' = show German, answer English; 'en-de' = opposite
+    practiceDirection: 'de-en', // 'de-en' = show German, answer English; 'en-de' = opposite
+    difficultyMigrationV1Done: false
   },
   // Quiz Optionen
   MC_OPTIONS_COUNT: 4
@@ -1946,6 +1947,138 @@ const DB = {
 // ============================================
 
 const DataManager = {
+  calculateDifficulty(vocab, progress) {
+    // Base score from word complexity (for cards without progress history)
+    const native = (vocab.native || '').trim();
+    const foreign = (vocab.foreign || '').trim();
+    const avgLen = Math.round((native.length + foreign.length) / 2);
+    const isPhrase = /\s/.test(native) || /\s/.test(foreign);
+
+    let baseDifficulty = 2; // Mittel
+    if (!isPhrase && avgLen <= 7) baseDifficulty = 1; // Leicht
+    else if (isPhrase || avgLen >= 12) baseDifficulty = 3; // Schwer
+
+    if (!progress) return baseDifficulty;
+
+    // Refine from learning history
+    const correct = progress.correctCount || 0;
+    const incorrect = progress.incorrectCount || 0;
+    const total = correct + incorrect;
+    const level = progress.level || 0;
+    const accuracy = total > 0 ? (correct / total) : 0;
+
+    if (total >= 3) {
+      if (accuracy >= 0.85 && level >= 3) return 1;
+      if (accuracy < 0.6 || incorrect > correct || level <= 1) return 3;
+      return 2;
+    }
+
+    if (incorrect > correct && total > 0) return 3;
+    if (level >= 4) return 1;
+    return baseDifficulty;
+  },
+
+  async migrateDifficultyBands() {
+    let updated = 0;
+
+    for (const vocab of state.vocabulary) {
+      const progress = state.progress[vocab.id];
+      const targetDifficulty = this.calculateDifficulty(vocab, progress);
+      const currentDifficulty = parseInt(vocab.difficulty, 10) || 0;
+
+      if (currentDifficulty !== targetDifficulty) {
+        const updatedVocab = { ...vocab, difficulty: targetDifficulty };
+        await DB.put(CONFIG.STORE_VOCAB, updatedVocab);
+
+        const index = state.vocabulary.findIndex(v => v.id === vocab.id);
+        if (index >= 0) state.vocabulary[index] = updatedVocab;
+        updated++;
+      }
+    }
+
+    if (updated > 0) {
+      console.log(`Difficulty migration applied: ${updated} cards updated`);
+    }
+  },
+
+  sanitizeVocabularyEntry(raw) {
+    if (!raw || typeof raw !== 'object') return null;
+
+    const native = typeof raw.native === 'string' ? raw.native.trim() : '';
+    const foreign = typeof raw.foreign === 'string' ? raw.foreign.trim() : '';
+    if (!native || !foreign) return null;
+
+    const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+    const toSafeString = (value, maxLen = 300) => {
+      if (typeof value !== 'string') return '';
+      return value.trim().slice(0, maxLen);
+    };
+
+    return {
+      id: typeof raw.id === 'string' && raw.id.trim() ? raw.id.trim().slice(0, 120) : undefined,
+      native: toSafeString(native, 160),
+      foreign: toSafeString(foreign, 160),
+      example: toSafeString(raw.example, 500),
+      exampleDe: toSafeString(raw.exampleDe, 500),
+      category: toSafeString(raw.category, 80) || 'Eigene Wörter',
+      difficulty: clamp(parseInt(raw.difficulty, 10) || 1, 1, 3),
+      note: toSafeString(raw.note, 500),
+      createdAt: typeof raw.createdAt === 'string' ? raw.createdAt : undefined
+    };
+  },
+
+  sanitizeProgressEntry(raw, allowedIds) {
+    if (!raw || typeof raw !== 'object') return null;
+    const vocabId = typeof raw.vocabId === 'string' ? raw.vocabId.trim() : '';
+    if (!vocabId || !allowedIds.has(vocabId)) return null;
+
+    const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+    const level = clamp(parseInt(raw.level, 10) || 0, 0, CONFIG.INTERVALS.length - 1);
+    const correctCount = clamp(parseInt(raw.correctCount, 10) || 0, 0, 1000000);
+    const incorrectCount = clamp(parseInt(raw.incorrectCount, 10) || 0, 0, 1000000);
+
+    return {
+      vocabId,
+      level,
+      correctCount,
+      incorrectCount,
+      lastReview: typeof raw.lastReview === 'string' ? raw.lastReview : null,
+      nextReview: typeof raw.nextReview === 'string' ? raw.nextReview : null
+    };
+  },
+
+  parseCSVLine(line) {
+    const values = [];
+    let current = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      const next = line[i + 1];
+
+      if (char === '"' && inQuotes && next === '"') {
+        current += '"';
+        i++;
+        continue;
+      }
+
+      if (char === '"') {
+        inQuotes = !inQuotes;
+        continue;
+      }
+
+      if (char === ';' && !inQuotes) {
+        values.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+
+    values.push(current.trim());
+    return { values, inQuotes };
+  },
+
   async loadAll() {
     try {
       // Vokabeln laden
@@ -1972,6 +2105,12 @@ const DataManager = {
 
       // Selection laden
       await this.loadSelection();
+
+      // Existing cards einmalig in Leicht/Mittel/Schwer einordnen
+      if (!state.settings.difficultyMigrationV1Done) {
+        await this.migrateDifficultyBands();
+        await this.saveSettings({ difficultyMigrationV1Done: true });
+      }
 
       // Streak prüfen
       this.checkStreak();
@@ -2308,7 +2447,7 @@ const DataManager = {
       settings: state.settings,
       stats: state.stats,
       exportedAt: new Date().toISOString(),
-      version: '1.0'
+      version: '1.0.1'
     };
 
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -2327,23 +2466,73 @@ const DataManager = {
       reader.onload = async (e) => {
         try {
           const data = JSON.parse(e.target.result);
-
-          // Vokabeln importieren
-          if (data.vocabulary && Array.isArray(data.vocabulary)) {
-            for (const vocab of data.vocabulary) {
-              await this.saveVocab(vocab);
-            }
+          if (!data || typeof data !== 'object') {
+            throw new Error('Ungültiges JSON-Format');
           }
 
-          // Progress importieren
-          if (data.progress && Array.isArray(data.progress)) {
-            for (const prog of data.progress) {
-              await DB.put(CONFIG.STORE_PROGRESS, prog);
-              state.progress[prog.vocabId] = prog;
+          const vocabulary = Array.isArray(data.vocabulary) ? data.vocabulary : [];
+          const progress = Array.isArray(data.progress) ? data.progress : [];
+
+          let importedVocab = 0;
+          let skippedVocab = 0;
+          let importedProgress = 0;
+          let skippedProgress = 0;
+
+          const idMap = new Map();
+          const seenImportIds = new Set();
+          const existingIds = new Set(state.vocabulary.map(v => v.id));
+
+          for (const rawVocab of vocabulary) {
+            const vocab = this.sanitizeVocabularyEntry(rawVocab);
+            if (!vocab) {
+              skippedVocab++;
+              continue;
             }
+
+            const originalId = vocab.id;
+            if (vocab.id) {
+              if (seenImportIds.has(vocab.id)) {
+                vocab.id = undefined; // duplicate ID in import file
+              } else {
+                seenImportIds.add(vocab.id);
+              }
+
+              // Prevent foreign collision with existing entries
+              if (vocab.id && existingIds.has(vocab.id)) {
+                const existing = state.vocabulary.find(v => v.id === vocab.id);
+                const sameWord = existing &&
+                  existing.native.toLowerCase().trim() === vocab.native.toLowerCase().trim() &&
+                  existing.foreign.toLowerCase().trim() === vocab.foreign.toLowerCase().trim();
+                if (!sameWord) {
+                  vocab.id = undefined;
+                }
+              }
+            }
+
+            const saved = await this.saveVocab(vocab);
+            importedVocab++;
+            if (originalId) idMap.set(originalId, saved.id);
           }
 
-          resolve(data.vocabulary?.length || 0);
+          // Progress importieren (nur für valide/mappbare IDs)
+          const importableIds = new Set(state.vocabulary.map(v => v.id));
+          for (const rawProg of progress) {
+            const mapped = { ...rawProg };
+            if (typeof mapped.vocabId === 'string' && idMap.has(mapped.vocabId)) {
+              mapped.vocabId = idMap.get(mapped.vocabId);
+            }
+            const prog = this.sanitizeProgressEntry(mapped, importableIds);
+            if (!prog) {
+              skippedProgress++;
+              continue;
+            }
+
+            await DB.put(CONFIG.STORE_PROGRESS, prog);
+            state.progress[prog.vocabId] = prog;
+            importedProgress++;
+          }
+
+          resolve({ importedVocab, skippedVocab, importedProgress, skippedProgress });
         } catch (error) {
           reject(error);
         }
@@ -2359,14 +2548,23 @@ const DataManager = {
       const reader = new FileReader();
       reader.onload = async (e) => {
         try {
-          const lines = e.target.result.split('\n').filter(l => l.trim());
-          let count = 0;
+          const lines = e.target.result
+            .split(/\r?\n/)
+            .map(l => l.trim())
+            .filter(l => l);
+          let imported = 0;
+          let skipped = 0;
 
           for (let i = 0; i < lines.length; i++) {
             const line = lines[i].trim();
             if (!line || (i === 0 && line.toLowerCase().includes('native'))) continue;
 
-            const parts = line.split(';').map(p => p.trim());
+            const { values: parts, inQuotes } = this.parseCSVLine(line);
+            if (inQuotes) {
+              skipped++;
+              continue;
+            }
+
             if (parts.length >= 2) {
               let vocab;
               if (parts.length === 5) {
@@ -2392,12 +2590,19 @@ const DataManager = {
                   note: parts[6] || ''
                 };
               }
-              await this.saveVocab(vocab);
-              count++;
+              const sanitized = this.sanitizeVocabularyEntry(vocab);
+              if (!sanitized) {
+                skipped++;
+                continue;
+              }
+              await this.saveVocab(sanitized);
+              imported++;
+            } else {
+              skipped++;
             }
           }
 
-          resolve(count);
+          resolve({ imported, skipped });
         } catch (error) {
           reject(error);
         }
@@ -2524,12 +2729,22 @@ function showGoalCelebration() {
   overlay.className = 'celebration-overlay';
   overlay.innerHTML = `
     <div class="celebration-content">
-      <div class="celebration-emoji">🎉</div>
+      <div class="celebration-emoji" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 3v4"></path><path d="M19 3v4"></path><path d="M3 8h18"></path>
+          <path d="M7 8v6a5 5 0 0 0 10 0V8"></path>
+          <path d="M12 19v2"></path>
+        </svg>
+      </div>
       <div class="celebration-title">Tagesziel erreicht!</div>
       <div class="celebration-subtitle">Du hast heute ${CONFIG.DAILY_GOAL} Wörter gelernt</div>
       ${streak > 0 ? `
         <div class="celebration-streak">
-          <span class="streak-fire">🔥</span>
+          <span class="streak-fire" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3c2 3 4 4 4 8a4 4 0 1 1-8 0c0-2 1-4 4-8z"></path>
+            </svg>
+          </span>
           <span>${streak} Tage Streak!</span>
         </div>
       ` : ''}
@@ -2569,13 +2784,19 @@ const Views = {
   show(viewName) {
     // Aktive View wechseln
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => {
+      n.classList.remove('active');
+      n.removeAttribute('aria-current');
+    });
 
     const viewEl = document.getElementById(`view-${viewName}`);
     const navEl = document.querySelector(`[data-view="${viewName}"]`);
 
     if (viewEl) viewEl.classList.add('active');
-    if (navEl) navEl.classList.add('active');
+    if (navEl) {
+      navEl.classList.add('active');
+      navEl.setAttribute('aria-current', 'page');
+    }
 
     this.current = viewName;
     state.currentView = viewName;
@@ -2618,14 +2839,12 @@ const HomeView = {
     const streak = state.stats.streak || 0;
     const progressPercent = Math.min((dailyCorrect / CONFIG.DAILY_GOAL) * 100, 100);
 
-    const masteredCount = Object.values(state.progress).filter(p => p.level >= 5).length;
-    const learningCount = Object.keys(state.progress).length;
+    const todayStats = state.stats.dailyStats[today] || { reviews: 0, correct: 0 };
+    const openToday = Math.max(CONFIG.DAILY_GOAL - dailyCorrect, 0);
     const dueCount = DataManager.getDueCards().length;
-    const totalVocab = state.vocabulary.length;
-    // Gesamtfortschritt: Summe aller Level / (Anzahl Vokabeln * Max-Level)
-    const maxLevel = CONFIG.INTERVALS.length - 1;
-    const totalLevelSum = Object.values(state.progress).reduce((sum, p) => sum + p.level, 0);
-    const overallProgress = totalVocab > 0 ? Math.round((totalLevelSum / (totalVocab * maxLevel)) * 100) : 0;
+    const todayAccuracy = todayStats.reviews > 0
+      ? Math.round((todayStats.correct / todayStats.reviews) * 100)
+      : 0;
 
     container.innerHTML = `
       <div class="dashboard">
@@ -2654,7 +2873,13 @@ const HomeView = {
           <!-- Tagesziel Card -->
           <div class="db-card goal-card ${goalReached ? 'reached' : ''}">
             <div class="db-card-header">
-              <span class="db-card-icon">🎯</span>
+              <span class="db-card-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="18" height="18" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <circle cx="12" cy="12" r="5"></circle>
+                  <circle cx="12" cy="12" r="2"></circle>
+                </svg>
+              </span>
               <h3>Tagesziel</h3>
             </div>
             <div class="goal-progress-container">
@@ -2668,32 +2893,43 @@ const HomeView = {
                 <span class="goal-total">/ ${CONFIG.DAILY_GOAL}</span>
               </div>
             </div>
-            <p class="db-card-footer">${goalReached ? 'Ziel erreicht! 🎉' : `Noch ${CONFIG.DAILY_GOAL - dailyCorrect} Wörter`}</p>
+            <p class="db-card-footer">${goalReached ? 'Ziel erreicht!' : `Noch ${openToday} Wörter`}</p>
           </div>
 
           <!-- Fortschritt Card -->
           <div class="db-card progress-card">
             <div class="db-card-header">
-              <span class="db-card-icon">📊</span>
+              <span class="db-card-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="18" height="18" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19h16"></path>
+                  <path d="M7 15v-4"></path>
+                  <path d="M12 15V9"></path>
+                  <path d="M17 15V6"></path>
+                </svg>
+              </span>
               <h3>Fortschritt</h3>
             </div>
             <div class="stats-mini-grid">
+              <div class="mini-stat-item">
+                <span class="val">${openToday}</span>
+                <span class="lbl">Offen</span>
+              </div>
+              <div class="mini-stat-item">
+                <span class="val">${dailyCorrect}</span>
+                <span class="lbl">Heute gelernt</span>
+              </div>
               <div class="mini-stat-item">
                 <span class="val">${dueCount}</span>
                 <span class="lbl">Fällig</span>
               </div>
               <div class="mini-stat-item">
-                <span class="val">${learningCount}</span>
-                <span class="lbl">Gelernt</span>
-              </div>
-              <div class="mini-stat-item">
-                <span class="val">${masteredCount}</span>
-                <span class="lbl">Meister</span>
+                <span class="val">${todayAccuracy}%</span>
+                <span class="lbl">Heute korrekt</span>
               </div>
             </div>
             <div class="mastery-bar-container">
-               <div class="mastery-label">Fortschritt: ${overallProgress}%${masteredCount > 0 ? ` · ${masteredCount} gemeistert` : ''}</div>
-               <div class="mastery-bar-bg"><div class="mastery-bar-fill" style="width: ${overallProgress}%"></div></div>
+               <div class="mastery-label">Fortschritt heute: ${progressPercent}% · Ziel 50</div>
+               <div class="mastery-bar-bg"><div class="mastery-bar-fill" style="width: ${progressPercent}%"></div></div>
             </div>
           </div>
         </div>
@@ -3574,8 +3810,7 @@ const LearnView = {
   },
 
   escapeAttr(text) {
-    if (!text) return '';
-    return text.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
+    return Utils.escapeAttr(text);
   }
 };
 
@@ -3607,6 +3842,8 @@ const WordsView = {
     });
     const totalSelected = state.vocabulary.filter(v => state.selectedWords.has(v.id)).length;
     const selectedCategories = Object.entries(selectionByCategory).filter(([, s]) => s.selected > 0);
+    const visibleCategoryChips = selectedCategories.slice(0, 2);
+    const hiddenCategoryCount = Math.max(0, selectedCategories.length - visibleCategoryChips.length);
 
     // Filtern
     let filtered = state.vocabulary;
@@ -3631,17 +3868,22 @@ const WordsView = {
       </div>
 
       ${categories.length > 0 ? `
-        <div class="filter-chips">
-          <button class="filter-chip ${!this.category ? 'active' : ''}" onclick="WordsView.setCategory('')">Alle</button>
-          ${categories.map(cat => {
-            const s = selectionByCategory[cat] || { selected: 0, total: 0 };
-            return `
-            <button class="filter-chip ${this.category === cat ? 'active' : ''} ${s.selected > 0 ? 'has-selection' : ''}"
-                    onclick="WordsView.setCategory('${this.escapeAttr(cat)}')">
-              ${this.escapeHtml(cat)}${s.selected > 0 ? ` <span class="chip-count">${s.selected}</span>` : ''}
-            </button>`;
-          }).join('')}
-        </div>
+        <details class="category-filter-panel" ${this.category ? 'open' : ''}>
+          <summary>
+            Kategorien ${this.category ? `· ${this.escapeHtml(this.category)}` : 'auswählen'}
+          </summary>
+          <div class="filter-chips">
+            <button class="filter-chip ${!this.category ? 'active' : ''}" onclick="WordsView.setCategory('')">Alle</button>
+            ${categories.map(cat => {
+              const s = selectionByCategory[cat] || { selected: 0, total: 0 };
+              return `
+              <button class="filter-chip ${this.category === cat ? 'active' : ''} ${s.selected > 0 ? 'has-selection' : ''}"
+                      onclick="WordsView.setCategory('${this.escapeAttr(cat)}')">
+                ${this.escapeHtml(cat)}${s.selected > 0 ? ` <span class="chip-count">${s.selected}</span>` : ''}
+              </button>`;
+            }).join('')}
+          </div>
+        </details>
       ` : ''}
 
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-md); gap: var(--space-xs); flex-wrap: wrap;">
@@ -3687,7 +3929,8 @@ const WordsView = {
             <span class="selection-sticky-label">ausgewählt</span>
           </div>
           <div class="selection-sticky-chips">
-            ${selectedCategories.map(([cat, s]) => `<span class="selection-sticky-chip">${this.escapeHtml(cat)} <strong>${s.selected}</strong></span>`).join('')}
+            ${visibleCategoryChips.map(([cat, s]) => `<span class="selection-sticky-chip">${this.escapeHtml(cat)} <strong>${s.selected}</strong></span>`).join('')}
+            ${hiddenCategoryCount > 0 ? `<span class="selection-sticky-chip selection-sticky-chip-more">+${hiddenCategoryCount} weitere</span>` : ''}
           </div>
           <button class="btn btn-sm btn-ghost selection-sticky-clear" onclick="WordsView.deselectAll()" title="Alle abwählen">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 6L6 18M6 6l12 12"/></svg>
@@ -3716,7 +3959,8 @@ const WordsView = {
           <div class="vocab-item-meta">
             ${vocab.category ? `<span class="badge">${this.escapeHtml(vocab.category)}</span> ` : ''}
             ${this.renderDifficulty(vocab.difficulty || 1)}
-            ${level >= 0 ? ` · Level ${level + 1}` : ' · Neu'}
+            · ${this.getDifficultyLabel(vocab.difficulty || 1)}
+            ${level >= 0 ? ` · Level ${level + 1}` : ''}
           </div>
         </div>
         <div class="vocab-item-actions">
@@ -3736,11 +3980,18 @@ const WordsView = {
   },
 
   renderDifficulty(level) {
+    const difficultyClass = level <= 1 ? 'easy' : (level === 2 ? 'medium' : 'hard');
     return `
-      <span class="difficulty">
+      <span class="difficulty difficulty--${difficultyClass}">
         ${[1, 2, 3].map(i => `<span class="difficulty-dot ${i <= level ? 'filled' : ''}"></span>`).join('')}
       </span>
     `;
+  },
+
+  getDifficultyLabel(level) {
+    if (level <= 1) return 'Leicht';
+    if (level === 2) return 'Mittel';
+    return 'Schwer';
   },
 
   setFilter(value) {
@@ -3939,8 +4190,7 @@ const WordsView = {
   },
 
   escapeAttr(text) {
-    if (!text) return '';
-    return text.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
+    return Utils.escapeAttr(text);
   }
 };
 
@@ -4245,7 +4495,7 @@ const SettingsView = {
         <div class="settings-item">
           <div>
             <div class="settings-item-label">CSV importieren</div>
-            <div class="settings-item-desc">Format: native;foreign;example;category;difficulty</div>
+            <div class="settings-item-desc">Format: native;foreign;example;exampleDe;category;difficulty</div>
           </div>
           <div class="file-input-wrapper" style="display: flex; gap: var(--space-xs);">
             <button class="btn btn-ghost btn-sm" onclick="DataManager.downloadCSVTemplate()" title="Vorlage herunterladen">
@@ -4376,8 +4626,12 @@ const SettingsView = {
   async importJSON(file) {
     if (!file) return;
     try {
-      const count = await DataManager.importJSON(file);
-      Toast.show(`${count} Vokabeln importiert`, 'success');
+      const result = await DataManager.importJSON(file);
+      const msg = `${result.importedVocab} Vokabeln importiert`;
+      const detail = result.skippedVocab > 0 || result.skippedProgress > 0
+        ? ` (${result.skippedVocab} Vokabeln / ${result.skippedProgress} Fortschritte übersprungen)`
+        : '';
+      Toast.show(`${msg}${detail}`, 'success', 4500);
       await DataManager.loadAll();
       this.render();
     } catch (error) {
@@ -4389,8 +4643,9 @@ const SettingsView = {
   async importCSV(file) {
     if (!file) return;
     try {
-      const count = await DataManager.importCSV(file);
-      Toast.show(`${count} Vokabeln importiert`, 'success');
+      const result = await DataManager.importCSV(file);
+      const detail = result.skipped > 0 ? ` (${result.skipped} Zeilen übersprungen)` : '';
+      Toast.show(`${result.imported} Vokabeln importiert${detail}`, 'success', 4500);
       await DataManager.loadAll();
       this.render();
     } catch (error) {

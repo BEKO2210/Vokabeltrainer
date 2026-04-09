@@ -1,5 +1,5 @@
 // Service Worker für Vokabel Master+
-const CACHE_NAME = 'vokabel-master-v6';
+const CACHE_NAME = 'vokabel-master-v1.0.1';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -37,11 +37,53 @@ self.addEventListener('activate', (event) => {
       .then(() => {
         return self.clients.claim();
       })
+      .then(async () => {
+        // Offene Tabs sofort auf die neue Version bringen
+        const clients = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+        await Promise.all(
+          clients.map((client) => {
+            if ('navigate' in client && client.url) {
+              return client.navigate(client.url).catch(() => null);
+            }
+            return Promise.resolve();
+          })
+        );
+      })
   );
 });
 
 // Fetch: Cache-First Strategie
 self.addEventListener('fetch', (event) => {
+  // Nur idempotente GET-Requests behandeln, um Nebenwirkungen
+  // bei zukünftigen POST/PUT/DELETE-Endpunkten zu vermeiden.
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
+  // Nicht-http(s) Requests (z.B. Browser-Extensions) ignorieren
+  const url = new URL(event.request.url);
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+    return;
+  }
+
+  // Navigationsanfragen: bevorzugt Netzwerk, damit Updates direkt sichtbar sind
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          if (response && response.status === 200) {
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put('./index.html', responseToCache);
+            });
+          }
+          return response;
+        })
+        .catch(() => caches.match('./index.html'))
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then((cachedResponse) => {
