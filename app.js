@@ -10,7 +10,7 @@
 // ============================================
 
 const CONFIG = {
-  version: '2.2.1',
+  version: '2.3.0',
   // Version der mitgelieferten Vokabelliste. Erhöhen, wenn vocabulary.js geändert wird,
   // damit bestehende Installationen die Änderungen einmalig übernehmen.
   PRESET_VERSION: 5,

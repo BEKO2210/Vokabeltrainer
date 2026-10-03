@@ -2,7 +2,7 @@
   "name": "Vokabel Master+",
   "short_name": "Vokabel+",
   "description": "Englisch-Vokabeln lernen – offline und ohne Konto",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "id": "./",
   "start_url": "./",
   "scope": "./",
