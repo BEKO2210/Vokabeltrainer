@@ -10,10 +10,10 @@
 // ============================================
 
 const CONFIG = {
-  version: '2.2.1',
+  version: '2.3.0',
   // Version der mitgelieferten Vokabelliste. Erhöhen, wenn vocabulary.js geändert wird,
   // damit bestehende Installationen die Änderungen einmalig übernehmen.
-  PRESET_VERSION: 4,
+  PRESET_VERSION: 5,
   // Spaced-Repetition-Intervalle in Tagen (Level 0–5)
   INTERVALS: [1, 3, 7, 14, 30, 60],
   MASTERED_LEVEL: 4,
@@ -39,6 +39,7 @@ const CONFIG = {
     soundEnabled: true,
     hapticsEnabled: true,
     practiceDirection: 'de-en', // 'de-en' | 'en-de' | 'mixed'
+    gradeLevel: 'all', // 'A1' (Klasse 5–6) | 'A2' (bis Klasse 8) | 'all'
     lastMode: 'flashcard',
     presetSyncVersion: 0,
     difficultyMigrationV1Done: false
@@ -51,6 +52,19 @@ const MODES = {
   typing: { label: 'Schreiben', desc: 'Antwort eintippen', icon: 'keyboard' },
   dictation: { label: 'Diktat', desc: 'Hören & schreiben', icon: 'headphones' }
 };
+
+// Niveaustufen (GER) und ihre Zuordnung zu Klassen
+const LEVELS = { A1: 1, A2: 2, B1: 3, B2: 4, C1: 5 };
+const GRADE_LEVELS = [
+  ['A1', 'Klasse 5–6', 'Grundwortschatz'],
+  ['A2', 'Klasse 5–8', 'Grund- und Aufbauwortschatz'],
+  ['all', 'Alle Wörter', 'Auch Wörter für höhere Klassen']
+];
+
+function gradeLabel() {
+  const g = GRADE_LEVELS.find(x => x[0] === state.settings.gradeLevel) || GRADE_LEVELS[2];
+  return g[1];
+}
 
 // ============================================
 // HILFSFUNKTIONEN
@@ -210,6 +224,8 @@ const TOPIC_ICONS = {
   calendar: '<path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h16"/><path d="M11 15h1"/><path d="M12 15v3"/>',
   quote: '<path d="M10 11h-4a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h3a1 1 0 0 1 1 1v6c0 2.667 -1.333 4.333 -4 5"/><path d="M19 11h-4a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h3a1 1 0 0 1 1 1v6c0 2.667 -1.333 4.333 -4 5"/>',
   abc: '<path d="M3 16v-6a2 2 0 1 1 4 0v6"/><path d="M3 13h4"/><path d="M10 8v6a2 2 0 1 0 4 0v-1a2 2 0 1 0 -4 0v1"/><path d="M20.732 12a2 2 0 0 0 -3.732 1v1a2 2 0 0 0 3.726 1.01"/>',
+  bank: '<path d="M3 21l18 0"/><path d="M3 10l18 0"/><path d="M5 6l7 -3l7 3"/><path d="M4 10l0 11"/><path d="M20 10l0 11"/><path d="M8 14l0 3"/><path d="M12 14l0 3"/><path d="M16 14l0 3"/>',
+  bulb: '<path d="M3 12h1m8 -9v1m8 8h1m-15.4 -6.4l.7 .7m12.1 -.7l-.7 .7"/><path d="M9 16a5 5 0 1 1 6 0a3.5 3.5 0 0 0 -1 3a2 2 0 0 1 -4 0a3.5 3.5 0 0 0 -1 -3"/><path d="M9.7 17l4.6 0"/>',
   pencil: '<path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4"/><path d="M13.5 6.5l4 4"/>'
 };
 
@@ -231,6 +247,8 @@ const TOPIC_THEMES = {
   'Merkmale & Eigenschaften': { icon: 'palette', hue: 292 },
   'Familie & Freunde': { icon: 'users', hue: 335 },
   'Zahlen & Zeit': { icon: 'calendar', hue: 58 },
+  'Gesellschaft & Politik': { icon: 'bank', hue: 196 },
+  'Allgemeine Begriffe': { icon: 'bulb', hue: 80 },
   'Sätze & Redewendungen': { icon: 'quote', hue: 128 },
   'Kleine Wörter': { icon: 'abc', hue: 275 },
   'Eigene Wörter': { icon: 'pencil', hue: 252 }
@@ -527,6 +545,7 @@ const DataManager = {
           example: word.example || '',
           exampleDe: word.exampleDe || '',
           category: category.name,
+          level: word.level || '',
           difficulty: this.calculateDifficulty(word),
           note: '',
           createdAt: now,
@@ -601,6 +620,7 @@ const DataManager = {
           example: t.word.example || '',
           exampleDe: t.word.exampleDe || '',
           category: t.category,
+          level: t.word.level || '',
           difficulty: this.calculateDifficulty(t.word),
           note: '',
           createdAt: nowIso,
@@ -631,6 +651,7 @@ const DataManager = {
         foreign: t.word.foreign,
         example: t.word.example || '',
         exampleDe: t.word.exampleDe || '',
+        level: t.word.level || '',
         note: keep.note || others.map(v => v.note).find(Boolean) || '',
         updatedAt: nowIso
       });
@@ -810,9 +831,23 @@ const DataManager = {
 
   // ---------- Abfragen ----------
 
+  // Wörter der gewählten Klassenstufe (eigene Wörter ohne Niveau sind immer dabei)
+  inLevel(v) {
+    const max = LEVELS[state.settings.gradeLevel];
+    if (!max || !v.level) return true;
+    return (LEVELS[v.level] || 99) <= max;
+  },
+
+  visible() {
+    if (!LEVELS[state.settings.gradeLevel]) return state.vocabulary;
+    return state.vocabulary.filter(v => this.inLevel(v));
+  },
+
   getPool() {
-    if (state.selectedWords.size === 0) return state.vocabulary;
-    return state.vocabulary.filter(v => state.selectedWords.has(v.id));
+    const words = this.visible();
+    if (state.selectedWords.size === 0) return words;
+    const pool = words.filter(v => state.selectedWords.has(v.id));
+    return pool;
   },
 
   isDue(vocab, endOfDay = Utils.endOfToday()) {
@@ -846,7 +881,7 @@ const DataManager = {
 
   getCategories() {
     const map = new Map();
-    for (const v of state.vocabulary) {
+    for (const v of this.visible()) {
       const name = v.category || CONFIG.CUSTOM_CATEGORY;
       if (!map.has(name)) map.set(name, { name, total: 0, selected: 0, learned: 0, mastered: 0, due: 0 });
       const c = map.get(name);
@@ -1420,7 +1455,7 @@ const HomeView = {
         <span class="topic-summary-icon">${icon('book', 20)}</span>
         <span class="topic-summary-text">
           <strong>${state.selectedWords.size === 0 ? 'Alle Themen' : Utils.plural(selectedTopics, 'Thema', 'Themen')} ausgewählt</strong>
-          <span>${Utils.plural(pool.length, 'Wort', 'Wörter')} im Training · Themen ändern</span>
+          <span>${Utils.esc(gradeLabel())} · ${Utils.plural(pool.length, 'Wort', 'Wörter')} im Training</span>
         </span>
         ${icon('chevronRight', 20, 'muted')}
       </button>
@@ -1485,7 +1520,7 @@ const Session = {
       case 'errors': return DataManager.getErrorCards(pool).slice(0, limit);
       case 'all': return Utils.shuffle(pool).slice(0, limit);
       case 'category': {
-        const words = state.vocabulary.filter(v => v.category === extra.category);
+        const words = DataManager.visible().filter(v => v.category === extra.category);
         const due = DataManager.getDueCards(words);
         const fresh = DataManager.getNewCards(words);
         const rest = Utils.shuffle(words.filter(v => !due.includes(v) && !fresh.includes(v)))
@@ -2088,7 +2123,7 @@ const WordsView = {
 
   render() {
     const el = document.getElementById('view-words');
-    if (this.topic && !state.vocabulary.some(v => v.category === this.topic)) this.topic = null;
+    if (this.topic && !DataManager.visible().some(v => v.category === this.topic)) this.topic = null;
     if (this.topic) {
       el.innerHTML = this.renderTopic(this.topic);
     } else {
@@ -2102,7 +2137,7 @@ const WordsView = {
     return `
       <header class="page-header">
         <div>
-          <p class="eyebrow">${Utils.plural(state.vocabulary.length, 'Wort', 'Wörter')}</p>
+          <p class="eyebrow">${Utils.plural(DataManager.visible().length, 'Wort', 'Wörter')} · ${Utils.esc(gradeLabel())}</p>
           <h1 class="page-title">Wörter</h1>
         </div>
         <button type="button" class="btn btn--primary btn--sm" data-action="word-add">${icon('plus', 18)} Neu</button>
@@ -2173,7 +2208,8 @@ const WordsView = {
           <button type="button" class="btn btn--primary" data-action="word-add">${icon('plus', 18)} Wort anlegen</button>
         </div>`;
     }
-    const allSelected = state.vocabulary.length > 0 && state.vocabulary.every(v => state.selectedWords.has(v.id));
+    const shown = DataManager.visible();
+    const allSelected = shown.length > 0 && shown.every(v => state.selectedWords.has(v.id));
     return `
       <div class="list-head">
         <h2 class="section-title">Themen</h2>
@@ -2234,7 +2270,7 @@ const WordsView = {
   },
 
   renderTopic(name) {
-    const words = state.vocabulary.filter(v => v.category === name);
+    const words = DataManager.visible().filter(v => v.category === name);
     const c = DataManager.getCategories().find(x => x.name === name) || { total: 0, selected: 0, learned: 0, mastered: 0 };
     const due = DataManager.getDueCards(words).length;
     const allSelected = c.selected === c.total;
@@ -2278,7 +2314,7 @@ const WordsView = {
     await DataManager.setSelection([id], on);
     btn.setAttribute('aria-checked', String(on));
     if (this.topic) {
-      const words = state.vocabulary.filter(v => v.category === this.topic);
+      const words = DataManager.visible().filter(v => v.category === this.topic);
       const selected = words.filter(v => state.selectedWords.has(v.id)).length;
       const meta = document.getElementById('topic-selection-meta');
       if (meta) meta.textContent = `${selected} von ${words.length} im Training`;
@@ -2286,7 +2322,7 @@ const WordsView = {
   },
 
   async toggleTopic(name) {
-    const ids = state.vocabulary.filter(v => v.category === name).map(v => v.id);
+    const ids = DataManager.visible().filter(v => v.category === name).map(v => v.id);
     const allOn = ids.every(id => state.selectedWords.has(id));
     await DataManager.setSelection(ids, !allOn);
     this.renderResults();
@@ -2585,6 +2621,10 @@ const SettingsView = {
         <h2 class="section-title">Lernen</h2>
         <div class="card settings-card">
           <div class="setting">
+            <div class="setting-label"><span class="row-title">Klassenstufe</span><span class="row-sub">${Utils.esc((GRADE_LEVELS.find(x => x[0] === st.gradeLevel) || GRADE_LEVELS[2])[2])}</span></div>
+            ${this.segmented('gradeLevel', [['A1', 'Kl. 5–6'], ['A2', 'Kl. 5–8'], ['all', 'Alle']], st.gradeLevel)}
+          </div>
+          <div class="setting">
             <div class="setting-label"><span class="row-title">Tagesziel</span><span class="row-sub">Richtige Antworten pro Tag</span></div>
             ${this.segmented('dailyGoal', [[10, '10'], [20, '20'], [30, '30'], [50, '50']], st.dailyGoal)}
           </div>
@@ -2697,6 +2737,8 @@ const SettingsView = {
           <h3>Impressum</h3>
           <p><strong>Betreiber der Anwendung:</strong><br>Belkis Aslani<br>Vogelsangstr. 32<br>71691 Freiberg am Neckar</p>
           <p><strong>Kontakt:</strong><br>Telefon: +49 176 81462526<br>E-Mail: belkis.aslani@gmail.com</p>
+          <h3>Quellen</h3>
+          <p>Die Wortauswahl und die Einstufung nach Niveau (A1/A2) stützen sich unter anderem auf: The CEFR-J Wordlist Version 1.5. Compiled by Yukio Tono, Tokyo University of Foreign Studies. Retrieved from http://www.cefr-j.org/download.html. Deutsche Übersetzungen und Beispielsätze sind eigene Inhalte dieser App.</p>
           <h3>Datenschutzerklärung</h3>
           <p>Diese Anwendung („Vokabel Master+“) ist eine reine Offline-Anwendung (Progressive Web App). Alle Daten werden ausschließlich lokal in der Datenbank Ihres Webbrowsers (IndexedDB) gespeichert.</p>
           <p><strong>Datenerhebung:</strong><br>Es werden keine personenbezogenen Daten an externe Server übertragen. Die von Ihnen eingegebenen Vokabeln und Lernfortschritte verbleiben auf Ihrem Gerät.</p>
@@ -2869,12 +2911,12 @@ const Actions = {
   },
   'topic-toggle': (el) => WordsView.toggleTopic(el.dataset.cat),
   'topic-select': async (el) => {
-    const ids = state.vocabulary.filter(v => v.category === el.dataset.cat).map(v => v.id);
+    const ids = DataManager.visible().filter(v => v.category === el.dataset.cat).map(v => v.id);
     await DataManager.setSelection(ids, el.dataset.on === '1');
     WordsView.render();
   },
   'select-all-topics': async (el) => {
-    await DataManager.setSelection(state.vocabulary.map(v => v.id), el.dataset.on === '1');
+    await DataManager.setSelection(DataManager.visible().map(v => v.id), el.dataset.on === '1');
     WordsView.renderResults();
   },
   'topic-practice': (el) => Session.start('category', { category: el.dataset.cat }),
