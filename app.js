@@ -10,10 +10,10 @@
 // ============================================
 
 const CONFIG = {
-  version: '2.1.0',
+  version: '2.2.0',
   // Version der mitgelieferten Vokabelliste. Erhöhen, wenn vocabulary.js geändert wird,
   // damit bestehende Installationen die Änderungen einmalig übernehmen.
-  PRESET_VERSION: 3,
+  PRESET_VERSION: 4,
   // Spaced-Repetition-Intervalle in Tagen (Level 0–5)
   INTERVALS: [1, 3, 7, 14, 30, 60],
   MASTERED_LEVEL: 4,
@@ -206,7 +206,10 @@ const TOPIC_ICONS = {
   paw: '<path d="M14.7 13.5c-1.1 -2 -1.441 -2.5 -2.7 -2.5c-1.259 0 -1.736 .755 -2.836 2.747c-.942 1.703 -2.846 1.845 -3.321 3.291c-.097 .265 -.145 .677 -.143 .962c0 1.176 .787 2 1.8 2c1.259 0 3 -1 4.5 -1s3.241 1 4.5 1c1.013 0 1.8 -.823 1.8 -2c0 -.285 -.049 -.697 -.146 -.962c-.475 -1.451 -2.512 -1.835 -3.454 -3.538z"/><path d="M20.188 8.082a1.039 1.039 0 0 0 -.406 -.082h-.015c-.735 .012 -1.56 .75 -1.993 1.866c-.519 1.335 -.28 2.7 .538 3.052c.129 .055 .267 .082 .406 .082c.739 0 1.575 -.742 2.011 -1.866c.516 -1.335 .273 -2.7 -.54 -3.052z"/><path d="M9.474 9c.055 0 .109 0 .163 -.011c.944 -.128 1.533 -1.346 1.32 -2.722c-.203 -1.297 -1.047 -2.267 -1.932 -2.267c-.055 0 -.109 0 -.163 .011c-.944 .128 -1.533 1.346 -1.32 2.722c.204 1.293 1.048 2.267 1.933 2.267z"/><path d="M16.456 6.733c.214 -1.376 -.375 -2.594 -1.32 -2.722a1.164 1.164 0 0 0 -.162 -.011c-.885 0 -1.728 .97 -1.93 2.267c-.214 1.376 .375 2.594 1.32 2.722c.054 .007 .108 .011 .162 .011c.885 0 1.73 -.974 1.93 -2.267z"/><path d="M5.69 12.918c.816 -.352 1.054 -1.719 .536 -3.052c-.436 -1.124 -1.271 -1.866 -2.009 -1.866c-.14 0 -.277 .027 -.407 .082c-.816 .352 -1.054 1.719 -.536 3.052c.436 1.124 1.271 1.866 2.009 1.866c.14 0 .277 -.027 .407 -.082z"/>',
   run: '<path d="M12 4a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M4 17l5 1l.75 -1.5"/><path d="M15 21l0 -4l-4 -3l1 -6"/><path d="M7 12l0 -3l5 -1l3 3l3 1"/>',
   palette: '<path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25"/><path d="M7.5 10.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M11.5 7.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M15.5 10.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>',
-  backpack: '<path d="M5 18v-6a6 6 0 0 1 6 -6h2a6 6 0 0 1 6 6v6a3 3 0 0 1 -3 3h-8a3 3 0 0 1 -3 -3z"/><path d="M10 6v-1a2 2 0 1 1 4 0v1"/><path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4"/><path d="M11 10h2"/>',
+  users: '<path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0 -3 -3.85"/>',
+  calendar: '<path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h16"/><path d="M11 15h1"/><path d="M12 15v3"/>',
+  quote: '<path d="M10 11h-4a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h3a1 1 0 0 1 1 1v6c0 2.667 -1.333 4.333 -4 5"/><path d="M19 11h-4a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h3a1 1 0 0 1 1 1v6c0 2.667 -1.333 4.333 -4 5"/>',
+  abc: '<path d="M3 16v-6a2 2 0 1 1 4 0v6"/><path d="M3 13h4"/><path d="M10 8v6a2 2 0 1 0 4 0v-1a2 2 0 1 0 -4 0v1"/><path d="M20.732 12a2 2 0 0 0 -3.732 1v1a2 2 0 0 0 3.726 1.01"/>',
   pencil: '<path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4"/><path d="M13.5 6.5l4 4"/>'
 };
 
@@ -226,8 +229,11 @@ const TOPIC_THEMES = {
   'Tierwelt': { icon: 'paw', hue: 12 },
   'Alltagshandlungen': { icon: 'run', hue: 165 },
   'Merkmale & Eigenschaften': { icon: 'palette', hue: 292 },
-  '5. Klasse Gymnasium': { icon: 'backpack', hue: 252 },
-  'Eigene Wörter': { icon: 'pencil', hue: 330 }
+  'Familie & Freunde': { icon: 'users', hue: 335 },
+  'Zahlen & Zeit': { icon: 'calendar', hue: 58 },
+  'Sätze & Redewendungen': { icon: 'quote', hue: 128 },
+  'Kleine Wörter': { icon: 'abc', hue: 275 },
+  'Eigene Wörter': { icon: 'pencil', hue: 252 }
 };
 
 // Kleines Themenbild (eigene Themen bekommen den Anfangsbuchstaben)
@@ -375,8 +381,7 @@ const DataManager = {
   buildPresetIndex() {
     let i = 0;
     PRESET_VOCABULARY.categories.forEach((cat, ci) => {
-      // Schulbuch-Wortschatz steht ganz oben
-      this.categoryOrder.set(cat.name, cat.name === '5. Klasse Gymnasium' ? -2 : ci);
+      this.categoryOrder.set(cat.name, ci);
       cat.words.forEach(w => this.presetOrder.set(`${cat.name}|${w.native}`, i++));
     });
   },
@@ -538,121 +543,124 @@ const DataManager = {
     return true;
   },
 
-  // Änderungen an der mitgelieferten Liste übernehmen, ohne Fortschritt zu verlieren.
-  // Läuft nur, wenn sich PRESET_VERSION geändert hat.
+  // Änderungen an der mitgelieferten Liste übernehmen, ohne Lernstand zu verlieren.
+  // Zuordnung über das deutsche Wort: Jedes deutsche Wort gibt es in der Liste genau einmal.
+  // Doppelte Einträge (z. B. aus der früheren Klassenliste) werden zusammengeführt.
   async syncPresetVocabulary() {
     if (state.settings.presetSyncVersion >= CONFIG.PRESET_VERSION) return;
 
+    const fold = (t) => this.foldKey(t);
     const nowIso = new Date().toISOString();
-    const forced = new Map();
-    const same = (v, category, native, foreign) => v.category === category &&
-      this.foldKey(v.native) === this.foldKey(native) && this.foldKey(v.foreign) === this.foldKey(foreign);
+    const legacy = typeof PRESET_LEGACY_CATEGORIES !== 'undefined' ? PRESET_LEGACY_CATEGORIES : [];
+    const renameList = typeof PRESET_NATIVE_RENAMES !== 'undefined' ? PRESET_NATIVE_RENAMES : [];
+    const removedList = typeof PRESET_REMOVED_NATIVES !== 'undefined' ? PRESET_REMOVED_NATIVES : [];
+    const renames = new Map(renameList.map(([cat, from, to]) => [`${cat}|${fold(from)}`, fold(to)]));
+    const removed = new Set(removedList.map(fold));
+    const presetCats = new Set([...legacy, ...PRESET_VOCABULARY.categories.map(c => c.name)]);
 
-    // 1) Korrigierte Wörter umbenennen, damit ihr Lernstand erhalten bleibt
-    const renames = typeof PRESET_RENAMES !== 'undefined' ? PRESET_RENAMES : [];
-    for (const r of renames) {
-      const idx = state.vocabulary.findIndex(v => same(v, r.category, r.from[0], r.from[1]));
-      if (idx < 0) continue;
-      const renamed = { ...state.vocabulary[idx], native: r.to[0], foreign: r.to[1], updatedAt: nowIso };
-      state.vocabulary[idx] = renamed;
-      forced.set(renamed.id, renamed);
+    const targets = new Map();
+    for (const cat of PRESET_VOCABULARY.categories) {
+      for (const word of cat.words) targets.set(fold(word.native), { category: cat.name, word });
     }
 
-    // 2) Entfernte Doppelungen löschen (bevorzugt Einträge ohne Lernstand)
-    const removedDefs = typeof PRESET_REMOVED !== 'undefined' ? PRESET_REMOVED : [];
+    const groups = new Map();
     const deleteIds = [];
-    for (const r of removedDefs) {
-      const keep = (PRESET_VOCABULARY.categories.find(c => c.name === r.category)?.words || [])
-        .filter(w => this.foldKey(w.native) === this.foldKey(r.native) && this.foldKey(w.foreign) === this.foldKey(r.foreign)).length;
-      const matches = state.vocabulary
-        .filter(v => same(v, r.category, r.native, r.foreign) && !deleteIds.includes(v.id))
-        .sort((a, b) => (state.progress[a.id] ? 1 : 0) - (state.progress[b.id] ? 1 : 0));
-      matches.slice(0, Math.max(0, matches.length - keep)).forEach(v => deleteIds.push(v.id));
-    }
-    if (deleteIds.length) {
-      await DB.deleteMany(CONFIG.STORE_VOCAB, deleteIds);
-      await DB.deleteMany(CONFIG.STORE_PROGRESS, deleteIds);
-      await DB.deleteMany(CONFIG.STORE_SELECTION, deleteIds);
-      const del = new Set(deleteIds);
-      state.vocabulary = state.vocabulary.filter(v => !del.has(v.id));
-      deleteIds.forEach(id => { delete state.progress[id]; state.selectedWords.delete(id); forced.delete(id); });
-    }
-
-    const byFull = new Map();
-    const byNative = new Map();
+    const updates = new Map();
     for (const v of state.vocabulary) {
-      const full = `${v.category}|${this.foldKey(v.native)}|${this.foldKey(v.foreign)}`;
-      if (!byFull.has(full)) byFull.set(full, v);
-      const nat = `${v.category}|${this.foldKey(v.native)}`;
-      byNative.set(nat, byNative.has(nat) ? null : v); // null = mehrdeutig
-    }
-
-    const changed = [];
-    const added = [];
-    const used = new Set();
-    const now = new Date().toISOString();
-    let counter = 0;
-
-    for (const category of PRESET_VOCABULARY.categories) {
-      for (const word of category.words) {
-        const fullKey = `${category.name}|${this.foldKey(word.native)}|${this.foldKey(word.foreign)}`;
-        const natKey = `${category.name}|${this.foldKey(word.native)}`;
-        let existing = byFull.get(fullKey);
-        if (!existing || used.has(existing.id)) existing = byNative.get(natKey) || null;
-        if (existing && used.has(existing.id)) existing = null;
-
-        if (existing) {
-          used.add(existing.id);
-          const next = {
-            ...existing,
-            native: word.native,
-            foreign: word.foreign,
-            example: word.example || '',
-            exampleDe: word.exampleDe || ''
-          };
-          if (next.native !== existing.native || next.foreign !== existing.foreign ||
-              next.example !== existing.example || next.exampleDe !== existing.exampleDe) {
-            next.updatedAt = now;
-            changed.push(next);
-          }
-        } else {
-          added.push({
-            id: `v_${Date.now()}_${(counter++).toString(36).padStart(4, '0')}${Math.random().toString(36).slice(2, 6)}`,
-            native: word.native,
-            foreign: word.foreign,
-            example: word.example || '',
-            exampleDe: word.exampleDe || '',
-            category: category.name,
-            difficulty: this.calculateDifficulty(word),
-            note: '',
-            createdAt: now,
-            updatedAt: now
-          });
-        }
+      if (!presetCats.has(v.category) || v.category === CONFIG.CUSTOM_CATEGORY) continue; // eigene Wörter bleiben
+      let key = fold(v.native);
+      key = renames.get(`${v.category}|${key}`) || renames.get(`*|${key}`) || key;
+      if (targets.has(key)) {
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(v);
+      } else if (removed.has(key)) {
+        deleteIds.push(v.id);
+      } else if (!targets.size || !PRESET_VOCABULARY.categories.some(c => c.name === v.category)) {
+        // Selbst geändertes Wort aus einem aufgelösten Thema -> zu den eigenen Wörtern
+        updates.set(v.id, { ...v, category: CONFIG.CUSTOM_CATEGORY, updatedAt: nowIso });
       }
     }
 
-    // Neue Wörter nur auswählen, wenn ihr Thema neu ist oder dort schon geübt wird
+    const score = (v) => {
+      const p = state.progress[v.id];
+      return p ? p.level * 100000 + p.correctCount * 10 - p.incorrectCount : -1;
+    };
+    const progressUpdates = [];
+    const selectIds = [];
+    const added = [];
     const topicSelected = new Map();
-    for (const v of state.vocabulary) {
-      if (!topicSelected.has(v.category)) topicSelected.set(v.category, false);
-      if (state.selectedWords.has(v.id)) topicSelected.set(v.category, true);
+    let counter = 0;
+
+    for (const [key, t] of targets) {
+      const list = groups.get(key) || [];
+      if (!list.length) {
+        added.push({
+          id: `v_${Date.now()}_${(counter++).toString(36).padStart(4, '0')}${Math.random().toString(36).slice(2, 6)}`,
+          native: t.word.native,
+          foreign: t.word.foreign,
+          example: t.word.example || '',
+          exampleDe: t.word.exampleDe || '',
+          category: t.category,
+          difficulty: this.calculateDifficulty(t.word),
+          note: '',
+          createdAt: nowIso,
+          updatedAt: nowIso
+        });
+        continue;
+      }
+      list.sort((a, b) => score(b) - score(a));
+      const keep = list[0];
+      const others = list.slice(1);
+      const anySelected = list.some(v => state.selectedWords.has(v.id));
+      if (anySelected && !state.selectedWords.has(keep.id)) selectIds.push(keep.id);
+      topicSelected.set(t.category, (topicSelected.get(t.category) || false) || anySelected);
+
+      // Lernstand zusammenführen: beste Stufe bleibt, Zähler werden addiert
+      const progs = list.map(v => state.progress[v.id]).filter(Boolean);
+      if (progs.length > 1) {
+        const merged = { ...state.progress[keep.id] };
+        merged.correctCount = progs.reduce((sum, p) => sum + (p.correctCount || 0), 0);
+        merged.incorrectCount = progs.reduce((sum, p) => sum + (p.incorrectCount || 0), 0);
+        progressUpdates.push(merged);
+      }
+
+      updates.set(keep.id, {
+        ...keep,
+        category: t.category,
+        native: t.word.native,
+        foreign: t.word.foreign,
+        example: t.word.example || '',
+        exampleDe: t.word.exampleDe || '',
+        note: keep.note || others.map(v => v.note).find(Boolean) || '',
+        updatedAt: nowIso
+      });
+      others.forEach(v => deleteIds.push(v.id));
     }
-    const toSelect = added.filter(v => topicSelected.get(v.category) !== false);
 
-    forced.forEach((v, id) => { if (!changed.some(c => c.id === id)) changed.push(v); });
-    await DB.putMany(CONFIG.STORE_VOCAB, [...changed, ...added]);
-    await DB.putMany(CONFIG.STORE_SELECTION, toSelect.map(v => ({ vocabId: v.id })));
+    // Neue Wörter auswählen, außer ihr Thema wurde bewusst abgewählt
+    added.forEach(v => {
+      if (topicSelected.get(v.category) !== false || state.selectedWords.size === 0) selectIds.push(v.id);
+    });
 
-    const changedMap = new Map(changed.map(v => [v.id, v]));
-    state.vocabulary = state.vocabulary.map(v => changedMap.get(v.id) || v).concat(added);
-    toSelect.forEach(v => state.selectedWords.add(v.id));
+    const del = new Set(deleteIds);
+    await DB.deleteMany(CONFIG.STORE_VOCAB, deleteIds);
+    await DB.deleteMany(CONFIG.STORE_PROGRESS, deleteIds);
+    await DB.deleteMany(CONFIG.STORE_SELECTION, deleteIds);
+    await DB.putMany(CONFIG.STORE_VOCAB, [...updates.values(), ...added]);
+    await DB.putMany(CONFIG.STORE_PROGRESS, progressUpdates);
+    await DB.putMany(CONFIG.STORE_SELECTION, selectIds.map(id => ({ vocabId: id })));
+
+    state.vocabulary = state.vocabulary
+      .filter(v => !del.has(v.id))
+      .map(v => updates.get(v.id) || v)
+      .concat(added);
+    deleteIds.forEach(id => { delete state.progress[id]; state.selectedWords.delete(id); });
+    progressUpdates.forEach(p => { state.progress[p.vocabId] = p; });
+    selectIds.forEach(id => state.selectedWords.add(id));
     this.sortVocabulary();
 
     await this.saveSettings({ presetSyncVersion: CONFIG.PRESET_VERSION, difficultyMigrationV1Done: true });
-    if (changed.length || added.length) {
-      console.info(`Vokabelliste aktualisiert: ${changed.length} geändert, ${added.length} neu`);
-    }
+    console.info(`Vokabelliste aktualisiert: ${updates.size} übernommen, ${added.length} neu, ${deleteIds.length} entfernt`);
   },
 
   async saveVocab(vocab) {
@@ -1581,7 +1589,8 @@ const Session = {
     const { card, dir } = item;
     const deEn = dir === 'de-en';
     return {
-      question: deEn ? card.native : card.foreign,
+      // Als Frage nur die erste Variante zeigen, damit keine Alternative die Lösung verrät
+      question: deEn ? card.native : Answer.primary(card.foreign),
       answer: deEn ? card.foreign : card.native,
       qLang: deEn ? state.settings.nativeLang : state.settings.speechLang,
       aLang: deEn ? state.settings.speechLang : state.settings.nativeLang,
@@ -1747,7 +1756,7 @@ const Session = {
     // Alle Schreibweisen, die für diese Karte richtig wären
     const correctKeys = new Set(Answer.variants(qa.answer).map(v => Answer.fold(v)).filter(Boolean));
     // Andere Karten mit derselben Bedeutung (z. B. doppelte Wörter in zwei Themen)
-    const questionKey = Answer.fold(qa.question);
+    const questionKey = Answer.fold(Answer.primary(qa.question));
     const questionField = item.dir === 'de-en' ? 'native' : 'foreign';
     const shape = (t) => (/^to\s/i.test(t) ? 'verb' : /^(der|die|das)\s/i.test(t) ? 'noun' : /\s/.test(t.trim()) ? 'phrase' : 'word');
     const targetShape = shape(qa.answer);
@@ -1755,7 +1764,7 @@ const Session = {
     const scored = [];
     for (const v of state.vocabulary) {
       if (v.id === item.card.id) continue;
-      if (Answer.fold(v[questionField]) === questionKey) continue;
+      if (Answer.fold(Answer.primary(v[questionField])) === questionKey) continue;
       const text = v[answerField];
       const shown = Answer.primary(text);
       const key = Answer.fold(shown);

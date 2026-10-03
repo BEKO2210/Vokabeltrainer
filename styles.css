@@ -829,16 +829,18 @@ button.row:active:not(:disabled) { background: var(--surface-2); }
 
 .search {
   position: sticky;
-  top: calc(var(--s2) + var(--safe-t));
+  top: 0;
   z-index: 5;
   display: flex;
   align-items: center;
-  margin-bottom: var(--s2);
+  margin: 0 calc(var(--s4) * -1) var(--s1);
+  padding: calc(var(--s2) + var(--safe-t)) var(--s4) var(--s3);
+  background: var(--bg);
 }
 
 .search-icon {
   position: absolute;
-  left: 14px;
+  left: calc(var(--s4) + 14px);
   color: var(--text-3);
   pointer-events: none;
 }
@@ -850,7 +852,7 @@ button.row:active:not(:disabled) { background: var(--surface-2); }
   border-radius: var(--r);
   border: 1px solid var(--border);
   background: var(--surface);
-  box-shadow: var(--shadow-sm), 0 6px 18px color-mix(in srgb, var(--bg) 80%, transparent);
+  box-shadow: var(--shadow-sm);
   font-size: 16px;
   outline: none;
   -webkit-appearance: none;
@@ -867,7 +869,7 @@ button.row:active:not(:disabled) { background: var(--surface-2); }
 
 .search-clear {
   position: absolute;
-  right: 3px;
+  right: calc(var(--s4) + 3px);
   color: var(--text-3);
 }
 
