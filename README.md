@@ -1,60 +1,40 @@
-# 🎓 Vokabel Master+
+# Vokabel Master+
 
-Ein moderner, leistungsstarker Vokabeltrainer, der als **Progressive Web App (PWA)** konzipiert wurde. Lerne effizient, offline und mit einer Benutzeroberfläche, die Spaß macht.
+Englisch-Vokabeltrainer als **Progressive Web App** – offline, ohne Konto, alle Daten bleiben auf dem Gerät.
 
----
+## Funktionen
 
-## 🚀 Highlights & Features
+- **1.600+ Vokabeln** in 16 Themen (inkl. „5. Klasse Gymnasium“), jeweils mit Beispielsatz auf Englisch und Deutsch
+- **„Jetzt lernen“**: mischt automatisch fällige Wiederholungen und neue Wörter (Spaced Repetition, Stufen 1–60 Tage)
+- **Vier Übungsarten**: Karteikarten, Auswahl (4 Antworten), Schreiben, Diktat (Hören & Schreiben, auch langsam)
+- **Falsche Wörter kommen in derselben Runde noch einmal**, am Ende gibt es „Fehler üben“
+- **Nachsichtige Prüfung**: Artikel, Groß-/Kleinschreibung, „to“, Umlaut-Schreibweise (ae/ä) und einzelne Tippfehler werden verziehen; mehrere Lösungen mit „/“
+- **Tagesziel & Serie**, Statistik mit 14-Tage-Verlauf, Wortschatz-Stufen und schwierigen Wörtern
+- **Themen & Wörter** auswählen, durchsuchen, eigene Wörter anlegen (mit Rückgängig beim Löschen)
+- **Sicherung** als JSON, Import von CSV-Wortlisten
+- Hell/Dunkel/Auto, Aussprache (US/UK), Töne, Vibration, Android-Zurück-Taste
 
-### 📚 Massive Vokabelbibliothek
-Die App kommt mit über **1.200 integrierten Vokabeln**, die sofort gelernt werden können. Jede Vokabel enthält:
-- Den englischen Begriff.
-- Einen englischen Beispielsatz für den Kontext.
-- Die deutsche Übersetzung des Wortes und des Beispielsatzes.
+## Lokal starten
 
-### 🧩 Vielfältige Kategorien
-Entdecke Vokabeln aus über 15 Lebensbereichen:
-- **Tierwelt**: 100+ Tiere (Säugetiere, Meereswelt, Insekten).
-- **Natur & Umwelt**: Klimatmen, Landschaften, Nachhaltigkeit.
-- **Beruf & Arbeit**: Büro, Karriere, verschiedene Berufsfelder.
-- **Einkaufen & Mode**: Kleidung, Materialien, Stilrichtungen.
-- **Gefühle & Charakter**: Emotionen und Persönlichkeitsmerkmale.
-- **...und viele mehr!** (Alltag, Technik, Gesundheit, Schule, etc.)
+```bash
+python3 -m http.server 8000
+# dann http://localhost:8000 öffnen
+```
 
-### 🧠 Intelligente Lernmodi
-- **Karteikarten**: Der Klassiker für schnelles Wiederholen.
-- **Multiple Choice**: Teste dein Wissen mit Auswahlmöglichkeiten.
-- **Tipp-Modus**: Übe die korrekte Rechtschreibung.
-- **Diktat**: Verbessere dein Hörverstehen mit Audio-Sprachausgabe.
+Unter Windows: `Start_Server.bat` doppelklicken.
 
-### 💎 Premium Design & UX
-- **Dynamic UI**: Wunderschöne Animationen, Glassmorphism-Effekte und interaktive Schaltflächen.
-- **Dark Mode**: Vollständige Unterstützung für Hell-, Dunkel- und System-Modus.
-- **Offline-First**: Einmal geladen, funktioniert die App auch ohne Internetverbindung im Wald oder Flugzeug.
-- **Privacy-First**: Keine Registrierung nötig. Alle Daten und Fortschritte bleiben **zu 100% lokal** auf deinem Gerät.
+## Aufbau
 
----
+| Datei | Inhalt |
+| --- | --- |
+| `index.html` | App-Gerüst und Navigation |
+| `styles.css` | Design-System (Tokens für hell/dunkel) |
+| `vocabulary.js` | Mitgelieferte Vokabeln (`PRESET_VOCABULARY`) |
+| `app.js` | Logik und Oberfläche (Vanilla JS, IndexedDB) |
+| `sw.js` | Service Worker: Netzwerk zuerst, Cache als Offline-Fallback |
 
-## 📥 Installation
+Änderungen an `vocabulary.js` werden bei bestehenden Installationen nur übernommen, wenn `CONFIG.PRESET_VERSION` in `app.js` erhöht wird. Der Lernfortschritt bleibt dabei erhalten.
 
-Um alle PWA-Vorteile (Installation, Offline-Modus) zu nutzen, muss die App über einen Webserver laufen.
+## Rechtliches
 
-1.  **Server starten**: Mache einen Doppelklick auf die Datei `Start_Server.bat`.
-2.  **App öffnen**: Navigiere in deinem Browser zu `http://localhost:8000`.
-3.  **Installieren**: Klicke in der Adressleiste auf das Installieren-Symbol oder nutze den "Installieren"-Button in den App-Einstellungen.
-
----
-
-## 🛠 Technologien
-- **HTML5 & CSS3**: Modernes Design mit CSS-Variablen und Grid/Flexbox.
-- **Vanilla JavaScript**: Schnelle Performance ohne schwere Frameworks.
-- **IndexedDB**: Robuste, lokale Datenspeicherung für Vokabeln und Fortschritte.
-- **Service Worker**: Ermöglicht die Offline-Fähigkeit und App-Installation.
-
----
-
-## ⚖️ Rechtliches
-Informationen zum Impressum und zum Datenschutz findest du direkt in der App unter **Einstellungen > Rechtliches**.
-
----
-*Viel Erfolg beim Lernen!* 🚀📚🏆🛋️
+Impressum, Datenschutz und Nutzungsbedingungen stehen in der App unter **Mehr**.
