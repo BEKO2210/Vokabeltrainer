@@ -1,14 +1,14 @@
 // Service Worker für Vokabel Master+
 // Strategie: Netzwerk zuerst (mit Timeout), Cache als Offline-Fallback.
 // So kommen Updates ohne manuelles Cache-Leeren an, und die App läuft trotzdem offline.
-const CACHE_NAME = 'vokabel-master-v2.2.0';
+const CACHE_NAME = 'vokabel-master-v2.2.1';
 const NETWORK_TIMEOUT_MS = 3500;
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles.css?v=2.2.0',
-  './vocabulary.js?v=2.2.0',
-  './app.js?v=2.2.0',
+  './styles.css?v=2.2.1',
+  './vocabulary.js?v=2.2.1',
+  './app.js?v=2.2.1',
   './manifest.webmanifest',
   './icons/icon.svg',
   './icons/icon-192.png',
