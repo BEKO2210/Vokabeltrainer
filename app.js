@@ -13,7 +13,7 @@ const CONFIG = {
   version: '2.0.0',
   // Version der mitgelieferten Vokabelliste. Erhöhen, wenn vocabulary.js geändert wird,
   // damit bestehende Installationen die Änderungen einmalig übernehmen.
-  PRESET_VERSION: 2,
+  PRESET_VERSION: 3,
   // Spaced-Repetition-Intervalle in Tagen (Level 0–5)
   INTERVALS: [1, 3, 7, 14, 30, 60],
   MASTERED_LEVEL: 4,
@@ -189,6 +189,57 @@ const ICONS = {
   trophy: '<path d="M8 21l8 0"/><path d="M12 17l0 4"/><path d="M7 4l10 0"/><path d="M17 4v8a5 5 0 0 1 -10 0v-8"/><path d="M5 9m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M19 9m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/>'
 };
 
+// Themenbilder: Icon + Farbton je mitgelieferter Kategorie
+const TOPIC_ICONS = {
+  plane: '<path d="M16 10h4a2 2 0 0 1 0 4h-4l-4 7h-3l2 -7h-4l-2 2h-3l2 -4l-2 -4h3l2 2h4l-2 -7h3z"/>',
+  school: '<path d="M22 9l-10 -4l-10 4l10 4l10 -4v6"/><path d="M6 10.6v5.4a6 3 0 0 0 12 0v-5.4"/>',
+  ball: '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M12 7l4.76 3.45l-1.76 5.55h-6l-1.76 -5.55z"/><path d="M12 7v-4m3 13l2.5 3m-.74 -8.55l3.74 -1.45m-11.44 7.05l-2.56 2.95m.74 -8.55l-3.74 -1.45"/>',
+  food: '<path d="M19 3v12h-5c-.023 -3.681 .184 -7.406 5 -12zm0 12v6h-1v-3m-10 -14v17m-3 -17v3a3 3 0 1 0 6 0v-3"/>',
+  briefcase: '<path d="M3 9a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"/><path d="M8 7v-2a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v2"/><path d="M12 12l0 .01"/><path d="M3 13a20 20 0 0 0 18 0"/>',
+  sofa: '<path d="M4 11a2 2 0 0 1 2 2v1h12v-1a2 2 0 1 1 4 0v5a1 1 0 0 1 -1 1h-18a1 1 0 0 1 -1 -1v-5a2 2 0 0 1 2 -2z"/><path d="M4 11v-3a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v3"/><path d="M12 5v9"/>',
+  heart: '<path d="M19.5 13.572l-7.5 7.428l-2.896 -2.868m-6.117 -8.104a5 5 0 0 1 9.013 -3.022a5 5 0 1 1 7.5 6.572"/><path d="M3 13h2l2 3l2 -6l1 3h3"/>',
+  laptop: '<path d="M3 19l18 0"/><path d="M5 7a1 1 0 0 1 1 -1h12a1 1 0 0 1 1 1v8a1 1 0 0 1 -1 1h-12a1 1 0 0 1 -1 -1z"/>',
+  leaf: '<path d="M5 21c.5 -4.5 2.5 -8 7 -10"/><path d="M9 18c6.218 0 10.5 -3.288 11 -12v-2h-4.014c-9 0 -11.986 4 -12 9c0 1 0 3 2 5h3z"/>',
+  smile: '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M9 10l.01 0"/><path d="M15 10l.01 0"/><path d="M9.5 15a3.5 3.5 0 0 0 5 0"/>',
+  bag: '<path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304z"/><path d="M9 11v-5a3 3 0 0 1 6 0v5"/>',
+  chat: '<path d="M21 14l-3 -3h-7a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1h9a1 1 0 0 1 1 1v10"/><path d="M14 15v2a1 1 0 0 1 -1 1h-7l-3 3v-10a1 1 0 0 1 1 -1h2"/>',
+  paw: '<path d="M14.7 13.5c-1.1 -2 -1.441 -2.5 -2.7 -2.5c-1.259 0 -1.736 .755 -2.836 2.747c-.942 1.703 -2.846 1.845 -3.321 3.291c-.097 .265 -.145 .677 -.143 .962c0 1.176 .787 2 1.8 2c1.259 0 3 -1 4.5 -1s3.241 1 4.5 1c1.013 0 1.8 -.823 1.8 -2c0 -.285 -.049 -.697 -.146 -.962c-.475 -1.451 -2.512 -1.835 -3.454 -3.538z"/><path d="M20.188 8.082a1.039 1.039 0 0 0 -.406 -.082h-.015c-.735 .012 -1.56 .75 -1.993 1.866c-.519 1.335 -.28 2.7 .538 3.052c.129 .055 .267 .082 .406 .082c.739 0 1.575 -.742 2.011 -1.866c.516 -1.335 .273 -2.7 -.54 -3.052z"/><path d="M9.474 9c.055 0 .109 0 .163 -.011c.944 -.128 1.533 -1.346 1.32 -2.722c-.203 -1.297 -1.047 -2.267 -1.932 -2.267c-.055 0 -.109 0 -.163 .011c-.944 .128 -1.533 1.346 -1.32 2.722c.204 1.293 1.048 2.267 1.933 2.267z"/><path d="M16.456 6.733c.214 -1.376 -.375 -2.594 -1.32 -2.722a1.164 1.164 0 0 0 -.162 -.011c-.885 0 -1.728 .97 -1.93 2.267c-.214 1.376 .375 2.594 1.32 2.722c.054 .007 .108 .011 .162 .011c.885 0 1.73 -.974 1.93 -2.267z"/><path d="M5.69 12.918c.816 -.352 1.054 -1.719 .536 -3.052c-.436 -1.124 -1.271 -1.866 -2.009 -1.866c-.14 0 -.277 .027 -.407 .082c-.816 .352 -1.054 1.719 -.536 3.052c.436 1.124 1.271 1.866 2.009 1.866c.14 0 .277 -.027 .407 -.082z"/>',
+  run: '<path d="M12 4a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M4 17l5 1l.75 -1.5"/><path d="M15 21l0 -4l-4 -3l1 -6"/><path d="M7 12l0 -3l5 -1l3 3l3 1"/>',
+  palette: '<path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25"/><path d="M7.5 10.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M11.5 7.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M15.5 10.5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>',
+  backpack: '<path d="M5 18v-6a6 6 0 0 1 6 -6h2a6 6 0 0 1 6 6v6a3 3 0 0 1 -3 3h-8a3 3 0 0 1 -3 -3z"/><path d="M10 6v-1a2 2 0 1 1 4 0v1"/><path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4"/><path d="M11 10h2"/>',
+  pencil: '<path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4"/><path d="M13.5 6.5l4 4"/>'
+};
+
+const TOPIC_THEMES = {
+  'Alltag & Reisen': { icon: 'plane', hue: 200 },
+  'Schule & Bildung': { icon: 'school', hue: 238 },
+  'Freizeit & Hobbys': { icon: 'ball', hue: 145 },
+  'Essen & Trinken': { icon: 'food', hue: 24 },
+  'Beruf & Arbeit': { icon: 'briefcase', hue: 268 },
+  'Haus & Wohnen': { icon: 'sofa', hue: 38 },
+  'Körper & Gesundheit': { icon: 'heart', hue: 350 },
+  'Technik & Internet': { icon: 'laptop', hue: 218 },
+  'Natur & Umwelt': { icon: 'leaf', hue: 110 },
+  'Gefühle & Charakter': { icon: 'smile', hue: 48 },
+  'Einkaufen & Mode': { icon: 'bag', hue: 318 },
+  'Kommunikation & Medien': { icon: 'chat', hue: 182 },
+  'Tierwelt': { icon: 'paw', hue: 12 },
+  'Alltagshandlungen': { icon: 'run', hue: 165 },
+  'Merkmale & Eigenschaften': { icon: 'palette', hue: 292 },
+  '5. Klasse Gymnasium': { icon: 'backpack', hue: 252 },
+  'Eigene Wörter': { icon: 'pencil', hue: 330 }
+};
+
+// Kleines Themenbild (eigene Themen bekommen den Anfangsbuchstaben)
+function topicAvatar(name, size = '') {
+  const theme = TOPIC_THEMES[name];
+  const hue = theme ? theme.hue : Utils.hue(name);
+  const cls = `avatar ${size ? `avatar--${size}` : ''}`;
+  if (!theme) return `<span class="${cls}" style="--h:${hue}" aria-hidden="true">${Utils.esc(Utils.monogram(name))}</span>`;
+  const px = size === 'lg' ? 26 : size === 'sm' ? 14 : 22;
+  return `<span class="${cls}" style="--h:${hue}" aria-hidden="true"><svg viewBox="0 0 24 24" width="${px}" height="${px}" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" focusable="false">${TOPIC_ICONS[theme.icon]}</svg></span>`;
+}
+
 function icon(name, size = 20, extraClass = '') {
   return `<svg class="icon ${extraClass}" viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICONS[name] || ''}</svg>`;
 }
@@ -324,7 +375,8 @@ const DataManager = {
   buildPresetIndex() {
     let i = 0;
     PRESET_VOCABULARY.categories.forEach((cat, ci) => {
-      this.categoryOrder.set(cat.name, ci);
+      // Schulbuch-Wortschatz steht ganz oben
+      this.categoryOrder.set(cat.name, cat.name === '5. Klasse Gymnasium' ? -2 : ci);
       cat.words.forEach(w => this.presetOrder.set(`${cat.name}|${w.native}`, i++));
     });
   },
@@ -490,6 +542,41 @@ const DataManager = {
   async syncPresetVocabulary() {
     if (state.settings.presetSyncVersion >= CONFIG.PRESET_VERSION) return;
 
+    const nowIso = new Date().toISOString();
+    const forced = new Map();
+    const same = (v, category, native, foreign) => v.category === category &&
+      this.foldKey(v.native) === this.foldKey(native) && this.foldKey(v.foreign) === this.foldKey(foreign);
+
+    // 1) Korrigierte Wörter umbenennen, damit ihr Lernstand erhalten bleibt
+    const renames = typeof PRESET_RENAMES !== 'undefined' ? PRESET_RENAMES : [];
+    for (const r of renames) {
+      const idx = state.vocabulary.findIndex(v => same(v, r.category, r.from[0], r.from[1]));
+      if (idx < 0) continue;
+      const renamed = { ...state.vocabulary[idx], native: r.to[0], foreign: r.to[1], updatedAt: nowIso };
+      state.vocabulary[idx] = renamed;
+      forced.set(renamed.id, renamed);
+    }
+
+    // 2) Entfernte Doppelungen löschen (bevorzugt Einträge ohne Lernstand)
+    const removedDefs = typeof PRESET_REMOVED !== 'undefined' ? PRESET_REMOVED : [];
+    const deleteIds = [];
+    for (const r of removedDefs) {
+      const keep = (PRESET_VOCABULARY.categories.find(c => c.name === r.category)?.words || [])
+        .filter(w => this.foldKey(w.native) === this.foldKey(r.native) && this.foldKey(w.foreign) === this.foldKey(r.foreign)).length;
+      const matches = state.vocabulary
+        .filter(v => same(v, r.category, r.native, r.foreign) && !deleteIds.includes(v.id))
+        .sort((a, b) => (state.progress[a.id] ? 1 : 0) - (state.progress[b.id] ? 1 : 0));
+      matches.slice(0, Math.max(0, matches.length - keep)).forEach(v => deleteIds.push(v.id));
+    }
+    if (deleteIds.length) {
+      await DB.deleteMany(CONFIG.STORE_VOCAB, deleteIds);
+      await DB.deleteMany(CONFIG.STORE_PROGRESS, deleteIds);
+      await DB.deleteMany(CONFIG.STORE_SELECTION, deleteIds);
+      const del = new Set(deleteIds);
+      state.vocabulary = state.vocabulary.filter(v => !del.has(v.id));
+      deleteIds.forEach(id => { delete state.progress[id]; state.selectedWords.delete(id); forced.delete(id); });
+    }
+
     const byFull = new Map();
     const byNative = new Map();
     for (const v of state.vocabulary) {
@@ -552,6 +639,7 @@ const DataManager = {
     }
     const toSelect = added.filter(v => topicSelected.get(v.category) !== false);
 
+    forced.forEach((v, id) => { if (!changed.some(c => c.id === id)) changed.push(v); });
     await DB.putMany(CONFIG.STORE_VOCAB, [...changed, ...added]);
     await DB.putMany(CONFIG.STORE_SELECTION, toSelect.map(v => ({ vocabId: v.id })));
 
@@ -1580,7 +1668,7 @@ const Session = {
 
   hint(card) {
     return state.settings.showHints && card.category
-      ? `<span class="q-hint">${Utils.esc(card.category)}</span>` : '';
+      ? `<span class="q-hint">${topicAvatar(card.category, 'sm')}${Utils.esc(card.category)}</span>` : '';
   },
 
   // ---------- Karteikarten ----------
@@ -2078,7 +2166,6 @@ const WordsView = {
     const stateAttr = c.selected === 0 ? 'false' : c.selected === c.total ? 'true' : 'mixed';
     const pct = c.total ? Math.round((c.mastered / c.total) * 100) : 0;
     const learnedPct = c.total ? Math.round((c.learned / c.total) * 100) : 0;
-    const hue = Utils.hue(c.name);
     return `
       <div class="row topic-row">
         <button type="button" class="check" role="checkbox" aria-checked="${stateAttr}" data-action="topic-toggle"
@@ -2086,7 +2173,7 @@ const WordsView = {
           ${stateAttr === 'mixed' ? '<span class="check-dash"></span>' : icon('check', 16)}
         </button>
         <button type="button" class="topic-main" data-action="topic-open" data-cat="${Utils.esc(c.name)}">
-          <span class="avatar" style="--h:${hue}">${Utils.esc(Utils.monogram(c.name))}</span>
+          ${topicAvatar(c.name)}
           <span class="row-text">
             <span class="row-title">${Utils.esc(c.name)}</span>
             <span class="row-sub">${Utils.plural(c.total, 'Wort', 'Wörter')} · ${learnedPct}% geübt</span>
@@ -2127,11 +2214,10 @@ const WordsView = {
     const c = DataManager.getCategories().find(x => x.name === name) || { total: 0, selected: 0, learned: 0, mastered: 0 };
     const due = DataManager.getDueCards(words).length;
     const allSelected = c.selected === c.total;
-    const hue = Utils.hue(name);
     return `
       <header class="page-header page-header--sub">
         <button type="button" class="icon-btn" data-action="topic-back" aria-label="Zurück zu den Themen">${icon('chevronLeft', 24)}</button>
-        <span class="avatar avatar--lg" style="--h:${hue}">${Utils.esc(Utils.monogram(name))}</span>
+        ${topicAvatar(name, 'lg')}
         <div class="page-header-text">
           <h1 class="page-title page-title--sm">${Utils.esc(name)}</h1>
           <p class="eyebrow">${Utils.plural(c.total, 'Wort', 'Wörter')} · ${c.mastered} gemeistert</p>
@@ -2403,7 +2489,7 @@ const StatsView = {
               const pct = Math.round((c.learned / c.total) * 100);
               return `
                 <div class="row row--static">
-                  <span class="avatar" style="--h:${Utils.hue(c.name)}">${Utils.esc(Utils.monogram(c.name))}</span>
+                  ${topicAvatar(c.name)}
                   <span class="row-text">
                     <span class="row-title">${Utils.esc(c.name)}</span>
                     <span class="mini-bar" aria-hidden="true"><span style="width:${pct}%"></span><span class="mini-bar-mastered" style="width:${Math.round((c.mastered / c.total) * 100)}%"></span></span>
