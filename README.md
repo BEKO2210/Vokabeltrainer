@@ -4,7 +4,7 @@ Englisch-Vokabeltrainer als **Progressive Web App** – offline, ohne Konto, all
 
 ## Funktionen
 
-- **1.600+ Vokabeln** in 16 Themen (inkl. „5. Klasse Gymnasium“), jeweils mit Beispielsatz auf Englisch und Deutsch
+- **1.190 Vokabeln in 19 Themen** (z. B. Familie, Schule, Zahlen & Zeit, Tierwelt), jedes deutsche Wort genau einmal, jeweils mit Beispielsatz auf Englisch und Deutsch
 - **„Jetzt lernen“**: mischt automatisch fällige Wiederholungen und neue Wörter (Spaced Repetition, Stufen 1–60 Tage)
 - **Vier Übungsarten**: Karteikarten, Auswahl (4 Antworten), Schreiben, Diktat (Hören & Schreiben, auch langsam)
 - **Falsche Wörter kommen in derselben Runde noch einmal**, am Ende gibt es „Fehler üben“
