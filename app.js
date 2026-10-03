@@ -10,7 +10,7 @@
 // ============================================
 
 const CONFIG = {
-  version: '2.0.0',
+  version: '2.1.0',
   // Version der mitgelieferten Vokabelliste. Erhöhen, wenn vocabulary.js geändert wird,
   // damit bestehende Installationen die Änderungen einmalig übernehmen.
   PRESET_VERSION: 3,
@@ -398,6 +398,7 @@ const DataManager = {
     return String(text || '')
       .toLowerCase()
       .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
+      .replace(/\s*\/\s*/g, '/')
       .replace(/\s+/g, ' ')
       .trim();
   },
@@ -1036,6 +1037,12 @@ const Answer = {
       return t.length >= 5 && this.distance(g, t) <= 1;
     });
     return close ? 'typo' : 'wrong';
+  },
+
+  // Erste Variante für die Anzeige in der Auswahl ("plane / airplane" -> "plane"),
+  // damit die richtige Antwort nicht an Schrägstrichen erkennbar ist
+  primary(text) {
+    return String(text || '').split(/\s+\/\s+/)[0].trim();
   },
 
   // Kernwort zum Hervorheben im Beispielsatz (ohne Artikel/„to“)
@@ -1737,16 +1744,24 @@ const Session = {
   distractors(item) {
     const qa = this.qa(item);
     const answerField = item.dir === 'de-en' ? 'foreign' : 'native';
-    const target = Answer.fold(qa.answer);
+    // Alle Schreibweisen, die für diese Karte richtig wären
+    const correctKeys = new Set(Answer.variants(qa.answer).map(v => Answer.fold(v)).filter(Boolean));
+    // Andere Karten mit derselben Bedeutung (z. B. doppelte Wörter in zwei Themen)
+    const questionKey = Answer.fold(qa.question);
+    const questionField = item.dir === 'de-en' ? 'native' : 'foreign';
     const shape = (t) => (/^to\s/i.test(t) ? 'verb' : /^(der|die|das)\s/i.test(t) ? 'noun' : /\s/.test(t.trim()) ? 'phrase' : 'word');
     const targetShape = shape(qa.answer);
-    const seen = new Set([target]);
+    const seen = new Set();
     const scored = [];
     for (const v of state.vocabulary) {
       if (v.id === item.card.id) continue;
+      if (Answer.fold(v[questionField]) === questionKey) continue;
       const text = v[answerField];
-      const key = Answer.fold(text);
+      const shown = Answer.primary(text);
+      const key = Answer.fold(shown);
       if (!key || seen.has(key)) continue;
+      // Nie eine Option anbieten, die ebenfalls richtig wäre
+      if (Answer.variants(text).some(x => correctKeys.has(Answer.fold(x)))) continue;
       seen.add(key);
       let score = Math.random();
       if (v.category === item.card.category) score += 2;
@@ -1758,7 +1773,7 @@ const Session = {
 
   renderMC(item) {
     const qa = this.qa(item);
-    const options = Utils.shuffle([qa.answer, ...this.distractors(item)]);
+    const options = Utils.shuffle([qa.answer, ...this.distractors(item)].map(o => Answer.primary(o)));
     this.s.mcOptions = options;
     return `
       <div class="q-card">
@@ -1785,12 +1800,12 @@ const Session = {
     const qa = this.qa(item);
     const chosen = s.mcOptions[index];
     if (chosen === undefined) return;
-    const correct = Answer.fold(chosen) === Answer.fold(qa.answer);
+    const correct = Answer.fold(chosen) === Answer.fold(Answer.primary(qa.answer));
     s.phase = 'feedback';
     s.pending = correct;
     document.querySelectorAll('.mc-option').forEach((btn, i) => {
       btn.disabled = true;
-      const isAnswer = Answer.fold(s.mcOptions[i]) === Answer.fold(qa.answer);
+      const isAnswer = Answer.fold(s.mcOptions[i]) === Answer.fold(Answer.primary(qa.answer));
       if (isAnswer) btn.classList.add('is-correct');
       else if (i === index) btn.classList.add('is-wrong');
       else btn.classList.add('is-dim');
