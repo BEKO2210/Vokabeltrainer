@@ -463,28 +463,38 @@ button.row:active:not(:disabled) { background: var(--surface-2); }
 
 .avatar {
   --h: 240;
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
   flex-shrink: 0;
-  border-radius: 12px;
+  border-radius: 13px;
   display: grid;
   place-items: center;
   font-weight: 800;
-  font-size: 16px;
-  color: hsl(var(--h) 55% 38%);
-  background: hsl(var(--h) 80% 94%);
+  font-size: 17px;
+  color: hsl(var(--h) 62% 40%);
+  background: linear-gradient(145deg, hsl(var(--h) 90% 95%), hsl(var(--h) 75% 87%));
+  box-shadow: inset 0 0 0 1px hsl(var(--h) 60% 80% / 0.5);
 }
 
 [data-theme="dark"] .avatar {
-  color: hsl(var(--h) 80% 78%);
-  background: hsl(var(--h) 35% 20%);
+  color: hsl(var(--h) 85% 78%);
+  background: linear-gradient(145deg, hsl(var(--h) 40% 24%), hsl(var(--h) 45% 17%));
+  box-shadow: inset 0 0 0 1px hsl(var(--h) 50% 35% / 0.5);
 }
 
 .avatar--lg {
-  width: 48px;
-  height: 48px;
-  border-radius: 15px;
-  font-size: 20px;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  font-size: 21px;
+}
+
+.avatar--sm {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  font-size: 11px;
+  box-shadow: none;
 }
 
 /* ---------- Buttons ---------- */
@@ -1139,11 +1149,14 @@ button.row:active:not(:disabled) { background: var(--surface-2); }
 }
 
 .q-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 13px;
   font-weight: 600;
   color: var(--text-3);
   background: var(--surface-2);
-  padding: 3px 10px;
+  padding: 3px 10px 3px 4px;
   border-radius: var(--r-full);
 }
 
