@@ -58,7 +58,14 @@ jobs:
             sw_content,
             count=1,
           )
+          sw_content = re.sub(r"\?v=\d+\.\d+\.\d+", f"?v={new_version}", sw_content)
           sw_path.write_text(sw_content, encoding="utf-8")
+
+          # Versionierte Asset-URLs, damit alte Caches nie alte Dateien liefern
+          index_path = Path("index.html")
+          index_content = index_path.read_text(encoding="utf-8")
+          index_content = re.sub(r"\?v=\d+\.\d+\.\d+", f"?v={new_version}", index_content)
+          index_path.write_text(index_content, encoding="utf-8")
 
           manifest_path = Path("manifest.webmanifest")
           manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -78,6 +85,7 @@ jobs:
 
       - name: Validate app files
         run: |
+          node --check vocabulary.js
           node --check app.js
           node --check sw.js
           python3 -m json.tool manifest.webmanifest > /dev/null
@@ -90,6 +98,6 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add VERSION app.js sw.js manifest.webmanifest
+          git add VERSION app.js sw.js manifest.webmanifest index.html
           git commit -m "chore: bump version [skip ci]"
           git push

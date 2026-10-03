@@ -1,36 +1,23 @@
 {
   "name": "Vokabel Master+",
   "short_name": "Vokabel+",
-  "description": "Premium Vokabeltrainer für Schüler und Sprachenlerner",
-  "version": "1.0.1",
-  "start_url": ".",
+  "description": "Englisch-Vokabeln lernen – offline und ohne Konto",
+  "version": "2.0.0",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#0891b2",
   "orientation": "portrait",
-  "scope": "/",
-  "icons": [
-    {
-      "src": "icons/icon-192.svg",
-      "sizes": "192x192",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/icon-192.svg",
-      "sizes": "192x192",
-      "type": "image/svg+xml",
-      "purpose": "maskable"
-    },
-    {
-      "src": "icons/icon-512.svg",
-      "sizes": "512x512",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    }
-  ],
-  "categories": ["education", "productivity"],
+  "background_color": "#f6f7fb",
+  "theme_color": "#4f46e5",
   "lang": "de-DE",
   "dir": "ltr",
+  "categories": ["education", "productivity"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
   "prefer_related_applications": false
 }
